@@ -1,25 +1,7 @@
-import axios from 'axios';
+import data from './data.json';
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
-});
-
-export default api;
-
-// ─── Type Definitions ────────────────────────────────────────────────────────
-
-export interface Category {
+export interface Variant {
   id: number;
-  name: string;
-  slug: string;
-  image_url: string;
-  description: string;
-  product_count?: number;
-}
-
-export interface ProductVariant {
-  id: number;
-  product_id: number;
   weight_label: string;
   price_inr: number;
   mrp_inr: number;
@@ -29,191 +11,87 @@ export interface ProductVariant {
 
 export interface Product {
   id: number;
-  category_id: number;
-  name: string;
   slug: string;
+  name: string;
   description: string;
   image_url: string;
   is_active: boolean;
   is_featured: boolean;
-  created_at: string;
-  variants: ProductVariant[];
+  category_id: number;
+  variants: Variant[];
   category?: Category;
 }
 
-export interface PincodeResult {
-  deliverable: boolean;
-  zone: string;
-  message: string;
-  delivery_charge: number;
-}
-
-export interface OrderItem {
+export interface Category {
   id: number;
-  product_name: string;
-  variant_label: string;
-  quantity: number;
-  unit_price: number;
+  slug: string;
+  name: string;
+  image_url: string;
+  description: string;
+  product_count?: number;
 }
 
-export interface Order {
-  id: number;
-  customer_name: string;
-  customer_phone: string;
-  address: string;
-  pincode: string;
-  zone_name: string;
-  subtotal: number;
-  delivery_charge: number;
-  total: number;
-  status: string;
-  payment_method: string;
-  razorpay_order_id?: string;
-  razorpay_payment_id?: string;
-  created_at: string;
-  items: OrderItem[];
+export async function getProducts(categorySlug?: string, featured?: boolean, search?: string): Promise<Product[]> {
+  let products = data.products as Product[];
+
+  if (categorySlug) {
+    const category = data.categories.find(c => c.slug === categorySlug);
+    if (category) {
+      products = products.filter(p => p.category_id === category.id);
+    } else {
+      products = [];
+    }
+  }
+
+  if (featured) {
+    products = products.filter(p => p.is_featured);
+  }
+
+  if (search) {
+    products = products.filter(p => p.name.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase()));
+  }
+
+  // Inject categories
+  return products.map(p => ({
+    ...p,
+    category: data.categories.find(c => c.id === p.category_id) as Category
+  }));
 }
 
-export interface OrderResult {
-  order_id: number;
-  whatsapp_url?: string;
-  total: number;
-  status: string;
+export async function getProduct(slug: string): Promise<Product | null> {
+  const product = data.products.find(p => p.slug === slug) as Product | undefined;
+  if (!product) return null;
+
+  return {
+    ...product,
+    category: data.categories.find(c => c.id === product.category_id) as Category
+  };
 }
-
-export interface Stats {
-  total_orders: number;
-  total_revenue: number;
-  pending_orders: number;
-  total_products: number;
-  top_products: { name: string; total_qty_sold: number }[];
-}
-
-// ─── Helper: Get Admin Auth Header ──────────────────────────────────────────
-
-function getAdminHeaders(): { Authorization: string } {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : '';
-  return { Authorization: `Bearer ${token || ''}` };
-}
-
-// ─── Public API Functions ───────────────────────────────────────────────────
 
 export async function getCategories(): Promise<Category[]> {
-  const response = await api.get<Category[]>('/categories');
-  return response.data;
+  return data.categories as Category[];
 }
 
-export async function getProducts(params?: {
-  category_id?: number;
-  search?: string;
-  is_featured?: boolean;
-  skip?: number;
-  limit?: number;
-}): Promise<Product[]> {
-  const response = await api.get<Product[]>('/products', { params });
-  return response.data;
+export async function validatePincode(pincode: string) {
+  // Simple mock for validation
+  const validRegex = /^[1-9][0-9]{5}$/;
+  if (!validRegex.test(pincode)) {
+    return { deliverable: false, message: 'Invalid format' };
+  }
+  return { 
+    deliverable: true, 
+    zone: 'India', 
+    message: 'Delivery available', 
+    delivery_charge: 40 
+  };
 }
 
-export async function getProductBySlug(slug: string): Promise<Product> {
-  const response = await api.get<Product>(`/products/${slug}`);
-  return response.data;
-}
-
-export async function validatePincode(pincode: string): Promise<PincodeResult> {
-  const response = await api.post<PincodeResult>('/validate-pincode', { pincode });
-  return response.data;
-}
-
-export async function createOrder(data: {
-  customer_name: string;
-  customer_phone: string;
-  address: string;
-  pincode: string;
-  payment_method: string;
-  items: { variant_id: number; quantity: number }[];
-}): Promise<OrderResult> {
-  const response = await api.post<OrderResult>('/orders', data);
-  return response.data;
-}
-
-export async function getOrder(id: number): Promise<Order> {
-  const response = await api.get<Order>(`/orders/${id}`);
-  return response.data;
-}
-
-// ─── Admin API Functions ────────────────────────────────────────────────────
-
-export async function adminLogin(email: string, password: string): Promise<{ token: string }> {
-  const response = await api.post<{ token: string }>('/admin/login', { email, password });
-  return response.data;
-}
-
-export async function getAdminStats(): Promise<Stats> {
-  const response = await api.get<Stats>('/admin/stats', {
-    headers: getAdminHeaders(),
-  });
-  return response.data;
-}
-
-export async function getAdminOrders(params?: {
-  status?: string;
-  skip?: number;
-  limit?: number;
-}): Promise<Order[]> {
-  const response = await api.get<Order[]>('/admin/orders', {
-    headers: getAdminHeaders(),
-    params,
-  });
-  return response.data;
-}
-
-export async function updateOrderStatus(id: number, status: string): Promise<void> {
-  await api.patch(`/admin/orders/${id}/status`, { status }, {
-    headers: getAdminHeaders(),
-  });
-}
-
-export async function getAdminProducts(): Promise<Product[]> {
-  const response = await api.get<Product[]>('/admin/products', {
-    headers: getAdminHeaders(),
-  });
-  return response.data;
-}
-
-export async function createAdminProduct(data: {
-  name: string;
-  slug: string;
-  category_id: number;
-  description: string;
-  image_url: string;
-  is_active: boolean;
-  is_featured: boolean;
-  variants: { weight_label: string; price_inr: number; mrp_inr: number; stock_qty: number; sku: string }[];
-}): Promise<Product> {
-  const response = await api.post<Product>('/admin/products', data, {
-    headers: getAdminHeaders(),
-  });
-  return response.data;
-}
-
-export async function updateAdminProduct(id: number, data: {
-  name?: string;
-  slug?: string;
-  category_id?: number;
-  description?: string;
-  image_url?: string;
-  is_active?: boolean;
-  is_featured?: boolean;
-  variants?: { weight_label: string; price_inr: number; mrp_inr: number; stock_qty: number; sku: string }[];
-}): Promise<Product> {
-  const response = await api.put<Product>(`/admin/products/${id}`, data, {
-    headers: getAdminHeaders(),
-  });
-  return response.data;
-}
-
-export async function deleteAdminProduct(id: number): Promise<void> {
-  await api.delete(`/admin/products/${id}`, {
-    headers: getAdminHeaders(),
-  });
+export async function createOrder(orderData: any) {
+  // Since we are serverless and free, we just return a mock success for now
+  return {
+    order_id: 'ORD-' + Math.floor(Math.random() * 1000000),
+    whatsapp_url: `https://wa.me/919999999999?text=${encodeURIComponent('Hello! I would like to place an order...')}`,
+    total: 0,
+    status: 'pending'
+  };
 }

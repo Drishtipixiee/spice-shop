@@ -124,6 +124,14 @@ export default function HomePage() {
           
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
+              href="/blender"
+              className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-xl text-base font-bold shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:animate-[shimmer_1s_forwards]" />
+              <span className="text-xl">✨</span> Custom Blender
+            </Link>
+
+            <Link
               href="/products?category=spices"
               className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-base font-bold shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.5)] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
             >
