@@ -81,3 +81,53 @@ export async function createOrder(orderData: any) {
     status: 'pending'
   };
 }
+
+export async function getAdminProducts(): Promise<Product[]> {
+  const { data } = await supabase.from('products').select(`*, variants(*), category:categories(*)`);
+  return (data as unknown as Product[]) || [];
+}
+
+export async function createAdminProduct(productData: any) {
+  return { success: true };
+}
+
+export async function updateAdminProduct(id: number, productData: any) {
+  return { success: true };
+}
+
+export async function deleteAdminProduct(id: number) {
+  return { success: true };
+}
+
+export async function getAdminStats() {
+  return { 
+    totalOrders: 0, 
+    todaysRevenue: 0, 
+    pendingOrders: 0, 
+    totalProducts: 0, 
+    recentSales: [] 
+  };
+}
+export interface Stats { 
+  totalOrders: number; 
+  todaysRevenue: number; 
+  pendingOrders: number; 
+  totalProducts: number; 
+  recentSales: any[]; 
+}
+
+export async function getAdminOrders() {
+  return [];
+}
+
+export async function updateOrderStatus(id: number, status: string) {
+  return { success: true };
+}
+
+export async function getOrder(id: string) {
+  return null;
+}
+
+export async function getProductBySlug(slug: string) {
+  return getProduct(slug);
+}

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ShoppingBag, Droplet, Flame, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import useCartStore from '@/store/cartStore';
+import { useCartStore } from '@/store/cartStore';
 import toast from 'react-hot-toast';
 
 const SPICES = [
