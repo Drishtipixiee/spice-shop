@@ -105,7 +105,7 @@ export async function getAdminStats() {
     todaysRevenue: 0, 
     pendingOrders: 0, 
     totalProducts: 0, 
-    recentSales: [] 
+    recentOrders: [] 
   };
 }
 export interface Stats { 
@@ -113,7 +113,7 @@ export interface Stats {
   todaysRevenue: number; 
   pendingOrders: number; 
   totalProducts: number; 
-  recentSales: any[]; 
+  recentOrders: any[]; 
 }
 
 export async function getAdminOrders() {
