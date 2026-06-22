@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory | Enterprise Admin</title>
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span style="color:var(--text-main)">Spice</span>Shop
+  </div>
+  <div class="sidebar-menu">
+    <div class="menu-label">Main Menu</div>
+    <a href="index.html" class="menu-item">📊 Dashboard</a>
+    <a href="orders.html" class="menu-item">📦 Orders</a>
+    <a href="products.html" class="menu-item active">📋 Products Inventory</a>
+    
+    <div class="menu-label">Settings</div>
+    <a href="#" onclick="api.logout()" class="menu-item">🚪 Logout</a>
+  </div>
+</aside>
+
+<main class="main-wrapper">
+  <header class="topbar">
+    <div class="topbar-search">
+      🔍 <input type="text" placeholder="Search inventory...">
+    </div>
+    <div class="topbar-right">
+      <div class="admin-profile">
+        <div class="admin-avatar">A</div>
+        <div class="admin-info">
+          <span class="admin-name">Admin User</span>
+          <span class="admin-role">Super Admin</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title">Products Inventory</h1>
+      <div class="page-actions">
+        <button class="btn btn-outline" onclick="loadProducts()">🔄 Refresh</button>
+        <button class="btn btn-primary" onclick="openModal()">+ Add New Product</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Product Info</th>
+              <th>Category</th>
+              <th>Price (₹)</th>
+              <th>MRP (₹)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productsTable">
+            <tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
+<div class="modal" id="prodModal">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modalTitle">Edit Product</h3>
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="pId">
+    
+    <div class="form-group">
+      <label class="form-label">Product Name (English/Hindi)</label>
+      <input type="text" id="pName" class="form-control" placeholder="e.g. Turmeric Powder">
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select id="pCat" class="form-control">
+          <option value="1">Spice</option>
+          <option value="2">Dairy</option>
+          <option value="3">Cake</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Weight/Size</label>
+        <input type="text" id="pWeight" class="form-control" placeholder="e.g. 500g" value="1 pc">
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Selling Price (₹)</label>
+        <input type="number" id="pPrice" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">MRP (₹)</label>
+        <input type="number" id="pMrp" class="form-control">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Photo URL (Link)</label>
+      <input type="text" id="pImg" class="form-control" placeholder="https://...">
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Upload to Imgur or copy a valid image link.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+  </div>
+</div>
+
+<script src="assets/js/api.js"></script>
+<script>
+let allProducts = [];
+
+async function loadProducts() {
+  const tbody = document.getElementById('productsTable');
+  tbody.innerHTML = '<tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>';
+  
+  allProducts = await api.getProducts();
+  if(allProducts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No products found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = allProducts.map(p => {
+    let catBadge = 'badge-spice';
+    let catText = 'Spice';
+    if(p.category_id === 2) { catBadge = 'badge-dairy'; catText = 'Dairy'; }
+    if(p.category_id === 3) { catBadge = 'badge-cake'; catText = 'Cake'; }
+
+    return `
+      <tr>
+        <td>
+          <div class="prod-cell">
+            <img src="${p.image_url}" class="prod-img">
+            <div class="prod-meta">
+              <strong>${p.name}</strong>
+              <span style="font-size:0.8rem;color:var(--text-muted)">${p.weight || '1 pc'}</span>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${catBadge}">${catText}</span></td>
+        <td><strong>${formatMoney(p.price)}</strong></td>
+        <td><strike style="color:var(--text-muted)">${formatMoney(p.mrp || p.price)}</strike></td>
+        <td>
+          <button class="btn btn-sm btn-outline" onclick="openModal(${p.id})">Edit</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function openModal(id = null) {
+  document.getElementById('modalTitle').textContent = id ? "Edit Product" : "Add New Product";
+  if(id) {
+    const p = allProducts.find(x => x.id === id);
+    document.getElementById('pId').value = p.id;
+    document.getElementById('pName').value = p.name;
+    document.getElementById('pCat').value = p.category_id;
+    document.getElementById('pPrice').value = p.price;
+    document.getElementById('pMrp').value = p.mrp || p.price;
+    document.getElementById('pWeight').value = p.weight || '1 pc';
+    document.getElementById('pImg').value = p.image_url;
+  } else {
+    document.getElementById('pId').value = "";
+    document.getElementById('pName').value = "";
+    document.getElementById('pPrice').value = "";
+    document.getElementById('pMrp').value = "";
+    document.getElementById('pWeight').value = "1 pc";
+    document.getElementById('pImg').value = "";
+  }
+  
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('prodModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('prodModal').classList.remove('open');
+}
+
+async function saveProduct() {
+  const idStr = document.getElementById('pId').value;
+  const payload = {
+    name: document.getElementById('pName').value,
+    hindi_name: document.getElementById('pName').value,
+    category_id: parseInt(document.getElementById('pCat').value),
+    price: parseInt(document.getElementById('pPrice').value),
+    mrp: parseInt(document.getElementById('pMrp').value),
+    weight: document.getElementById('pWeight').value,
+    image_url: document.getElementById('pImg').value,
+    description: "Authentic Product"
+  };
+  
+  if(!payload.name || !payload.image_url) { alert("Name and Photo URL required."); return; }
+  
+  try {
+    await api.saveProduct(idStr ? parseInt(idStr) : null, payload);
+    closeModal();
+    loadProducts();
+  } catch(e) {
+    alert("Failed to save product.");
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadProducts);
+</script>
+</body>
+</html>
