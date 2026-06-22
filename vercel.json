@@ -1,4 +1,5 @@
 {
-  "buildCommand": "echo 'No build required for static HTML'",
+  "framework": null,
+  "buildCommand": "echo 'No build required'",
   "outputDirectory": "site"
 }
