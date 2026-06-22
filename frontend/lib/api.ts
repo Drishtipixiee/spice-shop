@@ -3,6 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export interface ProductVariant {
   id: number;
   weight_label: string;
+  label?: string;
   price_inr: number;
   mrp_inr: number;
   stock_qty: number;
@@ -13,6 +14,7 @@ export interface Category {
   id: number;
   name: string;
   slug: string;
+  product_count?: number;
 }
 
 export interface Product {
@@ -24,44 +26,59 @@ export interface Product {
   is_active: boolean;
   is_featured: boolean;
   category: Category;
+  category_slug?: string;
   variants: ProductVariant[];
+  price_inr?: number;
   created_at?: string;
 }
 
-export async function getProducts(): Promise<Product[]> {
-  const res = await fetch(`${API_URL}/products`);
-  if (!res.ok) throw new Error('Failed to fetch products');
-  return res.json();
+export async function getProducts(params?: { category?: string; featured?: boolean; search?: string }): Promise<Product[]> {
+  try {
+    let url = `${API_URL}/products`;
+    const queryParts: string[] = [];
+    if (params?.category) queryParts.push(`category_slug=${encodeURIComponent(params.category)}`);
+    if (params?.featured) queryParts.push('featured=true');
+    if (params?.search) queryParts.push(`search=${encodeURIComponent(params.search)}`);
+    if (queryParts.length > 0) url += '?' + queryParts.join('&');
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed');
+    return res.json();
+  } catch {
+    return [];
+  }
 }
 
 export async function getProductById(idOrSlug: string): Promise<Product | null> {
-  const res = await fetch(`${API_URL}/products/${idOrSlug}`);
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error('Failed to fetch product');
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/products/${idOrSlug}`, { cache: 'no-store' });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error('Failed');
+    return res.json();
+  } catch {
+    return null;
+  }
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   return getProductById(slug);
 }
 
-export async function getCategories(): Promise<string[]> {
-  const res = await fetch(`${API_URL}/categories`);
-  if (!res.ok) throw new Error('Failed to fetch categories');
-  const data: Category[] = await res.json();
-  return data.map(c => c.name);
+export async function getCategories(): Promise<Category[]> {
+  try {
+    const res = await fetch(`${API_URL}/categories`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed');
+    return res.json();
+  } catch {
+    return [];
+  }
 }
 
 export async function searchProducts(query: string): Promise<Product[]> {
-  const res = await fetch(`${API_URL}/products?search=${encodeURIComponent(query)}`);
-  if (!res.ok) throw new Error('Failed to search products');
-  return res.json();
+  return getProducts({ search: query });
 }
 
 export async function getProductsByCategory(category: string): Promise<Product[]> {
-  const res = await fetch(`${API_URL}/products?category_slug=${encodeURIComponent(category)}`);
-  if (!res.ok) throw new Error('Failed to fetch category products');
-  return res.json();
+  return getProducts({ category });
 }
 
 // ADMIN FUNCTIONS
@@ -70,16 +87,16 @@ export async function updateAdminProduct(id: string, productData: any) { return 
 export async function deleteAdminProduct(id: string) { return { success: true }; }
 export async function getAdminProducts(): Promise<Product[]> { return getProducts(); }
 
-export interface Stats { 
-  totalOrders: number; 
-  todaysRevenue: number; 
-  pendingOrders: number; 
-  totalProducts: number; 
-  recentOrders: any[]; 
+export interface Stats {
+  totalOrders: number;
+  todaysRevenue: number;
+  pendingOrders: number;
+  totalProducts: number;
+  recentOrders: any[];
   topProducts: any[];
 }
 export async function getAdminStats(): Promise<Stats> {
-  return { 
+  return {
     totalOrders: 0, todaysRevenue: 0, pendingOrders: 0, totalProducts: 0, recentOrders: [], topProducts: []
   };
 }
@@ -138,9 +155,9 @@ export interface PincodeResult {
   state?: string;
 }
 
-export async function validatePincode(pincode: string): Promise<PincodeResult> { 
-  return { valid: true, cod_available: true, estimated_days: 3, deliverable: true, pincode, city: 'Mumbai', state: 'Maharashtra' }; 
+export async function validatePincode(pincode: string): Promise<PincodeResult> {
+  return { valid: true, cod_available: true, estimated_days: 3, deliverable: true, pincode, city: 'Mumbai', state: 'Maharashtra' };
 }
-export async function createOrder(orderData: any) { 
-  return { order_id: 'ORD-' + Math.floor(Math.random() * 1000000), whatsapp_url: `https://wa.me/919999999999?text=${encodeURIComponent('Hello! I would like to place an order...')}`, total: 0, status: 'pending' }; 
+export async function createOrder(orderData: any) {
+  return { order_id: 'ORD-' + Math.floor(Math.random() * 1000000), whatsapp_url: `https://wa.me/919999999999?text=${encodeURIComponent('Hello! I would like to place an order...')}`, total: 0, status: 'pending' };
 }

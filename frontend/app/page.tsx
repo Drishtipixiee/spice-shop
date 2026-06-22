@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getProducts, getCategories, searchProducts, getProductsByCategory, Product } from '@/lib/api';
+import { getProducts, getCategories, Product, Category } from '@/lib/api';
 import ProductCard from '@/components/ProductCard';
 import { Search, Flame, Loader2, Sparkles, ChevronRight, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,7 +35,7 @@ const HERO_SLIDES = [
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -53,7 +53,7 @@ export default function Home() {
       try {
         const [prodData, catData] = await Promise.all([getProducts(), getCategories()]);
         setProducts(prodData);
-        setCategories(['All', ...catData]);
+        setCategories(catData);
       } catch (e) {
         console.error(e);
       } finally {
@@ -68,10 +68,10 @@ export default function Home() {
       setLoading(true);
       try {
         if (searchQuery) {
-          const data = await searchProducts(searchQuery);
+          const data = await getProducts({ search: searchQuery });
           setProducts(data);
         } else if (activeCategory !== 'All') {
-          const data = await getProductsByCategory(activeCategory);
+          const data = await getProducts({ category: activeCategory });
           setProducts(data);
         } else {
           const data = await getProducts();
@@ -176,17 +176,28 @@ export default function Home() {
         <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-12 flex items-center gap-3 overflow-x-auto no-scrollbar border border-orange-50">
           <Flame className="w-6 h-6 text-orange-500 shrink-0 ml-2" />
           <div className="w-px h-8 bg-gray-200 shrink-0 mx-2"></div>
+          <button
+            key="All"
+            onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}
+            className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm ${
+              activeCategory === 'All'
+                ? 'bg-orange-500 text-white shadow-orange-200 scale-105'
+                : 'bg-gray-50 text-gray-600 hover:bg-orange-50 hover:text-orange-600 border border-gray-100'
+            }`}
+          >
+            All
+          </button>
           {categories.map((cat) => (
             <button
-              key={cat}
-              onClick={() => { setActiveCategory(cat); setSearchQuery(''); }}
+              key={cat.id}
+              onClick={() => { setActiveCategory(cat.slug); setSearchQuery(''); }}
               className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm ${
-                activeCategory === cat 
-                  ? 'bg-orange-500 text-white shadow-orange-200 scale-105' 
+                activeCategory === cat.slug
+                  ? 'bg-orange-500 text-white shadow-orange-200 scale-105'
                   : 'bg-gray-50 text-gray-600 hover:bg-orange-50 hover:text-orange-600 border border-gray-100'
               }`}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
