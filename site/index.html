@@ -439,6 +439,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 }
 </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="products.js"></script>
 </head>
 <body>
 
@@ -844,40 +845,20 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 
 <script>
 // ===== PRODUCT DATA =====
-let PRODUCTS = [];
-
-const API_URL = 'https://spice-shop-backend.onrender.com/api';
+// Products are now loaded directly from products.js to ensure the site never crashes
+const API_URL = ''; // Backend removed
 let payMethod = 'razorpay';
 let checkoutTotal = 0;
 
 async function loadProducts() {
-  try {
-    const res = await fetch(API_URL + '/products');
-    const data = await res.json();
-    if(data && data.length > 0) {
-      PRODUCTS = data.map(p => ({
-        id: p.id,
-        name: p.name,
-        hindi: p.hindi_name || p.name,
-        cat: p.category_id === 1 ? 'spice' : (p.category_id === 2 ? 'dairy' : 'cake'),
-        price: p.price,
-        mrp: p.mrp || (p.price + 50),
-        weight: '1 pc',
-        img: p.image_url || 'https://via.placeholder.com/150',
-        badges: p.is_bestseller ? ['bestseller'] : [],
-        rating: 5, reviews: Math.floor(Math.random()*500), tags: []
-      }));
-      renderProducts();
-      
-      const cc = document.getElementById('count-cake');
-      if(cc) cc.textContent = PRODUCTS.filter(p=>p.cat==='cake').length;
-      document.getElementById('count-all').textContent = PRODUCTS.length;
-      document.getElementById('count-spice').textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
-      document.getElementById('count-dairy').textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
-    }
-  } catch(e) {
-    console.error("Failed to load API products", e);
-  }
+  // Since we removed the backend, PRODUCTS is already defined in products.js
+  renderProducts();
+  
+  const cc = document.getElementById('count-cake');
+  if(cc) cc.textContent = PRODUCTS.filter(p=>p.cat==='cake').length;
+  document.getElementById('count-all').textContent = PRODUCTS.length;
+  document.getElementById('count-spice').textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
+  document.getElementById('count-dairy').textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
 }
 document.addEventListener('DOMContentLoaded', loadProducts);
 
