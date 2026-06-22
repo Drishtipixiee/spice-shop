@@ -6,7 +6,5 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[build.environment]
-  NEXT_PUBLIC_API_URL         = "https://spice-shop-backend.onrender.com"
-  NEXT_PUBLIC_WHATSAPP_NUMBER = "919999999999"
-  NEXT_PUBLIC_ENABLE_RAZORPAY = "false"
+# No NEXT_PUBLIC_API_URL set → frontend uses its own /api routes from data.json
+# This means ZERO backend dependency — site works fully on Netlify alone!

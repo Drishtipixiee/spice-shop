@@ -1,4 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Use NEXT_PUBLIC_API_URL if set (for external backend), otherwise use built-in Next.js API routes
+const API_URL = (process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL !== 'undefined')
+  ? process.env.NEXT_PUBLIC_API_URL
+  : '/api';
 
 export interface ProductVariant {
   id: number;
