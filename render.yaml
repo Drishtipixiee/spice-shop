@@ -7,6 +7,8 @@ services:
     startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./data/shop.db
       - key: ADMIN_EMAIL
         value: admin@spiceshop.in
       - key: ADMIN_PASSWORD
