@@ -7,8 +7,6 @@ services:
     startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
-      - key: DATABASE_URL
-        value: postgresql://postgres:Hjklvbnm%401234@db.dinygrtktvzkyqgutuft.supabase.co:5432/postgres
       - key: ADMIN_EMAIL
         value: admin@spiceshop.in
       - key: ADMIN_PASSWORD
@@ -16,7 +14,7 @@ services:
       - key: JWT_SECRET
         value: supersecretjwtkey2025changeme
       - key: ALLOWED_ORIGINS
-        value: https://tubular-boba-0eac96.netlify.app,https://spice-shop-drishtipixiee.vercel.app,http://localhost:3000
+        value: https://tubular-boba-0eac96.netlify.app,https://spice-shop-drishtipixiee.vercel.app,https://spice-shop-one.vercel.app,http://localhost:3000
       - key: WHATSAPP_NUMBER
         value: "919999999999"
       - key: ENABLE_RAZORPAY
