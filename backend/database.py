@@ -14,7 +14,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 load_dotenv()
 
 # Automatically read from Supabase URL if provided, otherwise fallback to SQLite
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:Hjklvbnm@1234@db.dinygrtktvzkyqgutuft.supabase.co:5432/postgres")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:Hjklvbnm%401234@db.dinygrtktvzkyqgutuft.supabase.co:5432/postgres")
 
 # SQLAlchemy requires 'postgresql://' instead of 'postgres://'
 if DATABASE_URL.startswith("postgres://"):
