@@ -1,9 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "https://spice-shop-api.koyeb.app"
-  }
+  "buildCommand": "echo 'No build required'",
+  "outputDirectory": "../site"
 }
