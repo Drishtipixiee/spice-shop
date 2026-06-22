@@ -27,6 +27,12 @@ if DATABASE_URL.startswith("sqlite"):
     # Ensure data directory exists
     db_path = DATABASE_URL.replace("sqlite:///", "")
     Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+elif DATABASE_URL.startswith("postgresql"):
+    # Supabase requires SSL for remote connections
+    if "?" not in DATABASE_URL:
+        DATABASE_URL += "?sslmode=require"
+    elif "sslmode" not in DATABASE_URL:
+        DATABASE_URL += "&sslmode=require"
 
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
