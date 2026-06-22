@@ -1,5 +1,5 @@
 [build]
-  base    = "spice-shop/frontend"
+  base    = "frontend"
   command = "npm install && npm run build"
   publish = ".next"
 
@@ -7,11 +7,6 @@
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NEXT_PUBLIC_API_URL        = "https://spice-shop-backend.onrender.com"
+  NEXT_PUBLIC_API_URL         = "https://spice-shop-backend.onrender.com"
   NEXT_PUBLIC_WHATSAPP_NUMBER = "919999999999"
   NEXT_PUBLIC_ENABLE_RAZORPAY = "false"
-
-[[redirects]]
-  from   = "/*"
-  to     = "/index.html"
-  status = 200
