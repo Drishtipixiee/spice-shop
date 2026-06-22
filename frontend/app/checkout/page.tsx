@@ -431,7 +431,7 @@ export default function CheckoutPage() {
 
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-1">
                 {items.map((item) => {
-                  const itemId = (item as any).variantId || item.id || `${(item as any).productId}-${item.variant}`;
+                  const itemId = (item as any).variantId || item.id || `${(item as any).productId}-${(item as any).variant}`;
                   return (
                     <div
                       key={itemId}
@@ -443,7 +443,7 @@ export default function CheckoutPage() {
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{item.name}</p>
                         <p className="text-gray-500 text-xs">
-                          {item.variant} × {item.quantity}
+                          {(item as any).variant} × {item.quantity}
                         </p>
                       </div>
                       <p className="font-semibold text-gray-900 flex-shrink-0">
