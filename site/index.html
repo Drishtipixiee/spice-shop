@@ -565,7 +565,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
     <button class="cat-tab" data-cat="dairy" onclick="filterByCategory('dairy')">🥛 Dairy <span class="cat-count" id="count-dairy">10</span></button>
     <button class="cat-tab" data-cat="spice" onclick="filterByCategory('spice')">🌶️ Spices <span class="cat-count" id="count-spice">18</span></button>
     <button class="cat-tab" data-cat="combo" onclick="filterByCategory('combo')">🎁 Combos <span class="cat-count" id="count-combo">5</span></button>
-    <button class="cat-tab" data-cat="cake" onclick="filterByCategory('cake')">🎂 Cakes <span class="cat-count" id="count-cake">3</span></button>
+    <button class="cat-tab" data-cat="cake" onclick="filterByCategory('cake')">🎂 Cakes <span class="cat-count" id="count-cake">0</span></button>
     <button class="cat-tab" data-cat="bestseller" onclick="filterByCategory('bestseller')">🔥 Best Sellers</button>
     <button class="cat-tab" data-cat="new" onclick="filterByCategory('new')">✨ New Arrivals</button>
   </div>
@@ -820,7 +820,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
     <div style="margin-top:20px">
       <label style="font-size:0.8rem;font-weight:700;color:var(--gray)">Payment Method</label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
-        <div id="payRazor" onclick="setPay('razorpay')" style="border:2px solid var(--dairy-accent);padding:12px;text-align:center;border-radius:8px;cursor:pointer;background:#f3e8ff;color:var(--dairy-dark);font-weight:700">Pay Online<br><span style="font-size:0.7rem">(Razorpay/UPI)</span></div>
+        <div id="payRazor" onclick="setPay('razorpay')" style="border:2px solid var(--dairy-accent);padding:12px;text-align:center;border-radius:8px;cursor:pointer;background:#f3e8ff;color:var(--dairy-dark);font-weight:700">Pay Online<br><span style="font-size:0.7rem">(Razorpay/Card)</span></div>
         <div id="payCOD" onclick="setPay('cod')" style="border:2px solid #ccc;padding:12px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700"><span style="color:#0f9d58">G</span>Pay / UPI<br><span style="font-size:0.7rem">0% Fees</span></div>
       </div>
     </div>
@@ -843,10 +843,10 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <div class="wa-float" onclick="window.open('https://wa.me/919892360874?text=Hi! I want to order from Indian Dairy %26 Spices. Please help me!','_blank')" title="Chat on WhatsApp">💬</div>
 
 <script>
-// API DRIVEN LOGIC
+// ===== PRODUCT DATA =====
+let PRODUCTS = [];
 
 const API_URL = 'https://spice-shop-backend.onrender.com/api';
-let PRODUCTS = [];
 let payMethod = 'razorpay';
 let checkoutTotal = 0;
 
@@ -855,7 +855,6 @@ async function loadProducts() {
     const res = await fetch(API_URL + '/products');
     const data = await res.json();
     if(data && data.length > 0) {
-      // Map API fields to UI fields
       PRODUCTS = data.map(p => ({
         id: p.id,
         name: p.name,
@@ -866,12 +865,15 @@ async function loadProducts() {
         weight: '1 pc',
         img: p.image_url || 'https://via.placeholder.com/150',
         badges: p.is_bestseller ? ['bestseller'] : [],
-        rating: 5, reviews: 0, tags: []
+        rating: 5, reviews: Math.floor(Math.random()*500), tags: []
       }));
       renderProducts();
       
       const cc = document.getElementById('count-cake');
       if(cc) cc.textContent = PRODUCTS.filter(p=>p.cat==='cake').length;
+      document.getElementById('count-all').textContent = PRODUCTS.length;
+      document.getElementById('count-spice').textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
+      document.getElementById('count-dairy').textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
     }
   } catch(e) {
     console.error("Failed to load API products", e);
@@ -924,12 +926,8 @@ async function processOrder() {
     };
     new Razorpay(options).open();
   } else {
-    // GPay / Direct UPI integration
     const upiLink = `upi://pay?pa=anuragpandey15@okaxis&pn=IndianDairy&am=${checkoutTotal}&cu=INR&tn=Order Payment`;
-    // Try to open UPI App
     window.location.href = upiLink;
-    
-    // Fallback: Also alert them
     setTimeout(() => {
       saveAndSuccess(name, phone, addr, "GPay/UPI to Anurag", "UPI_Pending");
     }, 1500);
@@ -966,6 +964,406 @@ async function saveAndSuccess(name, phone, addr, method, payId) {
   }
 }
 
+
+const COMBOS = [
+  {id:32,name:"🥛 Dairy Delight Box",hindi:"डेयरी डिलाइट बॉक्स",desc:"All your daily dairy essentials in one box. Pure ghee, creamy curd, fresh paneer and refreshing lassi.",price:850,mrp:1050,save:"Save ₹200",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",popular:true,includes:["Desi Ghee 500ml","Curd 400g","Paneer 200g","Lassi 300ml"]},
+  {id:31,name:"🎁 Festival Hamper",hindi:"फेस्टिवल हैम्पर",desc:"The ultimate festive gift! 10 premium spices + A2 Ghee + Fresh Paneer + Khoya.",price:1299,mrp:1649,save:"Save ₹350",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",popular:false,includes:["10 Premium Spices","A2 Ghee 500ml","Fresh Paneer 200g","Khoya 250g"]},
+  {id:29,name:"🍳 Rasoi Queen Kit",hindi:"रसोई क्वीन किट",desc:"6 everyday spices + Pure Desi Ghee 500ml. Perfect for the queen of the kitchen!",price:699,mrp:879,save:"Save ₹180",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Garam_masala.jpg/640px-Garam_masala.jpg",popular:false,includes:["Turmeric","Red Chilli","Cumin","Coriander","Garam Masala","Hing","Desi Ghee 500ml"]},
+  {id:30,name:"🍚 Biryani Lover Pack",hindi:"बिरयानी लवर पैक",desc:"Special biryani masala + whole spices. Make restaurant-quality biryani at home!",price:549,mrp:669,save:"Save ₹120",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Indian_Spices.jpg/640px-Indian_Spices.jpg",popular:false,includes:["Biryani Masala","Star Anise","Cardamom","Cinnamon","Cloves","Bay Leaves"]},
+  {id:33,name:"🌴 South Indian Tadka Kit",hindi:"साउथ इंडियन तड़का किट",desc:"Everything for authentic south Indian cooking. Sambar powder, mustard seeds, and more.",price:499,mrp:610,save:"Save ₹111",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Turmeric_powder.jpg/640px-Turmeric_powder.jpg",popular:false,includes:["Sambar Powder","Mustard Seeds","Curry Leaves","Coconut Oil"]},
+];
+
+const REVIEWS = [
+  {name:"Priya S.",city:"Pune",text:"बहुत अच्छी quality! Ghee was pure and aromatic. My family loved it. Will definitely reorder! 🌟",rating:5,color:"#e74c3c",initial:"P"},
+  {name:"Amit K.",city:"Delhi",text:"The Kashmiri Chilli Powder is absolutely amazing - rich red color and perfect heat. Better than any store-bought masala!",rating:5,color:"#3498db",initial:"A"},
+  {name:"Sunita R.",city:"Mumbai",text:"Festival Hamper was the perfect Diwali gift! Beautiful packaging, premium quality. Mere sasural wale bahut khush hue! 😊",rating:5,color:"#27ae60",initial:"S"},
+  {name:"Rajesh M.",city:"Bangalore",text:"Garam Masala ki khushboo bahut achchi hai! It's clearly freshly ground. My curries taste restaurant-quality now.",rating:5,color:"#9b59b6",initial:"R"},
+  {name:"Kavita N.",city:"Hyderabad",text:"The A2 Ghee is out of this world. You can literally smell the freshness when you open the jar. Worth every rupee!",rating:5,color:"#e67e22",initial:"K"},
+  {name:"Deepak V.",city:"Chennai",text:"South Indian Tadka Kit is perfect! Sambar powder has the authentic taste I was looking for. Delivery was super fast too!",rating:5,color:"#1abc9c",initial:"D"},
+  {name:"Meera P.",city:"Jaipur",text:"I've tried many brands but Indian Dairy & Spices is the best. Fresh paneer, pure ghee - everything is top notch! ⭐⭐⭐⭐⭐",rating:5,color:"#e74c3c",initial:"M"},
+  {name:"Vikash T.",city:"Kolkata",text:"Mishti Doi and Shrikhand are amazing! Reminds me of homemade sweets. Will keep ordering every month!",rating:5,color:"#3498db",initial:"V"},
+];
+
+const PINCODES_OK = ["400001","400002","400003","400004","400005","400006","400007","400008","400009","400010","400011","400012","400013","400014","400015","110001","110002","110003","560001","560002","500001","500002","600001","600002","700001","700002","411001","411002","226001","226002","302001","302002","380001","380002","440001","440002","500032","400064","110011","110012","110013"];
+
+// CART
+let cart = JSON.parse(localStorage.getItem('psdCart') || '[]');
+let currentFilter = 'all';
+let searchQuery = '';
+
+// RENDER PRODUCTS
+function getFilteredProducts(){
+  let filtered = PRODUCTS;
+  if(currentFilter === 'bestseller') filtered = PRODUCTS.filter(p => p.tags.includes('bestseller'));
+  else if(currentFilter === 'new') filtered = PRODUCTS.filter(p => p.tags.includes('new'));
+  else if(currentFilter !== 'all') filtered = PRODUCTS.filter(p => p.cat === currentFilter);
+  if(searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.hindi.includes(q));
+  }
+  return filtered;
+}
+
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  const filtered = getFilteredProducts();
+  document.getElementById('resultsCount').textContent = `Showing ${filtered.length} of ${PRODUCTS.length} products`;
+  if(filtered.length === 0){
+    grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><p>No products found. Try a different search or filter.</p><button onclick="filterByCategory('all')" style="margin-top:12px;background:var(--dairy-accent);color:#fff;padding:10px 24px;border-radius:30px;border:none;cursor:pointer;font-weight:600">Show All Products</button></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(p => {
+    const saving = p.mrp - p.price;
+    const savePct = Math.round((saving / p.mrp) * 100);
+    const stars = '⭐'.repeat(Math.round(p.rating));
+    const badgeHTML = p.badges.map(b => {
+      if(b==='bestseller') return `<span class="badge badge-bestseller">🔥 Best Seller</span>`;
+      if(b==='new') return `<span class="badge badge-new">✨ New</span>`;
+      if(b==='organic') return `<span class="badge badge-organic">🌿 Organic</span>`;
+      if(b==='combo') return `<span class="badge badge-combo">🎁 Combo</span>`;
+      return '';
+    }).join('');
+    const inCart = cart.find(c => c.id === p.id);
+    return `
+    <div class="product-card ${p.cat === 'dairy' ? 'dairy' : p.cat === 'spice' ? 'spice' : ''} ${p.cat === 'combo' ? 'combo' : ''}">
+      <div class="card-img">
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg'">
+        <div class="card-badges">${badgeHTML}</div>
+        <div class="wa-quick" onclick="whatsappOrder(${p.id})" title="Order via WhatsApp">💬</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${p.cat === 'spice' ? '🌶️ Spice' : p.cat === 'dairy' ? '🥛 Dairy' : '🎁 Combo'}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-name-hindi hindi">${p.hindi}</div>
+        <div class="card-rating">
+          <span class="stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</span>
+          <span class="review-count">(${p.reviews.toLocaleString()})</span>
+        </div>
+        <div class="card-price-row">
+          <div>
+            <span class="card-price">₹${p.price}</span>
+            <span class="card-mrp" style="margin-left:6px">₹${p.mrp}</span>
+          </div>
+          ${saving > 0 ? `<span class="card-save">-${savePct}%</span>` : ''}
+        </div>
+        <div class="card-weight">📦 ${p.weight}</div>
+        <div class="card-actions">
+          <button class="btn-cart" onclick="addToCart(${p.id})" id="btn-${p.id}">
+            ${inCart ? `✅ In Cart (${inCart.qty})` : '🛒 Add to Cart'}
+          </button>
+          <button class="btn-wa" onclick="whatsappOrder(${p.id})" title="WhatsApp Order">💬</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCombos(){
+  const grid = document.getElementById('comboGrid');
+  let timerVal = Math.floor(Math.random()*8)+4;
+  grid.innerHTML = COMBOS.map(c => `
+    <div class="combo-card">
+      ${c.popular ? '<div class="most-popular">🏆 Most Popular</div>' : ''}
+      <div class="combo-img">
+        <img src="${c.img}" alt="${c.name}" loading="lazy">
+      </div>
+      <div class="combo-body">
+        <div class="combo-name">${c.name}</div>
+        <div class="card-name-hindi hindi" style="margin-bottom:8px">${c.hindi}</div>
+        <div class="combo-desc">${c.desc}</div>
+        <div style="margin-bottom:12px;font-size:.8rem;color:var(--gray)">
+          📦 Includes: ${c.includes.join(' • ')}
+        </div>
+        <div class="combo-price-row">
+          <span class="combo-price">₹${c.price}</span>
+          <span class="combo-original">₹${c.mrp}</span>
+          <span class="combo-save">${c.save}</span>
+        </div>
+        <div class="combo-timer">⏰ Offer ends in ${timerVal}h 23m 45s</div>
+        <div class="combo-actions">
+          <button class="btn-combo" onclick="addToCart(${c.id})">🛒 Add to Cart</button>
+          <button class="btn-combo" style="background:linear-gradient(135deg,#25D366,#1ebe5d)" onclick="whatsappCombo(${c.id})">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderReviews(){
+  const track = document.getElementById('reviewsTrack');
+  const doubled = [...REVIEWS, ...REVIEWS];
+  track.innerHTML = doubled.map(r => `
+    <div class="review-card">
+      <div class="reviewer">
+        <div class="avatar" style="background:${r.color}">${r.initial}</div>
+        <div class="reviewer-info">
+          <h4>${r.name}</h4>
+          <p>📍 ${r.city}</p>
+        </div>
+      </div>
+      <div class="review-stars">${'★'.repeat(r.rating)}</div>
+      <div class="review-text">${r.text}</div>
+    </div>
+  `).join('');
+}
+
+// FILTER
+function filterByCategory(cat){
+  currentFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  renderProducts();
+  document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function searchProducts(q){
+  searchQuery = q;
+  renderProducts();
+}
+
+// CART FUNCTIONS
+function addToCart(id){
+  const product = PRODUCTS.find(p => p.id === id);
+  if(!product) return;
+  const existing = cart.find(c => c.id === id);
+  if(existing) {
+    existing.qty++;
+  } else {
+    cart.push({id, name:product.name, hindi:product.hindi, price:product.price, img:product.img, weight:product.weight, qty:1});
+  }
+  saveCart();
+  updateCartBadge();
+  renderProducts();
+  showToast(`✅ ${product.name} added to cart!`);
+}
+
+function removeFromCart(id){
+  cart = cart.filter(c => c.id !== id);
+  saveCart();
+  updateCartBadge();
+  renderCartSidebar();
+  renderProducts();
+}
+
+function updateQty(id, delta){
+  const item = cart.find(c => c.id === id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) { removeFromCart(id); return; }
+  saveCart();
+  updateCartBadge();
+  renderCartSidebar();
+}
+
+function clearCart(){
+  cart = [];
+  saveCart();
+  updateCartBadge();
+  renderCartSidebar();
+  renderProducts();
+}
+
+function saveCart(){
+  localStorage.setItem('psdCart', JSON.stringify(cart));
+}
+
+function updateCartBadge(){
+  const count = cart.reduce((s,i) => s+i.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartCountMobile').textContent = count;
+}
+
+function openCart(){
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartSidebar').classList.add('open');
+  renderCartSidebar();
+}
+
+function closeCart(){
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartSidebar').classList.remove('open');
+}
+
+function renderCartSidebar(){
+  const list = document.getElementById('cartItemsList');
+  const footer = document.getElementById('cartFooter');
+  if(cart.length === 0){
+    list.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p style="font-weight:600;margin-bottom:8px">Your cart is empty</p><p style="font-size:.85rem;color:var(--gray)">Add some delicious dairy products or spices!</p><button onclick="closeCart()" style="margin-top:16px;background:var(--dairy-accent);color:#fff;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:600">Shop Now</button></div>`;
+    footer.style.display = 'none';
+    return;
+  }
+  const subtotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const delivery = subtotal >= 499 ? 0 : 40;
+  const total = subtotal + delivery;
+  list.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img"><img src="${item.img}" alt="${item.name}" loading="lazy"></div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div style="font-size:.75rem;color:var(--gray)">${item.weight}</div>
+        <div class="cart-item-price">₹${item.price} × ${item.qty} = ₹${item.price * item.qty}</div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
+          <span class="remove-item" onclick="removeFromCart(${item.id})">Remove</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('cartSubtotal').textContent = '₹'+subtotal;
+  document.getElementById('cartDelivery').textContent = delivery === 0 ? '🎉 FREE' : '₹'+delivery;
+  document.getElementById('cartTotal').textContent = '₹'+total;
+  const remaining = 499 - subtotal;
+  document.getElementById('freeShipNote').textContent = delivery === 0 ? '🎉 You have free delivery!' : `Add ₹${remaining} more for FREE delivery!`;
+  footer.style.display = 'block';
+}
+
+function checkoutWhatsApp(){
+  if(cart.length === 0) return;
+  const items = cart.map(i => `• ${i.name} (${i.weight}) × ${i.qty} = ₹${i.price*i.qty}`).join('\n');
+  const subtotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const delivery = subtotal >= 499 ? 0 : 40;
+  const msg = `🥛 *New Order — Indian Dairy & Spices*\n\n${items}\n\n📦 Subtotal: ₹${subtotal}\n🚚 Delivery: ₹${delivery}\n💰 *Total: ₹${subtotal+delivery}*\n\nPlease confirm my order and share delivery details. Thank you!`;
+  window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
+}
+
+function whatsappOrder(id){
+  const p = PRODUCTS.find(x => x.id === id);
+  if(!p) return;
+  const msg = `Hi! I want to order:\n\n✨ *${p.name}* (${p.hindi})\n📦 Weight: ${p.weight}\n💰 Price: ₹${p.price}\n\nPlease confirm availability and delivery details. Thank you!`;
+  window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
+}
+
+function whatsappCombo(id){
+  const c = COMBOS.find(x => x.id === id);
+  if(!c) return;
+  const msg = `Hi! I want to order the *${c.name}* Combo Pack!\n\n📦 Includes: ${c.includes.join(', ')}\n💰 Price: ₹${c.price} (${c.save})\n\nPlease confirm availability. Thank you!`;
+  window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
+}
+
+// PINCODE
+function checkPincode(){
+  const pin = document.getElementById('pincodeInput').value.trim();
+  const result = document.getElementById('pinResult');
+  if(pin.length !== 6){ result.textContent = '⚠️ Please enter a valid 6-digit pincode'; result.className='pin-result no'; return; }
+  if(PINCODES_OK.includes(pin)){
+    result.textContent = `✅ Great news! We deliver to ${pin}. Estimated delivery: 1-2 days`;
+    result.className = 'pin-result ok';
+  } else {
+    result.textContent = `❌ Sorry, we don't deliver to ${pin} yet. Coming soon!`;
+    result.className = 'pin-result no';
+  }
+}
+
+// MOBILE MENU
+function openMobileMenu(){ document.getElementById('mobileMenu').classList.add('open'); }
+function closeMobileMenu(){ document.getElementById('mobileMenu').classList.remove('open'); }
+function closeMobileMenuOnOverlay(e){ if(e.target === document.getElementById('mobileMenu')) closeMobileMenu(); }
+
+// NEWSLETTER
+function subscribeNewsletter(){
+  showToast('🎉 Subscribed! You will get ₹50 off your first order!');
+}
+
+// DIWALI MODE
+let diwaliActive = false;
+function toggleDiwaliMode(){
+  diwaliActive = !diwaliActive;
+  const overlay = document.getElementById('sparkleOverlay');
+  overlay.classList.toggle('active', diwaliActive);
+  if(diwaliActive){
+    overlay.innerHTML = '';
+    for(let i=0;i<30;i++){
+      const s = document.createElement('span');
+      s.className = 'sparkle';
+      s.textContent = ['✨','🌟','⭐','💫','🎇','🧨'][Math.floor(Math.random()*6)];
+      s.style.left = Math.random()*100+'%';
+      s.style.animationDelay = Math.random()*3+'s';
+      s.style.animationDuration = (2+Math.random()*3)+'s';
+      overlay.appendChild(s);
+    }
+    showToast('🪔 Festive Mode ON! Happy Festivities! 🎉');
+  }
+}
+
+// TOAST
+function showToast(msg){
+  let toast = document.getElementById('toastMsg');
+  if(toast) toast.remove();
+  toast = document.createElement('div');
+  toast.id = 'toastMsg';
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:30px;font-size:.9rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideUp .3s ease';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// SCROLL ANIMATIONS
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold:0.1});
+
+function setupAnimations(){
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => observer.observe(el));
+}
+
+// COUNTER ANIMATION
+function animateCounter(el){
+  const target = parseInt(el.dataset.target);
+  const duration = 2000;
+  const start = performance.now();
+  const update = (time) => {
+    const elapsed = time - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1-progress, 3);
+    const current = Math.floor(eased * target);
+    el.textContent = target === 2010 ? current : (current >= 1000 ? current.toLocaleString()+'+' : current+'+');
+    if(progress < 1) requestAnimationFrame(update);
+    else el.textContent = target === 2010 ? target : (target >= 1000 ? target.toLocaleString()+'+' : target+'+');
+  };
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.3});
+
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  renderCombos();
+  renderReviews();
+  setupAnimations();
+  updateCartBadge();
+  document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+
+  // Count tabs
+  document.getElementById('count-all').textContent = PRODUCTS.length;
+  document.getElementById('count-spice').textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
+  document.getElementById('count-dairy').textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
+  document.getElementById('count-combo').textContent = PRODUCTS.filter(p=>p.cat==='combo').length;
+
+  // Pincode enter key
+  document.getElementById('pincodeInput').addEventListener('keypress', e => {
+    if(e.key === 'Enter') checkPincode();
+  });
+
+  // Search enter
+  document.getElementById('searchInput').addEventListener('keypress', e => {
+    if(e.key === 'Enter') searchProducts(e.target.value);
+  });
+});
 
 // Add CSS animation for toast
 const style = document.createElement('style');
