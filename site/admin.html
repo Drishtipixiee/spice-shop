@@ -321,10 +321,16 @@
           <input type="number" id="f_stock" placeholder="24">
         </div>
         
+        
         <div class="input-group full-width">
-          <label>Image URL</label>
-          <input type="text" id="f_image" placeholder="https://images.unsplash.com/..." oninput="updatePreview()">
+          <label>Image URL or Upload JPG</label>
+          <div style="display:flex; gap:10px;">
+            <input type="text" id="f_image" placeholder="https://..." oninput="updatePreview()" style="flex:1;">
+            <button class="btn btn-ghost" onclick="document.getElementById('f_image_file').click()">Upload JPG</button>
+            <input type="file" id="f_image_file" accept="image/jpeg, image/jpg" style="display:none;" onchange="handleImageUpload(event)">
+          </div>
         </div>
+
         
         <div class="input-group full-width">
           <label>Short Description</label>
@@ -353,13 +359,15 @@
       }
     }
 
-    let githubToken = "";
+    
+    let currentAdminPassword = "";
+    let pendingImageUploads = [];
 
     // Auth
     function login() {
       const code = document.getElementById('passcode').value.trim();
-      if (code.startsWith('ghp_') || code.startsWith('github_pat_')) { 
-        githubToken = code;
+      if (code === 'owner123') { 
+        currentAdminPassword = code;
         document.getElementById('login-overlay').style.opacity = '0';
         setTimeout(() => {
           document.getElementById('login-overlay').style.display = 'none';
@@ -368,7 +376,7 @@
           renderGrid();
         }, 500);
       } else {
-        document.getElementById('login-err').textContent = "Invalid GitHub Token!";
+        document.getElementById('login-err').textContent = "Invalid Password!";
         document.getElementById('login-err').style.display = 'block';
       }
     }
@@ -434,6 +442,27 @@
       editingId = null;
     }
 
+    
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const base64String = event.target.result.split(',')[1];
+        const filename = Date.now() + "_" + file.name;
+        
+        pendingImageUploads.push({
+          filename: filename,
+          base64: base64String
+        });
+        
+        document.getElementById('f_image').value = 'images/' + filename;
+        updatePreview();
+      };
+      reader.readAsDataURL(file);
+    }
+
     function updatePreview() {
       const url = document.getElementById('f_image').value;
       const preview = document.getElementById('formImgPreview');
@@ -494,51 +523,32 @@
       return window.btoa(unescape(encodeURIComponent(str)));
     }
 
+    
     async function saveToGitHub() {
       try {
-        const repoUrl = "https://api.github.com/repos/Drishtipixiee/spice-shop/contents/site/products.js";
-        
-        // 1. Get current file SHA
-        const getRes = await fetch(repoUrl, {
-          headers: { 'Authorization': `token ${githubToken}` }
-        });
-        
-        if (!getRes.ok) {
-          throw new Error("Failed to fetch file SHA. Check your token permissions.");
-        }
-        
-        const fileData = await getRes.json();
-        const sha = fileData.sha;
-        
-        // 2. Generate new JS content
-        const productsJson = JSON.stringify(products, null, 2).replace(/"([^"]+)":/g, '$1:');
-        const newContent = `const PRODUCTS = ${productsJson};\n`;
-        
-        // 3. PUT the update
-        const putRes = await fetch(repoUrl, {
-          method: 'PUT',
-          headers: { 
-            'Authorization': `token ${githubToken}`,
-            'Content-Type': 'application/json'
-          },
+        const res = await fetch('/.netlify/functions/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            message: "Admin Dashboard: Update products",
-            content: toBase64(newContent),
-            sha: sha
+            password: currentAdminPassword,
+            products: products,
+            imageUpdates: pendingImageUploads
           })
         });
-
-        if (putRes.ok) {
+        
+        if (res.ok) {
           showToast("Successfully saved to GitHub! Deployment started.");
+          pendingImageUploads = []; // Clear pending uploads
         } else {
-          const errData = await putRes.json();
+          const errData = await res.json();
           alert("Deploy failed: " + errData.message);
         }
       } catch (err) {
-        alert("Error saving to GitHub: " + err.message);
+        alert("Error saving to Netlify Function: " + err.message);
         console.error(err);
       }
     }
+
 
     function showToast(msg) {
       const t = document.getElementById('toast');

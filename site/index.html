@@ -214,7 +214,7 @@ nav{position:sticky;top:0;z-index:900;background:rgba(255,248,240,.96);
   display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
 .combo-card{background:#fff;border-radius:var(--radius);overflow:hidden;
   box-shadow:var(--shadow-lg);border:2px solid rgba(74,144,217,.4);position:relative}
-.combo-card::before{content:'🎁';position:absolute;top:-12px;right:16px;font-size:2rem;z-index:1}
+.combo-card::before{content:'<i class="ph-fill ph-gift"></i>';position:absolute;top:-12px;right:16px;font-size:2rem;z-index:1}
 .combo-img{height:220px;overflow:hidden;position:relative;background:#fff}
 .combo-img img{width:100%;height:100%;object-fit:cover;transition:.4s}
 .combo-card:hover .combo-img img{transform:scale(1.05)}
@@ -440,6 +440,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="products.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
 
@@ -449,54 +450,68 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-track" id="tickerTrack">
-    <span>🚚 Free delivery above ₹499</span>
-    <span>🏛️ FSSAI Certified</span>
-    <span>🌿 100% Natural, No Preservatives</span>
-    <span>⭐ 4.9/5 from 10,000+ customers</span>
-    <span>💬 Order via WhatsApp in 2 mins</span>
-    <span>🎁 Festival Hamper Available Now!</span>
-    <span>🚚 Free delivery above ₹499</span>
-    <span>🏛️ FSSAI Certified</span>
-    <span>🌿 100% Natural, No Preservatives</span>
-    <span>⭐ 4.9/5 from 10,000+ customers</span>
-    <span>💬 Order via WhatsApp in 2 mins</span>
-    <span>🎁 Festival Hamper Available Now!</span>
+    <span><i class="ph-fill ph-truck"></i> Free delivery above ₹499</span>
+    <span><i class="ph-fill ph-bank"></i> FSSAI Certified</span>
+    <span><i class="ph-fill ph-leaf"></i> 100% Natural, No Preservatives</span>
+    <span><i class="ph-fill ph-star"></i> 4.9/5 from 10,000+ customers</span>
+    <span><i class="ph-fill ph-chat-circle-dots"></i> Order via WhatsApp in 2 mins</span>
+    <span><i class="ph-fill ph-gift"></i> Festival Hamper Available Now!</span>
+    <span><i class="ph-fill ph-truck"></i> Free delivery above ₹499</span>
+    <span><i class="ph-fill ph-bank"></i> FSSAI Certified</span>
+    <span><i class="ph-fill ph-leaf"></i> 100% Natural, No Preservatives</span>
+    <span><i class="ph-fill ph-star"></i> 4.9/5 from 10,000+ customers</span>
+    <span><i class="ph-fill ph-chat-circle-dots"></i> Order via WhatsApp in 2 mins</span>
+    <span><i class="ph-fill ph-gift"></i> Festival Hamper Available Now!</span>
   </div>
 </div>
 
 <!-- NAVBAR -->
+
 <nav>
-  <div class="nav-inner">
-    <a href="/" class="logo">
-      <span class="logo-icon">🥛</span>
-      <span>Indian Dairy &amp; Spices</span>
-    </a>
-    <div class="nav-links">
-      <a href="#products">Shop All</a>
-      <a href="#combos">Combo Packs</a>
-      <a href="#about">About Us</a>
-      <a href="#contact">Contact</a>
+  <div class="nav-inner" style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="display:flex; align-items:center; gap: 20px;">
+      <a href="/" class="logo" style="display:flex; align-items:center; gap:8px;">
+        <span class="logo-icon"><i class="ph-fill ph-drop" style="color:var(--dairy-accent)"></i></span>
+        <span style="font-weight: 800; letter-spacing:-0.5px;">Indian Dairy</span>
+      </a>
+      <div class="location-picker" style="display:flex; align-items:center; gap:6px; cursor:pointer; background:var(--lgray); padding:8px 16px; border-radius:30px;">
+        <i class="ph-fill ph-map-pin" style="color:var(--dairy-accent); font-size:1.2rem;"></i>
+        <div>
+          <div style="font-size:0.75rem; color:var(--gray); font-weight:600; line-height:1;">Delivering to</div>
+          <div style="font-size:0.9rem; color:var(--dark); font-weight:700;">Thane, Maharashtra <i class="ph-bold ph-caret-down"></i></div>
+        </div>
+      </div>
     </div>
-    <div class="nav-right">
-      <button class="cart-btn" onclick="openCart()">
-        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    
+    <div class="nav-search" style="flex:1; max-width:400px; margin:0 20px;">
+      <div style="position:relative;">
+        <i class="ph-bold ph-magnifying-glass" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--gray);"></i>
+        <input type="text" id="searchInput" placeholder="Search for ghee, paneer, spices..." style="width:100%; padding:12px 16px 12px 48px; border-radius:12px; border:1px solid #ddd; outline:none; background:#f9f9f9;">
+      </div>
+    </div>
+
+    <div class="nav-right" style="display:flex; align-items:center; gap:16px;">
+      <button class="cart-btn" onclick="openCart()" style="background:var(--dairy-accent); display:flex; align-items:center; gap:8px; border-radius:30px; padding:10px 18px; color:white; border:none; cursor:pointer; font-weight:600;">
+        <i class="ph-bold ph-shopping-cart"></i> Cart 
+        <span class="cart-count" id="cartCount" style="color:var(--dairy-accent); background:#fff; border-radius:50%; padding:2px 6px; font-size:0.8rem;">0</span>
       </button>
-      <button class="burger" onclick="openMobileMenu()">☰</button>
+      <button class="burger" onclick="openMobileMenu()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;"><i class="ph-bold ph-list"></i></button>
     </div>
   </div>
 </nav>
+
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenuOnOverlay(event)">
   <div class="mobile-menu-inner">
     <button class="close-menu" onclick="closeMobileMenu()">✕</button>
-    <a href="#products" onclick="closeMobileMenu()">🥛 Shop Dairy</a>
-    <a href="#products" onclick="closeMobileMenu()">🌶️ Shop Spices</a>
-    <a href="#combos" onclick="closeMobileMenu()">🎁 Combo Packs</a>
-    <a href="#about" onclick="closeMobileMenu()">ℹ️ About Us</a>
-    <a href="#contact" onclick="closeMobileMenu()">📞 Contact</a>
+    <a href="#products" onclick="closeMobileMenu()"><i class="ph-fill ph-drop"></i> Shop Dairy</a>
+    <a href="#products" onclick="closeMobileMenu()"><i class="ph-fill ph-pepper"></i> Shop Spices</a>
+    <a href="#combos" onclick="closeMobileMenu()"><i class="ph-fill ph-gift"></i> Combo Packs</a>
+    <a href="#about" onclick="closeMobileMenu()"><i class="ph-fill ph-info"></i> About Us</a>
+    <a href="#contact" onclick="closeMobileMenu()"><i class="ph-fill ph-phone"></i> Contact</a>
     <div style="margin-top:16px">
-      <button class="btn-primary" onclick="openCart();closeMobileMenu()" style="width:100%;justify-content:center">🛒 View Cart (<span id="cartCountMobile">0</span>)</button>
+      <button class="btn-primary" onclick="openCart();closeMobileMenu()" style="width:100%;justify-content:center"><i class="ph-bold ph-shopping-cart"></i> View Cart (<span id="cartCountMobile">0</span>)</button>
     </div>
   </div>
 </div>
@@ -505,18 +520,18 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-particles">
-    <span class="particle">🥛</span>
-    <span class="particle">⭐</span>
-    <span class="particle">🌶️</span>
-    <span class="particle">🌿</span>
-    <span class="particle">✨</span>
-    <span class="particle">🧄</span>
-    <span class="particle">🧀</span>
-    <span class="particle">🫙</span>
+    <span class="particle"><i class="ph-fill ph-drop"></i></span>
+    <span class="particle"><i class="ph-fill ph-star"></i></span>
+    <span class="particle"><i class="ph-fill ph-pepper"></i></span>
+    <span class="particle"><i class="ph-fill ph-leaf"></i></span>
+    <span class="particle"><i class="ph-fill ph-sparkle"></i></span>
+    <span class="particle"><i class="ph-fill ph-garlic"></i></span>
+    <span class="particle"><i class="ph-fill ph-cheese"></i></span>
+    <span class="particle"><i class="ph-fill ph-jar"></i></span>
   </div>
   <div class="hero-content">
     <div class="hero-text">
-      <div class="hero-badge">✨ India's Premium Dairy &amp; Spice Brand</div>
+      <div class="hero-badge"><i class="ph-fill ph-sparkle"></i> India's Premium Dairy &amp; Spice Brand</div>
       <h1 class="hero-title-hindi" style="font-family:'Poppins',sans-serif">Fresh Dairy, Authentic Spices</h1>
       <p class="hero-title-en">Fresh Dairy, Pure Spices — Straight From the Farm</p>
       <p class="hero-desc">
@@ -524,8 +539,8 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
         FSSAI certified, 100% natural — taste the difference of purity.
       </p>
       <div class="hero-cta">
-        <button class="btn-primary" onclick="filterByCategory('dairy');document.getElementById('products').scrollIntoView({behavior:'smooth'})">🥛 Shop Dairy</button>
-        <button class="btn-outline" onclick="filterByCategory('spice');document.getElementById('products').scrollIntoView({behavior:'smooth'})">🌶️ Shop Spices</button>
+        <button class="btn-primary" onclick="filterByCategory('dairy');document.getElementById('products').scrollIntoView({behavior:'smooth'})"><i class="ph-fill ph-drop"></i> Shop Dairy</button>
+        <button class="btn-outline" onclick="filterByCategory('spice');document.getElementById('products').scrollIntoView({behavior:'smooth'})"><i class="ph-fill ph-pepper"></i> Shop Spices</button>
       </div>
     </div>
     <div class="hero-visual">
@@ -536,11 +551,11 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
         </div>
         <div class="hero-img-item">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg" alt="Fresh Paneer" loading="lazy">
-          <div class="img-label">🥛 Fresh Paneer</div>
+          <div class="img-label"><i class="ph-fill ph-drop"></i> Fresh Paneer</div>
         </div>
         <div class="hero-img-item">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg" alt="Indian Spices" loading="lazy">
-          <div class="img-label">🌶️ Premium Spices</div>
+          <div class="img-label"><i class="ph-fill ph-pepper"></i> Premium Spices</div>
         </div>
       </div>
     </div>
@@ -550,12 +565,12 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- TRUST STRIP -->
 <div class="trust-strip">
   <div class="trust-inner">
-    <div class="trust-item"><span class="trust-icon">🏛️</span><span>FSSAI Certified</span></div>
-    <div class="trust-item"><span class="trust-icon">🌿</span><span>100% Natural</span></div>
+    <div class="trust-item"><span class="trust-icon"><i class="ph-fill ph-bank"></i></span><span>FSSAI Certified</span></div>
+    <div class="trust-item"><span class="trust-icon"><i class="ph-fill ph-leaf"></i></span><span>100% Natural</span></div>
     <div class="trust-item"><span class="trust-icon">🚜</span><span>Farm to Table</span></div>
     <div class="trust-item"><span class="trust-icon">🔒</span><span>Secure Payments</span></div>
-    <div class="trust-item"><span class="trust-icon">⭐</span><span>4.9/5 Rating</span></div>
-    <div class="trust-item"><span class="trust-icon">🚚</span><span>Free Delivery ₹499+</span></div>
+    <div class="trust-item"><span class="trust-icon"><i class="ph-fill ph-star"></i></span><span>4.9/5 Rating</span></div>
+    <div class="trust-item"><span class="trust-icon"><i class="ph-fill ph-truck"></i></span><span>Free Delivery ₹499+</span></div>
   </div>
 </div>
 
@@ -563,12 +578,12 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <div class="category-section" id="products">
   <div class="cat-tabs" id="catTabs">
     <button class="cat-tab active" data-cat="all" onclick="filterByCategory('all')">All <span class="cat-count" id="count-all">33</span></button>
-    <button class="cat-tab" data-cat="dairy" onclick="filterByCategory('dairy')">🥛 Dairy <span class="cat-count" id="count-dairy">10</span></button>
-    <button class="cat-tab" data-cat="spice" onclick="filterByCategory('spice')">🌶️ Spices <span class="cat-count" id="count-spice">18</span></button>
-    <button class="cat-tab" data-cat="combo" onclick="filterByCategory('combo')">🎁 Combos <span class="cat-count" id="count-combo">5</span></button>
+    <button class="cat-tab" data-cat="dairy" onclick="filterByCategory('dairy')"><i class="ph-fill ph-drop"></i> Dairy <span class="cat-count" id="count-dairy">10</span></button>
+    <button class="cat-tab" data-cat="spice" onclick="filterByCategory('spice')"><i class="ph-fill ph-pepper"></i> Spices <span class="cat-count" id="count-spice">18</span></button>
+    <button class="cat-tab" data-cat="combo" onclick="filterByCategory('combo')"><i class="ph-fill ph-gift"></i> Combos <span class="cat-count" id="count-combo">5</span></button>
     <button class="cat-tab" data-cat="cake" onclick="filterByCategory('cake')">🎂 Cakes <span class="cat-count" id="count-cake">0</span></button>
-    <button class="cat-tab" data-cat="bestseller" onclick="filterByCategory('bestseller')">🔥 Best Sellers</button>
-    <button class="cat-tab" data-cat="new" onclick="filterByCategory('new')">✨ New Arrivals</button>
+    <button class="cat-tab" data-cat="bestseller" onclick="filterByCategory('bestseller')"><i class="ph-fill ph-fire"></i> Best Sellers</button>
+    <button class="cat-tab" data-cat="new" onclick="filterByCategory('new')"><i class="ph-fill ph-sparkle"></i> New Arrivals</button>
   </div>
 </div>
 
@@ -594,8 +609,8 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- COMBOS SECTION -->
 <div class="combo-section" id="combos">
   <div class="section-head reveal">
-    <p class="hindi-sub hindi">✨ विशेष ऑफर</p>
-    <h2>🎁 Festival Combo Packs</h2>
+    <p class="hindi-sub hindi"><i class="ph-fill ph-sparkle"></i> विशेष ऑफर</p>
+    <h2><i class="ph-fill ph-gift"></i> Festival Combo Packs</h2>
     <p class="sub">Hand-curated bundles — best value for everyday cooking &amp; gifting</p>
   </div>
   <div class="combo-grid" id="comboGrid"></div>
@@ -604,13 +619,13 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- WHY US -->
 <div class="why-section">
   <div class="section-head reveal" style="color:#fff">
-    <p class="hindi-sub hindi" style="color:var(--gold)">✨ हम क्यों?</p>
+    <p class="hindi-sub hindi" style="color:var(--gold)"><i class="ph-fill ph-sparkle"></i> हम क्यों?</p>
     <h2 style="color:#fff">Why 10,000+ Families Choose Us</h2>
     <p class="sub" style="color:rgba(255,255,255,.7)">Quality, trust, and freshness — delivered every time</p>
   </div>
   <div class="why-grid">
     <div class="why-card reveal">
-      <div class="why-icon">📦</div>
+      <div class="why-icon"><i class="ph-fill ph-package"></i></div>
       <div class="why-num" data-target="500">0</div>
       <div class="why-label">Premium Products</div>
     </div>
@@ -625,7 +640,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
       <div class="why-label">States Delivered</div>
     </div>
     <div class="why-card reveal">
-      <div class="why-icon">🏆</div>
+      <div class="why-icon"><i class="ph-fill ph-trophy"></i></div>
       <div class="why-num" data-target="2010">0</div>
       <div class="why-label">Trusted Since</div>
     </div>
@@ -635,7 +650,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- REVIEWS -->
 <div class="reviews-section">
   <div class="section-head reveal">
-    <p class="hindi-sub hindi">💬 ग्राहक क्या कहते हैं</p>
+    <p class="hindi-sub hindi"><i class="ph-fill ph-chat-circle-dots"></i> ग्राहक क्या कहते हैं</p>
     <h2>Customer Love ❤️</h2>
   </div>
   <div class="reviews-track-wrap">
@@ -646,7 +661,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- HOW TO ORDER -->
 <div class="how-section" id="about">
   <div class="section-head reveal">
-    <p class="hindi-sub hindi">📦 कैसे ऑर्डर करें</p>
+    <p class="hindi-sub hindi"><i class="ph-fill ph-package"></i> कैसे ऑर्डर करें</p>
     <h2>Order in 3 Simple Steps</h2>
     <p class="sub">Easy ordering — WhatsApp, UPI, or Cash on Delivery</p>
   </div>
@@ -657,7 +672,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
       <p class="step-desc">Browse our wide collection of fresh dairy products and authentic spices. Filter by category or search.</p>
     </div>
     <div class="how-step reveal">
-      <div class="step-num">💬</div>
+      <div class="step-num"><i class="ph-fill ph-chat-circle-dots"></i></div>
       <h3 class="step-title">Add to Cart / WhatsApp</h3>
       <p class="step-desc">Add items to cart and checkout, or tap "WhatsApp Order" for instant personalized service from our team.</p>
     </div>
@@ -668,13 +683,13 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
     </div>
   </div>
   <div style="text-align:center;margin-top:32px">
-    <div class="cod-badge reveal">💵 Cash on Delivery Available | 🔄 7-Day Returns | 📞 24/7 WhatsApp Support</div>
+    <div class="cod-badge reveal">💵 Cash on Delivery Available | 🔄 7-Day Returns | <i class="ph-fill ph-phone"></i> 24/7 WhatsApp Support</div>
   </div>
 </div>
 
 <!-- PINCODE -->
 <div class="pincode-section">
-  <h2 class="hindi reveal" style="font-size:1.8rem">📍 Check Delivery Availability</h2>
+  <h2 class="hindi reveal" style="font-size:1.8rem"><i class="ph-fill ph-map-pin"></i> Check Delivery Availability</h2>
   <p class="reveal" style="margin-top:8px;opacity:.85">Enter your pincode to check if we deliver to your area</p>
   <div class="pincode-form reveal">
     <input class="pincode-input" id="pincodeInput" type="text" maxlength="6" placeholder="Enter 6-digit pincode" oninput="this.value=this.value.replace(/\D/g,'')">
@@ -691,7 +706,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
   </div>
   <div class="trust-grid">
     <div class="trust-card reveal-left">
-      <div class="trust-card-icon">🏛️</div>
+      <div class="trust-card-icon"><i class="ph-fill ph-bank"></i></div>
       <h4>FSSAI Licensed</h4>
       <p>All products manufactured under FSSAI food safety standards. License No: 10025999000000</p>
     </div>
@@ -727,13 +742,13 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <footer id="contact">
   <div class="footer-grid">
     <div class="footer-brand">
-      <div class="footer-logo">🥛 Indian Dairy &amp; Spices</div>
+      <div class="footer-logo"><i class="ph-fill ph-drop"></i> Indian Dairy &amp; Spices</div>
       <p>Bringing farm-fresh dairy and authentic Indian flavors directly from the source to your kitchen. Quality you can taste, purity you can trust.</p>
       <div class="social-links">
         <a class="social-link" href="#" title="Instagram">📸</a>
         <a class="social-link" href="#" title="Facebook">📘</a>
         <a class="social-link" href="#" title="YouTube">▶️</a>
-        <a class="social-link" href="https://wa.me/919892360874" title="WhatsApp">💬</a>
+        <a class="social-link" href="https://wa.me/919892360874" title="WhatsApp"><i class="ph-fill ph-chat-circle-dots"></i></a>
       </div>
     </div>
     <div class="footer-col">
@@ -755,14 +770,14 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
     </div>
     <div class="newsletter">
       <h5>Contact &amp; Newsletter</h5>
-      <p>Subscribe and get ₹50 off your first order! 🎉</p>
+      <p>Subscribe and get ₹50 off your first order! <i class="ph-fill ph-confetti"></i></p>
       <div class="newsletter-form">
         <input type="email" placeholder="your@email.com">
         <button onclick="subscribeNewsletter()">Subscribe</button>
       </div>
       <div style="margin-top:16px;font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.8">
-        <p>📞 +91 98923 60874 (Primary)</p>
-        <p>📞 +91 88793 14335 (Alt)</p>
+        <p><i class="ph-fill ph-phone"></i> +91 98923 60874 (Primary)</p>
+        <p><i class="ph-fill ph-phone"></i> +91 88793 14335 (Alt)</p>
         <p>📧 pandeyanurag15@gmail.com</p>
         <p>📧 darshanbhalerao07@gmail.com</p>
       </div>
@@ -770,9 +785,9 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
   </div>
   <div class="footer-bottom">
     <p>© 2026 Indian Dairy &amp; Spices. All Rights Reserved.</p>
-    <p>Made with ❤️ in India | FSSAI Licensed | 🌿 100% Natural</p>
+    <p>Made with ❤️ in India | FSSAI Licensed | <i class="ph-fill ph-leaf"></i> 100% Natural</p>
     <p>
-      <span style="cursor:pointer;margin-right:8px" onclick="toggleDiwaliMode()" title="Festive Mode">🪔 Festive Mode</span>
+      <span style="cursor:pointer;margin-right:8px" onclick="toggleDiwaliMode()" title="Festive Mode"><i class="ph-fill ph-lamp"></i> Festive Mode</span>
     </p>
   </div>
 </footer>
@@ -781,7 +796,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
-    <h3>🛒 Your Cart</h3>
+    <h3><i class="ph-bold ph-shopping-cart"></i> Your Cart</h3>
     <button class="close-cart" onclick="closeCart()">✕</button>
   </div>
   <div class="cart-items" id="cartItemsList"></div>
@@ -834,14 +849,14 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 <!-- SUCCESS MODAL -->
 <div class="cart-overlay" id="successOverlay" onclick="location.reload()"></div>
 <div class="cart-sidebar" id="successSidebar" style="z-index:1010;justify-content:center;align-items:center;padding:40px;text-align:center">
-  <div style="font-size:4rem;color:#10b981;margin-bottom:20px">✅</div>
+  <div style="font-size:4rem;color:#10b981;margin-bottom:20px"><i class="ph-fill ph-check-circle"></i></div>
   <h2 style="margin-bottom:12px">Order Successful!</h2>
   <p style="color:var(--gray);margin-bottom:24px">Your order <strong id="succId"></strong> has been received. Our team will pack it shortly.</p>
   <button class="btn-checkout-wa" style="background:var(--dairy-accent)" onclick="location.reload()">Continue Shopping</button>
 </div>
 
 <!-- WHATSAPP FLOAT -->
-<div class="wa-float" onclick="window.open('https://wa.me/919892360874?text=Hi! I want to order from Indian Dairy %26 Spices. Please help me!','_blank')" title="Chat on WhatsApp">💬</div>
+<div class="wa-float" onclick="window.open('https://wa.me/919892360874?text=Hi! I want to order from Indian Dairy %26 Spices. Please help me!','_blank')" title="Chat on WhatsApp"><i class="ph-fill ph-chat-circle-dots"></i></div>
 
 <script>
 // ===== PRODUCT DATA =====
@@ -947,8 +962,8 @@ async function saveAndSuccess(name, phone, addr, method, payId) {
 
 
 const COMBOS = [
-  {id:32,name:"🥛 Dairy Delight Box",hindi:"डेयरी डिलाइट बॉक्स",desc:"All your daily dairy essentials in one box. Pure ghee, creamy curd, fresh paneer and refreshing lassi.",price:850,mrp:1050,save:"Save ₹200",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",popular:true,includes:["Desi Ghee 500ml","Curd 400g","Paneer 200g","Lassi 300ml"]},
-  {id:31,name:"🎁 Festival Hamper",hindi:"फेस्टिवल हैम्पर",desc:"The ultimate festive gift! 10 premium spices + A2 Ghee + Fresh Paneer + Khoya.",price:1299,mrp:1649,save:"Save ₹350",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",popular:false,includes:["10 Premium Spices","A2 Ghee 500ml","Fresh Paneer 200g","Khoya 250g"]},
+  {id:32,name:"<i class="ph-fill ph-drop"></i> Dairy Delight Box",hindi:"डेयरी डिलाइट बॉक्स",desc:"All your daily dairy essentials in one box. Pure ghee, creamy curd, fresh paneer and refreshing lassi.",price:850,mrp:1050,save:"Save ₹200",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",popular:true,includes:["Desi Ghee 500ml","Curd 400g","Paneer 200g","Lassi 300ml"]},
+  {id:31,name:"<i class="ph-fill ph-gift"></i> Festival Hamper",hindi:"फेस्टिवल हैम्पर",desc:"The ultimate festive gift! 10 premium spices + A2 Ghee + Fresh Paneer + Khoya.",price:1299,mrp:1649,save:"Save ₹350",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",popular:false,includes:["10 Premium Spices","A2 Ghee 500ml","Fresh Paneer 200g","Khoya 250g"]},
   {id:29,name:"🍳 Rasoi Queen Kit",hindi:"रसोई क्वीन किट",desc:"6 everyday spices + Pure Desi Ghee 500ml. Perfect for the queen of the kitchen!",price:699,mrp:879,save:"Save ₹180",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Garam_masala.jpg/640px-Garam_masala.jpg",popular:false,includes:["Turmeric","Red Chilli","Cumin","Coriander","Garam Masala","Hing","Desi Ghee 500ml"]},
   {id:30,name:"🍚 Biryani Lover Pack",hindi:"बिरयानी लवर पैक",desc:"Special biryani masala + whole spices. Make restaurant-quality biryani at home!",price:549,mrp:669,save:"Save ₹120",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Indian_Spices.jpg/640px-Indian_Spices.jpg",popular:false,includes:["Biryani Masala","Star Anise","Cardamom","Cinnamon","Cloves","Bay Leaves"]},
   {id:33,name:"🌴 South Indian Tadka Kit",hindi:"साउथ इंडियन तड़का किट",desc:"Everything for authentic south Indian cooking. Sambar powder, mustard seeds, and more.",price:499,mrp:610,save:"Save ₹111",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Turmeric_powder.jpg/640px-Turmeric_powder.jpg",popular:false,includes:["Sambar Powder","Mustard Seeds","Curry Leaves","Coconut Oil"]},
@@ -961,7 +976,7 @@ const REVIEWS = [
   {name:"Rajesh M.",city:"Bangalore",text:"Garam Masala ki khushboo bahut achchi hai! It's clearly freshly ground. My curries taste restaurant-quality now.",rating:5,color:"#9b59b6",initial:"R"},
   {name:"Kavita N.",city:"Hyderabad",text:"The A2 Ghee is out of this world. You can literally smell the freshness when you open the jar. Worth every rupee!",rating:5,color:"#e67e22",initial:"K"},
   {name:"Deepak V.",city:"Chennai",text:"South Indian Tadka Kit is perfect! Sambar powder has the authentic taste I was looking for. Delivery was super fast too!",rating:5,color:"#1abc9c",initial:"D"},
-  {name:"Meera P.",city:"Jaipur",text:"I've tried many brands but Indian Dairy & Spices is the best. Fresh paneer, pure ghee - everything is top notch! ⭐⭐⭐⭐⭐",rating:5,color:"#e74c3c",initial:"M"},
+  {name:"Meera P.",city:"Jaipur",text:"I've tried many brands but Indian Dairy & Spices is the best. Fresh paneer, pure ghee - everything is top notch! <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>",rating:5,color:"#e74c3c",initial:"M"},
   {name:"Vikash T.",city:"Kolkata",text:"Mishti Doi and Shrikhand are amazing! Reminds me of homemade sweets. Will keep ordering every month!",rating:5,color:"#3498db",initial:"V"},
 ];
 
@@ -996,12 +1011,12 @@ function renderProducts(){
   grid.innerHTML = filtered.map(p => {
     const saving = p.mrp - p.price;
     const savePct = Math.round((saving / p.mrp) * 100);
-    const stars = '⭐'.repeat(Math.round(p.rating));
+    const stars = '<i class="ph-fill ph-star"></i>'.repeat(Math.round(p.rating));
     const badgeHTML = p.badges.map(b => {
-      if(b==='bestseller') return `<span class="badge badge-bestseller">🔥 Best Seller</span>`;
-      if(b==='new') return `<span class="badge badge-new">✨ New</span>`;
-      if(b==='organic') return `<span class="badge badge-organic">🌿 Organic</span>`;
-      if(b==='combo') return `<span class="badge badge-combo">🎁 Combo</span>`;
+      if(b==='bestseller') return `<span class="badge badge-bestseller"><i class="ph-fill ph-fire"></i> Best Seller</span>`;
+      if(b==='new') return `<span class="badge badge-new"><i class="ph-fill ph-sparkle"></i> New</span>`;
+      if(b==='organic') return `<span class="badge badge-organic"><i class="ph-fill ph-leaf"></i> Organic</span>`;
+      if(b==='combo') return `<span class="badge badge-combo"><i class="ph-fill ph-gift"></i> Combo</span>`;
       return '';
     }).join('');
     const inCart = cart.find(c => c.id === p.id);
@@ -1010,14 +1025,14 @@ function renderProducts(){
       <div class="card-img">
         <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg'">
         <div class="card-badges">${badgeHTML}</div>
-        <div class="wa-quick" onclick="whatsappOrder(${p.id})" title="Order via WhatsApp">💬</div>
+        <div class="wa-quick" onclick="whatsappOrder(${p.id})" title="Order via WhatsApp"><i class="ph-fill ph-chat-circle-dots"></i></div>
       </div>
       <div class="card-body">
-        <div class="card-category">${p.cat === 'spice' ? '🌶️ Spice' : p.cat === 'dairy' ? '🥛 Dairy' : '🎁 Combo'}</div>
+        <div class="card-category">${p.cat === 'spice' ? '<i class="ph-fill ph-pepper"></i> Spice' : p.cat === 'dairy' ? '<i class="ph-fill ph-drop"></i> Dairy' : '<i class="ph-fill ph-gift"></i> Combo'}</div>
         <div class="card-name">${p.name}</div>
         <div class="card-name-hindi hindi">${p.hindi}</div>
         <div class="card-rating">
-          <span class="stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</span>
+          <span class="stars">${'<i class="ph-fill ph-star"></i>'.repeat(Math.round(p.rating))}${'<i class="ph ph-star"></i>'.repeat(5-Math.round(p.rating))}</span>
           <span class="review-count">(${p.reviews.toLocaleString()})</span>
         </div>
         <div class="card-price-row">
@@ -1027,12 +1042,12 @@ function renderProducts(){
           </div>
           ${saving > 0 ? `<span class="card-save">-${savePct}%</span>` : ''}
         </div>
-        <div class="card-weight">📦 ${p.weight}</div>
+        <div class="card-weight"><i class="ph-fill ph-package"></i> ${p.weight}</div>
         <div class="card-actions">
           <button class="btn-cart" onclick="addToCart(${p.id})" id="btn-${p.id}">
-            ${inCart ? `✅ In Cart (${inCart.qty})` : '🛒 Add to Cart'}
+            ${inCart ? `<i class="ph-fill ph-check-circle"></i> In Cart (${inCart.qty})` : '<i class="ph-bold ph-shopping-cart"></i> Add to Cart'}
           </button>
-          <button class="btn-wa" onclick="whatsappOrder(${p.id})" title="WhatsApp Order">💬</button>
+          <button class="btn-wa" onclick="whatsappOrder(${p.id})" title="WhatsApp Order"><i class="ph-fill ph-chat-circle-dots"></i></button>
         </div>
       </div>
     </div>`;
@@ -1044,7 +1059,7 @@ function renderCombos(){
   let timerVal = Math.floor(Math.random()*8)+4;
   grid.innerHTML = COMBOS.map(c => `
     <div class="combo-card">
-      ${c.popular ? '<div class="most-popular">🏆 Most Popular</div>' : ''}
+      ${c.popular ? '<div class="most-popular"><i class="ph-fill ph-trophy"></i> Most Popular</div>' : ''}
       <div class="combo-img">
         <img src="${c.img}" alt="${c.name}" loading="lazy">
       </div>
@@ -1053,17 +1068,17 @@ function renderCombos(){
         <div class="card-name-hindi hindi" style="margin-bottom:8px">${c.hindi}</div>
         <div class="combo-desc">${c.desc}</div>
         <div style="margin-bottom:12px;font-size:.8rem;color:var(--gray)">
-          📦 Includes: ${c.includes.join(' • ')}
+          <i class="ph-fill ph-package"></i> Includes: ${c.includes.join(' • ')}
         </div>
         <div class="combo-price-row">
           <span class="combo-price">₹${c.price}</span>
           <span class="combo-original">₹${c.mrp}</span>
           <span class="combo-save">${c.save}</span>
         </div>
-        <div class="combo-timer">⏰ Offer ends in ${timerVal}h 23m 45s</div>
+        <div class="combo-timer"><i class="ph-fill ph-clock"></i> Offer ends in ${timerVal}h 23m 45s</div>
         <div class="combo-actions">
-          <button class="btn-combo" onclick="addToCart(${c.id})">🛒 Add to Cart</button>
-          <button class="btn-combo" style="background:linear-gradient(135deg,#25D366,#1ebe5d)" onclick="whatsappCombo(${c.id})">💬 WhatsApp</button>
+          <button class="btn-combo" onclick="addToCart(${c.id})"><i class="ph-bold ph-shopping-cart"></i> Add to Cart</button>
+          <button class="btn-combo" style="background:linear-gradient(135deg,#25D366,#1ebe5d)" onclick="whatsappCombo(${c.id})"><i class="ph-fill ph-chat-circle-dots"></i> WhatsApp</button>
         </div>
       </div>
     </div>
@@ -1079,10 +1094,10 @@ function renderReviews(){
         <div class="avatar" style="background:${r.color}">${r.initial}</div>
         <div class="reviewer-info">
           <h4>${r.name}</h4>
-          <p>📍 ${r.city}</p>
+          <p><i class="ph-fill ph-map-pin"></i> ${r.city}</p>
         </div>
       </div>
-      <div class="review-stars">${'★'.repeat(r.rating)}</div>
+      <div class="review-stars">${'<i class="ph-fill ph-star"></i>'.repeat(r.rating)}</div>
       <div class="review-text">${r.text}</div>
     </div>
   `).join('');
@@ -1116,7 +1131,7 @@ function addToCart(id){
   saveCart();
   updateCartBadge();
   renderProducts();
-  showToast(`✅ ${product.name} added to cart!`);
+  showToast(`<i class="ph-fill ph-check-circle"></i> ${product.name} added to cart!`);
 }
 
 function removeFromCart(id){
@@ -1170,7 +1185,7 @@ function renderCartSidebar(){
   const list = document.getElementById('cartItemsList');
   const footer = document.getElementById('cartFooter');
   if(cart.length === 0){
-    list.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p style="font-weight:600;margin-bottom:8px">Your cart is empty</p><p style="font-size:.85rem;color:var(--gray)">Add some delicious dairy products or spices!</p><button onclick="closeCart()" style="margin-top:16px;background:var(--dairy-accent);color:#fff;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:600">Shop Now</button></div>`;
+    list.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon"><i class="ph-bold ph-shopping-cart"></i></div><p style="font-weight:600;margin-bottom:8px">Your cart is empty</p><p style="font-size:.85rem;color:var(--gray)">Add some delicious dairy products or spices!</p><button onclick="closeCart()" style="margin-top:16px;background:var(--dairy-accent);color:#fff;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:600">Shop Now</button></div>`;
     footer.style.display = 'none';
     return;
   }
@@ -1194,10 +1209,10 @@ function renderCartSidebar(){
     </div>
   `).join('');
   document.getElementById('cartSubtotal').textContent = '₹'+subtotal;
-  document.getElementById('cartDelivery').textContent = delivery === 0 ? '🎉 FREE' : '₹'+delivery;
+  document.getElementById('cartDelivery').textContent = delivery === 0 ? '<i class="ph-fill ph-confetti"></i> FREE' : '₹'+delivery;
   document.getElementById('cartTotal').textContent = '₹'+total;
   const remaining = 499 - subtotal;
-  document.getElementById('freeShipNote').textContent = delivery === 0 ? '🎉 You have free delivery!' : `Add ₹${remaining} more for FREE delivery!`;
+  document.getElementById('freeShipNote').textContent = delivery === 0 ? '<i class="ph-fill ph-confetti"></i> You have free delivery!' : `Add ₹${remaining} more for FREE delivery!`;
   footer.style.display = 'block';
 }
 
@@ -1206,21 +1221,21 @@ function checkoutWhatsApp(){
   const items = cart.map(i => `• ${i.name} (${i.weight}) × ${i.qty} = ₹${i.price*i.qty}`).join('\n');
   const subtotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
   const delivery = subtotal >= 499 ? 0 : 40;
-  const msg = `🥛 *New Order — Indian Dairy & Spices*\n\n${items}\n\n📦 Subtotal: ₹${subtotal}\n🚚 Delivery: ₹${delivery}\n💰 *Total: ₹${subtotal+delivery}*\n\nPlease confirm my order and share delivery details. Thank you!`;
+  const msg = `<i class="ph-fill ph-drop"></i> *New Order — Indian Dairy & Spices*\n\n${items}\n\n<i class="ph-fill ph-package"></i> Subtotal: ₹${subtotal}\n<i class="ph-fill ph-truck"></i> Delivery: ₹${delivery}\n💰 *Total: ₹${subtotal+delivery}*\n\nPlease confirm my order and share delivery details. Thank you!`;
   window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
 }
 
 function whatsappOrder(id){
   const p = PRODUCTS.find(x => x.id === id);
   if(!p) return;
-  const msg = `Hi! I want to order:\n\n✨ *${p.name}* (${p.hindi})\n📦 Weight: ${p.weight}\n💰 Price: ₹${p.price}\n\nPlease confirm availability and delivery details. Thank you!`;
+  const msg = `Hi! I want to order:\n\n<i class="ph-fill ph-sparkle"></i> *${p.name}* (${p.hindi})\n<i class="ph-fill ph-package"></i> Weight: ${p.weight}\n💰 Price: ₹${p.price}\n\nPlease confirm availability and delivery details. Thank you!`;
   window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
 }
 
 function whatsappCombo(id){
   const c = COMBOS.find(x => x.id === id);
   if(!c) return;
-  const msg = `Hi! I want to order the *${c.name}* Combo Pack!\n\n📦 Includes: ${c.includes.join(', ')}\n💰 Price: ₹${c.price} (${c.save})\n\nPlease confirm availability. Thank you!`;
+  const msg = `Hi! I want to order the *${c.name}* Combo Pack!\n\n<i class="ph-fill ph-package"></i> Includes: ${c.includes.join(', ')}\n💰 Price: ₹${c.price} (${c.save})\n\nPlease confirm availability. Thank you!`;
   window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
 }
 
@@ -1230,7 +1245,7 @@ function checkPincode(){
   const result = document.getElementById('pinResult');
   if(pin.length !== 6){ result.textContent = '⚠️ Please enter a valid 6-digit pincode'; result.className='pin-result no'; return; }
   if(PINCODES_OK.includes(pin)){
-    result.textContent = `✅ Great news! We deliver to ${pin}. Estimated delivery: 1-2 days`;
+    result.textContent = `<i class="ph-fill ph-check-circle"></i> Great news! We deliver to ${pin}. Estimated delivery: 1-2 days`;
     result.className = 'pin-result ok';
   } else {
     result.textContent = `❌ Sorry, we don't deliver to ${pin} yet. Coming soon!`;
@@ -1245,7 +1260,7 @@ function closeMobileMenuOnOverlay(e){ if(e.target === document.getElementById('m
 
 // NEWSLETTER
 function subscribeNewsletter(){
-  showToast('🎉 Subscribed! You will get ₹50 off your first order!');
+  showToast('<i class="ph-fill ph-confetti"></i> Subscribed! You will get ₹50 off your first order!');
 }
 
 // DIWALI MODE
@@ -1259,13 +1274,13 @@ function toggleDiwaliMode(){
     for(let i=0;i<30;i++){
       const s = document.createElement('span');
       s.className = 'sparkle';
-      s.textContent = ['✨','🌟','⭐','💫','🎇','🧨'][Math.floor(Math.random()*6)];
+      s.textContent = ['<i class="ph-fill ph-sparkle"></i>','🌟','<i class="ph-fill ph-star"></i>','<i class="ph-fill ph-star-four"></i>','<i class="ph-fill ph-sparkle"></i>','<i class="ph-fill ph-firecracker"></i>'][Math.floor(Math.random()*6)];
       s.style.left = Math.random()*100+'%';
       s.style.animationDelay = Math.random()*3+'s';
       s.style.animationDuration = (2+Math.random()*3)+'s';
       overlay.appendChild(s);
     }
-    showToast('🪔 Festive Mode ON! Happy Festivities! 🎉');
+    showToast('<i class="ph-fill ph-lamp"></i> Festive Mode ON! Happy Festivities! <i class="ph-fill ph-confetti"></i>');
   }
 }
 
@@ -1350,6 +1365,52 @@ document.addEventListener('DOMContentLoaded', () => {
 const style = document.createElement('style');
 style.textContent = '@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
 document.head.appendChild(style);
+</script>
+
+<!-- CHATBOT WIDGET -->
+<div id="chatbot-widget" style="position:fixed; bottom:30px; right:30px; z-index:9999;">
+  <button id="chatbot-btn" onclick="toggleChat()" style="width:60px; height:60px; border-radius:50%; background:var(--dairy-accent); color:white; border:none; box-shadow:var(--shadow-lg); font-size:1.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.3s;">
+    <i class="ph-fill ph-chats-circle"></i>
+  </button>
+  <div id="chatbot-window" style="display:none; position:absolute; bottom:80px; right:0; width:320px; background:#fff; border-radius:16px; box-shadow:var(--shadow-lg); overflow:hidden; flex-direction:column; border:1px solid #eee;">
+    <div style="background:var(--dairy-accent); color:white; padding:16px; font-weight:600; display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap:8px;"><i class="ph-fill ph-robot"></i> Indian Dairy Support</div>
+      <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;"><i class="ph-bold ph-x"></i></button>
+    </div>
+    <div id="chat-messages" style="height:250px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:#f9f9f9; font-size:0.9rem;">
+      <div style="background:#fff; padding:10px 14px; border-radius:12px; border-bottom-left-radius:2px; box-shadow:0 1px 2px rgba(0,0,0,0.05); align-self:flex-start; max-width:85%;">Namaste! <i class="ph-fill ph-hands-praying"></i> How can I help you with your order today?</div>
+    </div>
+    <div style="padding:12px; background:#fff; border-top:1px solid #eee; display:flex; gap:8px;">
+      <input type="text" id="chatInput" placeholder="Ask a question..." style="flex:1; border:1px solid #ddd; border-radius:20px; padding:8px 14px; outline:none;" onkeypress="if(event.key==='Enter') sendChat()">
+      <button onclick="sendChat()" style="background:var(--dairy-accent); color:white; border:none; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="ph-fill ph-paper-plane-right"></i></button>
+    </div>
+  </div>
+</div>
+<script>
+  function toggleChat() {
+    const w = document.getElementById('chatbot-window');
+    w.style.display = w.style.display === 'none' || w.style.display === '' ? 'flex' : 'none';
+  }
+  function sendChat() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    
+    const msgs = document.getElementById('chat-messages');
+    msgs.innerHTML += `<div style="background:var(--dairy-accent); color:white; padding:10px 14px; border-radius:12px; border-bottom-right-radius:2px; align-self:flex-end; max-width:85%;">${text}</div>`;
+    input.value = '';
+    msgs.scrollTop = msgs.scrollHeight;
+    
+    setTimeout(() => {
+      let reply = "We deliver across Thane within 2 hours! All our products are FSSAI certified and purely sourced.";
+      if(text.toLowerCase().includes('delivery')) reply = "Yes, we offer hyper-local delivery in Thane, Maharashtra. Free delivery above ₹499!";
+      if(text.toLowerCase().includes('pure') || text.toLowerCase().includes('a2')) reply = "Our A2 Ghee is made using the traditional Bilona method from pure Gir cow milk.";
+      if(text.toLowerCase().includes('payment')) reply = "We accept all UPI apps like GPay and PhonePe via our secure Razorpay checkout!";
+      
+      msgs.innerHTML += `<div style="background:#fff; padding:10px 14px; border-radius:12px; border-bottom-left-radius:2px; box-shadow:0 1px 2px rgba(0,0,0,0.05); align-self:flex-start; max-width:85%;">${reply}</div>`;
+      msgs.scrollTop = msgs.scrollHeight;
+    }, 800);
+  }
 </script>
 </body>
 </html>
