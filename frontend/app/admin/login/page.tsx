@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabaseClient';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -14,28 +13,17 @@ export default function AdminLogin() {
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // MOCK AUTHENTICATION since Supabase Client is removed for FastAPI integration
     if (isSignUp) {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success('Sign up successful! Please log in.');
-        setIsSignUp(false);
-      }
+      toast.success('Sign up mocked successfully! Please log in.');
+      setIsSignUp(false);
     } else {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        toast.error('Invalid credentials');
-      } else {
+      if (email === 'admin@spiceshop.com' && password === 'admin') {
         toast.success('Logged in successfully');
-        localStorage.setItem('admin_token', data.session?.access_token || 'true');
+        localStorage.setItem('admin_token', 'mock_token_true');
         router.push('/admin/dashboard');
+      } else {
+        toast.error('Invalid credentials. Use admin@spiceshop.com / admin');
       }
     }
   };
