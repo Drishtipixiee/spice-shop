@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: spice-shop-backend
+    env: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://postgres:Hjklvbnm%401234@db.dinygrtktvzkyqgutuft.supabase.co:5432/postgres
+      - key: ADMIN_EMAIL
+        value: admin@spiceshop.in
+      - key: ADMIN_PASSWORD
+        value: Admin@1234
+      - key: JWT_SECRET
+        value: supersecretjwtkey2025changeme
+      - key: ALLOWED_ORIGINS
+        value: https://tubular-boba-0eac96.netlify.app,https://spice-shop-drishtipixiee.vercel.app,http://localhost:3000
+      - key: WHATSAPP_NUMBER
+        value: "919999999999"
+      - key: ENABLE_RAZORPAY
+        value: "false"
