@@ -15,9 +15,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{
-  --saffron:#FF6B00;--gold:#FFC200;--red:#C0392B;--cream:#f8fafc;
-  --dark:#0f172a;--brown:#8B4513;--text:#333;--gray:#666;--lgray:#f5f5f5;
-  --dairy-bg:#e8f4fd;--dairy-accent:#7c3aed;--dairy-dark:#5b21b6;
+  --saffron:#FF6B00;--gold:#FFC200;--red:#C0392B;--cream:#FFF8F0;
+  --dark:#2C1810;--brown:#8B4513;--text:#333;--gray:#666;--lgray:#f5f5f5;
+  --dairy-bg:#e8f4fd;--dairy-accent:#4A90D9;--dairy-dark:#1d4ed8;
   --shadow:0 4px 20px rgba(44,24,16,.12);--shadow-lg:0 8px 40px rgba(44,24,16,.18);
   --radius:16px;--radius-sm:10px;
 }
@@ -69,7 +69,7 @@ nav{position:sticky;top:0;z-index:900;background:rgba(255,248,240,.96);
 
 /* HERO */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;
-  background:linear-gradient(135deg,#0f172a 0%,#5b21b6 40%,#7c3aed 100%);
+  background:linear-gradient(135deg,#0a1a30 0%,#1e3a8a 40%,#4A90D9 100%);
   overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/1200px-Ghee_in_a_bowl.jpg') center/cover;
   opacity:.15;z-index:0;filter:blur(4px)}
@@ -438,7 +438,6 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
   .cat-tab{padding:8px 14px;font-size:.8rem}
 }
 </style>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -516,7 +515,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
   <div class="hero-content">
     <div class="hero-text">
       <div class="hero-badge">✨ India's Premium Dairy &amp; Spice Brand</div>
-      <h1 class="hero-title-hindi" style="font-family:'Poppins',sans-serif">Fresh Dairy, Authentic Spices</h1>
+      <h1 class="hero-title-hindi hindi">ताज़ा डेयरी, शुद्ध मसाले</h1>
       <p class="hero-title-en">Fresh Dairy, Pure Spices — Straight From the Farm</p>
       <p class="hero-desc">
         Farm-fresh dairy delivered to your doorstep. Handpicked spices from the finest farms of India.
@@ -565,7 +564,6 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
     <button class="cat-tab" data-cat="dairy" onclick="filterByCategory('dairy')">🥛 Dairy <span class="cat-count" id="count-dairy">10</span></button>
     <button class="cat-tab" data-cat="spice" onclick="filterByCategory('spice')">🌶️ Spices <span class="cat-count" id="count-spice">18</span></button>
     <button class="cat-tab" data-cat="combo" onclick="filterByCategory('combo')">🎁 Combos <span class="cat-count" id="count-combo">5</span></button>
-    <button class="cat-tab" data-cat="cake" onclick="filterByCategory('cake')">🎂 Cakes <span class="cat-count" id="count-cake">3</span></button>
     <button class="cat-tab" data-cat="bestseller" onclick="filterByCategory('bestseller')">🔥 Best Sellers</button>
     <button class="cat-tab" data-cat="new" onclick="filterByCategory('new')">✨ New Arrivals</button>
   </div>
@@ -791,184 +789,56 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
       <div class="cart-row"><span>Delivery</span><span id="cartDelivery">₹40</span></div>
       <div class="cart-row total"><span>Total</span><span id="cartTotal">₹0</span></div>
     </div>
-    <button class="btn-checkout-wa" style="background:var(--dairy-accent)" onclick="openAddressModal()">Proceed to Address ➔</button>
+    <button class="btn-checkout-wa" onclick="checkoutWhatsApp()">💬 Checkout via WhatsApp</button>
     <button class="btn-clear-cart" onclick="clearCart()">🗑️ Clear Cart</button>
   </div>
-</div>
-
-
-<!-- ADDRESS MODAL -->
-<div class="cart-overlay" id="addressOverlay" onclick="closeAddressModal()"></div>
-<div class="cart-sidebar" id="addressSidebar" style="z-index:1005;">
-  <div class="cart-header">
-    <h3>Delivery Details</h3>
-    <button class="close-cart" onclick="closeAddressModal()">← Back</button>
-  </div>
-  <div style="padding:20px; overflow-y:auto; flex:1">
-    <div style="margin-bottom:12px">
-      <label style="font-size:0.8rem;font-weight:700">Full Name</label>
-      <input type="text" id="custName" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc" placeholder="Enter your name">
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:0.8rem;font-weight:700">Phone Number</label>
-      <input type="text" id="custPhone" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc" placeholder="10-digit number">
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:0.8rem;font-weight:700">Delivery Address</label>
-      <textarea id="custAddr" rows="3" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc" placeholder="House/Flat No, Area"></textarea>
-    </div>
-    <div style="margin-top:20px">
-      <label style="font-size:0.8rem;font-weight:700;color:var(--gray)">Payment Method</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
-        <div id="payRazor" onclick="setPay('razorpay')" style="border:2px solid var(--dairy-accent);padding:12px;text-align:center;border-radius:8px;cursor:pointer;background:#f3e8ff;color:var(--dairy-dark);font-weight:700">Pay Online<br><span style="font-size:0.7rem">(Razorpay/UPI)</span></div>
-        <div id="payCOD" onclick="setPay('cod')" style="border:2px solid #ccc;padding:12px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700">WhatsApp /<br><span style="font-size:0.7rem">Direct UPI</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="cart-footer">
-    <button class="btn-checkout-wa" id="finalPayBtn" style="background:var(--dairy-dark)" onclick="processOrder()">Pay Now</button>
-  </div>
-</div>
-
-<!-- SUCCESS MODAL -->
-<div class="cart-overlay" id="successOverlay" onclick="location.reload()"></div>
-<div class="cart-sidebar" id="successSidebar" style="z-index:1010;justify-content:center;align-items:center;padding:40px;text-align:center">
-  <div style="font-size:4rem;color:#10b981;margin-bottom:20px">✅</div>
-  <h2 style="margin-bottom:12px">Order Successful!</h2>
-  <p style="color:var(--gray);margin-bottom:24px">Your order <strong id="succId"></strong> has been received. Our team will pack it shortly.</p>
-  <button class="btn-checkout-wa" style="background:var(--dairy-accent)" onclick="location.reload()">Continue Shopping</button>
 </div>
 
 <!-- WHATSAPP FLOAT -->
 <div class="wa-float" onclick="window.open('https://wa.me/919892360874?text=Hi! I want to order from Indian Dairy %26 Spices. Please help me!','_blank')" title="Chat on WhatsApp">💬</div>
 
 <script>
-// DYNAMIC PRODUCT DATA + MODAL LOGIC
-
-// DYNAMIC PRODUCTS FOR ADMIN EDITING
-let storedProducts = localStorage.getItem('zeptoDbProducts');
-let PRODUCTS = [];
-if (storedProducts) {
-  PRODUCTS = JSON.parse(storedProducts);
-} else {
-  PRODUCTS = [
-    // Original 18 Spices, 10 Dairy, 5 Combos + 3 Cakes
-    {id:19,name:"Pure Cow Ghee (Desi)",hindi:"देसी गाय घी",cat:"dairy",price:650,mrp:820,weight:"500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",badges:["bestseller","organic"],rating:5.0,reviews:5621,tags:["bestseller"]},
-    {id:20,name:"A2 Milk Ghee",hindi:"A2 दूध घी",cat:"dairy",price:850,mrp:1050,weight:"500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",badges:["organic"],rating:4.9,reviews:2341,tags:[]},
-    {id:21,name:"Paneer Fresh",hindi:"ताज़ा पनीर",cat:"dairy",price:180,mrp:230,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",badges:["bestseller"],rating:4.8,reviews:3124,tags:["bestseller"]},
-    {id:22,name:"Dahi (Curd) Natural",hindi:"प्राकृतिक दही",cat:"dairy",price:60,mrp:80,weight:"400g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Mishti_Doi.jpg/640px-Mishti_Doi.jpg",badges:[],rating:4.7,reviews:1243,tags:["bestseller"]},
-    {id:23,name:"Lassi (Sweet/Salted)",hindi:"लस्सी",cat:"dairy",price:45,mrp:60,weight:"300ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Lassi_in_a_clay_cup.jpg/640px-Lassi_in_a_clay_cup.jpg",badges:["new"],rating:4.8,reviews:876,tags:["new"]},
-    {id:24,name:"Buttermilk (Chaas)",hindi:"मट्ठा / छाछ",cat:"dairy",price:35,mrp:50,weight:"500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Chaas.jpg/640px-Chaas.jpg",badges:[],rating:4.6,reviews:543,tags:[]},
-    {id:25,name:"Khoya (Mawa)",hindi:"खोया / मावा",cat:"dairy",price:250,mrp:320,weight:"250g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Khoa_in_a_bowl.jpg/640px-Khoa_in_a_bowl.jpg",badges:["bestseller"],rating:4.8,reviews:987,tags:["bestseller"]},
-    {id:26,name:"Shrikhand (Kesar/Elaichi)",hindi:"श्रीखंड",cat:"dairy",price:120,mrp:155,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Shrikhand.jpg/640px-Shrikhand.jpg",badges:["new"],rating:4.7,reviews:432,tags:["new"]},
-    {id:27,name:"Mishti Doi",hindi:"मिष्टी दोई",cat:"dairy",price:90,mrp:115,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Mishti_Doi.jpg/640px-Mishti_Doi.jpg",badges:["new"],rating:4.8,reviews:321,tags:["new"]},
-    {id:28,name:"Chenna Fresh",hindi:"छेना",cat:"dairy",price:160,mrp:200,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",badges:[],rating:4.6,reviews:213,tags:[]},
-    
-    {id:1,name:"Kashmiri Red Chilli Powder",hindi:"कश्मीरी लाल मिर्च",cat:"spice",price:120,mrp:160,weight:"250g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Chili_powder.jpg/640px-Chili_powder.jpg",badges:["bestseller"],rating:4.8,reviews:1247,tags:["bestseller"]},
-    {id:2,name:"Turmeric (Haldi) Powder",hindi:"हल्दी पाउडर",cat:"spice",price:80,mrp:110,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Turmeric_powder.jpg/640px-Turmeric_powder.jpg",badges:["bestseller","organic"],rating:4.9,reviews:2103,tags:["bestseller"]},
-    {id:3,name:"Cumin (Jeera) Seeds",hindi:"जीरा",cat:"spice",price:90,mrp:120,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Cumin_seeds.jpg/640px-Cumin_seeds.jpg",badges:["organic"],rating:4.7,reviews:876,tags:["bestseller"]},
-    {id:4,name:"Coriander (Dhaniya) Powder",hindi:"धनिया पाउडर",cat:"spice",price:70,mrp:95,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Coriander_powder.jpg/640px-Coriander_powder.jpg",badges:[],rating:4.6,reviews:654,tags:[]},
-    {id:5,name:"Garam Masala Blend",hindi:"गरम मसाला",cat:"spice",price:150,mrp:200,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Garam_masala.jpg/640px-Garam_masala.jpg",badges:["bestseller"],rating:4.9,reviews:3241,tags:["bestseller"]},
-    {id:6,name:"Black Pepper (Kali Mirch)",hindi:"काली मिर्च",cat:"spice",price:200,mrp:260,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Black_pepper.jpg/640px-Black_pepper.jpg",badges:[],rating:4.7,reviews:521,tags:[]},
-    {id:7,name:"Cardamom (Elaichi)",hindi:"इलायची",cat:"spice",price:350,mrp:440,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Cardamom_pods.jpg/640px-Cardamom_pods.jpg",badges:["organic"],rating:4.8,reviews:934,tags:[]},
-    {id:8,name:"Mustard Seeds (Rai)",hindi:"सरसों / राई",cat:"spice",price:60,mrp:80,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Black_mustard_seeds.jpg/640px-Black_mustard_seeds.jpg",badges:[],rating:4.5,reviews:432,tags:[]},
-    {id:10,name:"Black Salt (Kala Namak)",hindi:"काला नमक",cat:"spice",price:180,mrp:240,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Black_Salt.jpg/640px-Black_Salt.jpg",badges:["bestseller"],rating:4.9,reviews:1876,tags:["bestseller"]},
-    
-    // NEW CAKES
-    {id:101,name:"Black Forest Cake",hindi:"ब्लैक फॉरेस्ट केक",cat:"cake",price:450,mrp:550,weight:"500g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Black_forest_cake.jpg/640px-Black_forest_cake.jpg",badges:["new"],rating:4.8,reviews:112,tags:["new"]},
-    {id:102,name:"Pineapple Pastry",hindi:"पाइनएप्पल पेस्ट्री",cat:"cake",price:80,mrp:110,weight:"1 Pc",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Pineapple_pastry.jpg/640px-Pineapple_pastry.jpg",badges:[],rating:4.5,reviews:45,tags:[]},
-    {id:103,name:"Chocolate Truffle Cake",hindi:"चॉकलेट ट्रफल केक",cat:"cake",price:550,mrp:650,weight:"500g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Chocolate_truffle_cake.jpg/640px-Chocolate_truffle_cake.jpg",badges:["bestseller"],rating:4.9,reviews:320,tags:["bestseller"]}
-  ];
-  localStorage.setItem('zeptoDbProducts', JSON.stringify(PRODUCTS));
-}
-
-let payMethod = 'razorpay';
-let checkoutTotal = 0;
-
-function openAddressModal() {
-  const sub = cart.reduce((s,i) => s+i.price*i.qty, 0);
-  if(sub === 0) return;
-  checkoutTotal = sub + (sub >= 499 ? 0 : 40);
+// ===== PRODUCT DATA =====
+const PRODUCTS = [
+  // DAIRY (First Priority)
+  {id:19,name:"Pure Cow Ghee (Desi)",hindi:"देसी गाय घी",cat:"dairy",price:650,mrp:820,weight:"500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",badges:["bestseller","organic"],rating:5.0,reviews:5621,tags:["bestseller"]},
+  {id:20,name:"A2 Milk Ghee",hindi:"A2 दूध घी",cat:"dairy",price:850,mrp:1050,weight:"500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",badges:["organic"],rating:4.9,reviews:2341,tags:[]},
+  {id:21,name:"Paneer Fresh",hindi:"ताज़ा पनीर",cat:"dairy",price:180,mrp:230,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",badges:["bestseller"],rating:4.8,reviews:3124,tags:["bestseller"]},
+  {id:22,name:"Dahi (Curd) Natural",hindi:"प्राकृतिक दही",cat:"dairy",price:60,mrp:80,weight:"400g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Mishti_Doi.jpg/640px-Mishti_Doi.jpg",badges:[],rating:4.7,reviews:1243,tags:["bestseller"]},
+  {id:23,name:"Lassi (Sweet/Salted)",hindi:"लस्सी",cat:"dairy",price:45,mrp:60,weight:"300ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Lassi_in_a_clay_cup.jpg/640px-Lassi_in_a_clay_cup.jpg",badges:["new"],rating:4.8,reviews:876,tags:["new"]},
+  {id:24,name:"Buttermilk (Chaas)",hindi:"मट्ठा / छाछ",cat:"dairy",price:35,mrp:50,weight:"500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Chaas.jpg/640px-Chaas.jpg",badges:[],rating:4.6,reviews:543,tags:[]},
+  {id:25,name:"Khoya (Mawa)",hindi:"खोया / मावा",cat:"dairy",price:250,mrp:320,weight:"250g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Khoa_in_a_bowl.jpg/640px-Khoa_in_a_bowl.jpg",badges:["bestseller"],rating:4.8,reviews:987,tags:["bestseller"]},
+  {id:26,name:"Shrikhand (Kesar/Elaichi)",hindi:"श्रीखंड",cat:"dairy",price:120,mrp:155,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Shrikhand.jpg/640px-Shrikhand.jpg",badges:["new"],rating:4.7,reviews:432,tags:["new"]},
+  {id:27,name:"Mishti Doi",hindi:"मिष्टी दोई",cat:"dairy",price:90,mrp:115,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Mishti_Doi.jpg/640px-Mishti_Doi.jpg",badges:["new"],rating:4.8,reviews:321,tags:["new"]},
+  {id:28,name:"Chenna Fresh",hindi:"छेना",cat:"dairy",price:160,mrp:200,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",badges:[],rating:4.6,reviews:213,tags:[]},
   
-  document.getElementById('addressOverlay').classList.add('open');
-  document.getElementById('addressSidebar').classList.add('open');
-  document.getElementById('finalPayBtn').textContent = 'Pay ₹' + checkoutTotal;
-}
-function closeAddressModal() {
-  document.getElementById('addressOverlay').classList.remove('open');
-  document.getElementById('addressSidebar').classList.remove('open');
-}
-
-function setPay(method) {
-  payMethod = method;
-  document.getElementById('payRazor').style.background = method === 'razorpay' ? '#f3e8ff' : '#fff';
-  document.getElementById('payRazor').style.borderColor = method === 'razorpay' ? 'var(--dairy-accent)' : '#ccc';
-  document.getElementById('payCOD').style.background = method === 'cod' ? '#f3e8ff' : '#fff';
-  document.getElementById('payCOD').style.borderColor = method === 'cod' ? 'var(--dairy-accent)' : '#ccc';
+  // SPICES
+  {id:1,name:"Kashmiri Red Chilli Powder",hindi:"कश्मीरी लाल मिर्च",cat:"spice",price:120,mrp:160,weight:"250g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Chili_powder.jpg/640px-Chili_powder.jpg",badges:["bestseller"],rating:4.8,reviews:1247,tags:["bestseller"]},
+  {id:2,name:"Turmeric (Haldi) Powder",hindi:"हल्दी पाउडर",cat:"spice",price:80,mrp:110,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Turmeric_powder.jpg/640px-Turmeric_powder.jpg",badges:["bestseller","organic"],rating:4.9,reviews:2103,tags:["bestseller"]},
+  {id:3,name:"Cumin (Jeera) Seeds",hindi:"जीरा",cat:"spice",price:90,mrp:120,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Cumin_seeds.jpg/640px-Cumin_seeds.jpg",badges:["organic"],rating:4.7,reviews:876,tags:["bestseller"]},
+  {id:4,name:"Coriander (Dhaniya) Powder",hindi:"धनिया पाउडर",cat:"spice",price:70,mrp:95,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Coriander_powder.jpg/640px-Coriander_powder.jpg",badges:[],rating:4.6,reviews:654,tags:[]},
+  {id:5,name:"Garam Masala Blend",hindi:"गरम मसाला",cat:"spice",price:150,mrp:200,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Garam_masala.jpg/640px-Garam_masala.jpg",badges:["bestseller"],rating:4.9,reviews:3241,tags:["bestseller"]},
+  {id:6,name:"Black Pepper (Kali Mirch)",hindi:"काली मिर्च",cat:"spice",price:200,mrp:260,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Black_pepper.jpg/640px-Black_pepper.jpg",badges:[],rating:4.7,reviews:521,tags:[]},
+  {id:7,name:"Cardamom (Elaichi) Green",hindi:"इलायची",cat:"spice",price:350,mrp:440,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Cardamom_pods.jpg/640px-Cardamom_pods.jpg",badges:["organic"],rating:4.8,reviews:934,tags:[]},
+  {id:8,name:"Mustard Seeds (Rai)",hindi:"सरसों / राई",cat:"spice",price:60,mrp:80,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Black_mustard_seeds.jpg/640px-Black_mustard_seeds.jpg",badges:[],rating:4.5,reviews:432,tags:[]},
+  {id:9,name:"Fenugreek (Methi) Seeds",hindi:"मेथी दाना",cat:"spice",price:65,mrp:85,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Fenugreek_seeds.jpg/640px-Fenugreek_seeds.jpg",badges:["organic"],rating:4.6,reviews:367,tags:[]},
+  {id:10,name:"Black Salt (Kala Namak)",hindi:"काला नमक",cat:"spice",price:180,mrp:240,weight:"200g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Black_Salt.jpg/640px-Black_Salt.jpg",badges:["bestseller"],rating:4.9,reviews:1876,tags:["bestseller"]},
+  {id:11,name:"Bay Leaves (Tej Patta)",hindi:"तेज पत्ता",cat:"spice",price:50,mrp:70,weight:"50g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bay_leaves.jpg/640px-Bay_leaves.jpg",badges:[],rating:4.4,reviews:289,tags:[]},
+  {id:12,name:"Cloves (Laung)",hindi:"लौंग",cat:"spice",price:300,mrp:380,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Cloves_in_a_bowl.jpg/640px-Cloves_in_a_bowl.jpg",badges:["organic"],rating:4.7,reviews:612,tags:[]},
+  {id:13,name:"Cinnamon Sticks (Dalchini)",hindi:"दालचीनी",cat:"spice",price:130,mrp:170,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cinnamon_sticks.jpg/640px-Cinnamon_sticks.jpg",badges:[],rating:4.6,reviews:445,tags:[]},
+  {id:14,name:"Star Anise (Chakri Phool)",hindi:"चक्र फूल",cat:"spice",price:160,mrp:210,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Star_anise.jpg/640px-Star_anise.jpg",badges:["new"],rating:4.5,reviews:213,tags:["new"]},
+  {id:15,name:"Biryani Masala Special",hindi:"बिरयानी मसाला",cat:"spice",price:175,mrp:230,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Indian_Spices.jpg/640px-Indian_Spices.jpg",badges:["bestseller"],rating:4.9,reviews:4123,tags:["bestseller"]},
+  {id:16,name:"Chaat Masala",hindi:"चाट मसाला",cat:"spice",price:110,mrp:145,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg",badges:["bestseller"],rating:4.8,reviews:1654,tags:["bestseller"]},
+  {id:17,name:"Sambar Powder",hindi:"सांभर पाउडर",cat:"spice",price:120,mrp:155,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Indian_Spices.jpg/640px-Indian_Spices.jpg",badges:["new"],rating:4.7,reviews:387,tags:["new"]},
+  {id:18,name:"Tandoori Masala",hindi:"तंदूरी मसाला",cat:"spice",price:140,mrp:185,weight:"100g",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Chili_powder.jpg/640px-Chili_powder.jpg",badges:["new"],rating:4.8,reviews:876,tags:["new"]},
   
-  document.getElementById('finalPayBtn').textContent = method === 'cod' ? 'Pay via WhatsApp / UPI' : 'Pay ₹' + checkoutTotal;
-}
-
-function processOrder() {
-  const name = document.getElementById('custName').value.trim();
-  const phone = document.getElementById('custPhone').value.trim();
-  const addr = document.getElementById('custAddr').value.trim();
-  if(!name || !phone || !addr) { alert("Please enter delivery details."); return; }
-  
-  if(payMethod === 'razorpay') {
-    const options = {
-      "key": "rzp_test_dummykey", 
-      "amount": checkoutTotal * 100,
-      "currency": "INR",
-      "name": "Indian Dairy & Spices",
-      "description": "Order via Razorpay",
-      "handler": function (res){
-        saveAndSuccess(name, phone, addr, "Razorpay Online", res.razorpay_payment_id);
-      },
-      "prefill": { "name": name, "contact": phone },
-      "theme": { "color": "#7c3aed" }
-    };
-    new Razorpay(options).open();
-  } else {
-    // WhatsApp Direct UPI
-    const items = cart.map(i => `• ${i.name} (${i.weight}) x ${i.qty} = ₹${i.price*i.qty}`).join('%0A');
-    const msg = `Hi Anurag! I want to order:%0A%0A${items}%0A%0ATotal: ₹${checkoutTotal}%0A%0ADeliver to:%0A${name}, ${phone}%0A${addr}%0A%0AI will pay via UPI.`;
-    window.open('https://wa.me/919892360874?text='+msg, '_blank');
-    saveAndSuccess(name, phone, addr, "WhatsApp/UPI to Anurag", "UPI_Pending");
-  }
-}
-
-function saveAndSuccess(name, phone, addr, method, payId) {
-  const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
-  
-  const order = {
-    id: orderId, time: new Date().toLocaleString(),
-    customer: {name, phone, addr},
-    items: cart, total: checkoutTotal, method, payId,
-    status: "Received"
-  };
-  
-  let db = JSON.parse(localStorage.getItem('zeptoDbOrders') || '[]');
-  db.unshift(order);
-  localStorage.setItem('zeptoDbOrders', JSON.stringify(db));
-  
-  cart = []; saveCart(); updateCartBadge(); renderCartSidebar();
-  
-  closeAddressModal(); closeCart();
-  document.getElementById('successOverlay').classList.add('open');
-  document.getElementById('successSidebar').classList.add('open');
-  document.getElementById('succId').textContent = orderId;
-}
-
-// Add event listener to count cakes
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const cc = document.getElementById('count-cake');
-    if(cc) cc.textContent = PRODUCTS.filter(p=>p.cat==='cake').length;
-  }, 500);
-});
-
-
+  // COMBOS
+  {id:32,name:"Dairy Delight Box",hindi:"डेयरी डिलाइट बॉक्स",cat:"combo",price:850,mrp:1050,weight:"Ghee + Curd + Paneer + Lassi",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",badges:["combo"],rating:4.8,reviews:987,tags:[]},
+  {id:31,name:"Festival Hamper",hindi:"फेस्टिवल हैम्पर",cat:"combo",price:1299,mrp:1649,weight:"10 Spices + A2 Ghee + Paneer + Khoya",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",badges:["combo","bestseller"],rating:5.0,reviews:3421,tags:["bestseller"],save:"Save ₹350"},
+  {id:29,name:"Rasoi Queen Kit",hindi:"रसोई क्वीन किट",cat:"combo",price:699,mrp:879,weight:"6 Spices + Ghee 500ml",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg",badges:["combo","bestseller"],rating:4.9,reviews:2134,tags:["bestseller"],save:"Save ₹180"},
+  {id:30,name:"Biryani Lover Pack",hindi:"बिरयानी लवर पैक",cat:"combo",price:549,mrp:669,weight:"Biryani Masala + Whole Spices",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Indian_Spices.jpg/640px-Indian_Spices.jpg",badges:["combo"],rating:4.9,reviews:1876,tags:["bestseller"],save:"Save ₹120"},
+  {id:33,name:"South Indian Tadka Kit",hindi:"साउथ इंडियन तड़का किट",cat:"combo",price:499,mrp:610,weight:"Sambar + Mustard + Curry Leaves + Coconut Oil",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Turmeric_powder.jpg/640px-Turmeric_powder.jpg",badges:["combo","new"],rating:4.7,reviews:654,tags:["new"],save:"Save ₹111"},
+];
 
 const COMBOS = [
   {id:32,name:"🥛 Dairy Delight Box",hindi:"डेयरी डिलाइट बॉक्स",desc:"All your daily dairy essentials in one box. Pure ghee, creamy curd, fresh paneer and refreshing lassi.",price:850,mrp:1050,save:"Save ₹200",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",popular:true,includes:["Desi Ghee 500ml","Curd 400g","Paneer 200g","Lassi 300ml"]},
