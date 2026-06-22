@@ -3,9 +3,8 @@ services:
     name: spice-shop-backend
     env: python
     plan: free
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL
@@ -22,3 +21,5 @@ services:
         value: "919999999999"
       - key: ENABLE_RAZORPAY
         value: "false"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
