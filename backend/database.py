@@ -1,6 +1,6 @@
 """
 Database configuration and session management for the Spice Shop API.
-Uses SQLAlchemy ORM with SQLite backend.
+Uses SQLAlchemy ORM. Defaults to SQLite for easy deployment.
 """
 
 import os
@@ -13,8 +13,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 # Load environment variables
 load_dotenv()
 
-# Automatically read from Supabase URL if provided, otherwise fallback to SQLite
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:Hjklvbnm%401234@db.dinygrtktvzkyqgutuft.supabase.co:5432/postgres")
+# Default to SQLite for reliable deployment; set DATABASE_URL env var for PostgreSQL
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/shop.db")
 
 # SQLAlchemy requires 'postgresql://' instead of 'postgres://'
 if DATABASE_URL.startswith("postgres://"):
@@ -24,18 +24,14 @@ if DATABASE_URL.startswith("postgres://"):
 connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
     connect_args["check_same_thread"] = False
-    
-    # Ensure local directory exists for sqlite
-    os.makedirs(os.path.dirname("./data/shop.db"), exist_ok=True)
+    # Ensure data directory exists
+    db_path = DATABASE_URL.replace("sqlite:///", "")
+    Path(db_path).parent.mkdir(parents=True, exist_ok=True)
 
-try:
-    engine = create_engine(DATABASE_URL, connect_args=connect_args)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-except Exception as e:
-    print(f"Error connecting to database: {e}")
-    raise
-
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
 
 def get_db():
     """FastAPI dependency that yields a DB session and ensures cleanup."""

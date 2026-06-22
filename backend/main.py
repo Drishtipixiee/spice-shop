@@ -13,12 +13,19 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
+try:
+    from slowapi import _rate_limit_exceeded_handler
+    from slowapi.errors import RateLimitExceeded
+    SLOWAPI_AVAILABLE = True
+except ImportError:
+    SLOWAPI_AVAILABLE = False
 
 from database import Base, engine
 from routers import admin, cart, categories, orders, payments, pincode, products
-from routers.pincode import limiter
+try:
+    from routers.pincode import limiter
+except Exception:
+    limiter = None
 from seed import run_seed
 from models import Category  # noqa: F401 – ensure models are registered
 
@@ -58,9 +65,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Rate limiter
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+# Rate limiter (optional)
+if SLOWAPI_AVAILABLE and limiter:
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # ─────────────────────────── CORS ───────────────────────────
 
