@@ -5,7 +5,7 @@ const PRODUCTS = [
     hindi: "हल्दी पाउडर",
     cat: "spices",
     price: 120,
-    mrp: 150,
+    mrp: 1,
     weight: "250g",
     img: "https://5.imimg.com/data5/SELLER/Default/2023/1/VY/LZ/ZD/129728632/organic-turmeric-powder-1000x1000.jpg",
     badges: [
