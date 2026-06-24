@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Map — Indian Dairy & Spices, Thane</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#fffbf5;color:#1a1a2e}
+.header{background:#ff6b35;color:white;padding:16px 24px;text-align:center}
+.header h1{font-family:'Outfit';font-size:1.4rem;font-weight:800}
+.header p{font-size:.85rem;opacity:.9;margin-top:4px}
+.check-section{background:#fff8f3;padding:20px 24px;border-bottom:1px solid #ffd5c0}
+.check-row{display:flex;gap:10px;max-width:700px;margin:0 auto}
+.check-row input{flex:1;padding:12px 16px;border:1.5px solid #ffd5c0;border-radius:10px;font-size:.95rem;outline:none;font-family:inherit;color:#1a1a2e}
+.check-row input:focus{border-color:#ff6b35}
+.check-row button{padding:12px 22px;background:#ff6b35;color:white;border:none;border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:'Outfit'}
+#checkResult{max-width:700px;margin:10px auto 0;font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;display:none}
+.map-wrap{position:relative}
+#map{height:500px;width:100%}
+.legend{position:absolute;bottom:24px;right:12px;background:white;padding:14px 16px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:1000;font-size:.82rem;min-width:220px}
+.legend h4{font-family:'Outfit';font-weight:700;margin-bottom:10px;font-size:.88rem}
+.legend-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.legend-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+@media(max-width:600px){
+  #map{height:350px}
+  .legend{display:none}
+  .check-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🗺️ Delivery Zones — Indian Dairy & Spices</h1>
+  <p>Delivering across Thane district in 45–90 minutes</p>
+</div>
+<div class="check-section">
+  <div class="check-row">
+    <input type="text" id="areaInput" placeholder="Enter your area (e.g. Ghodbunder Road, Kalwa…)" onkeypress="if(event.key==='Enter')checkArea()">
+    <button onclick="checkArea()">Check Delivery</button>
+  </div>
+  <div id="checkResult"></div>
+</div>
+<div class="map-wrap">
+  <div id="map"></div>
+  <div class="legend">
+    <h4>Delivery Zones</h4>
+    <div class="legend-row"><div class="legend-dot" style="background:#2d6a4f"></div><span>Thane West — Free above ₹499</span></div>
+    <div class="legend-row"><div class="legend-dot" style="background:#ff6b35"></div><span>Thane East — ₹40</span></div>
+    <div class="legend-row"><div class="legend-dot" style="background:#0077b6"></div><span>Kalwa/Mumbra — ₹60</span></div>
+    <div class="legend-row"><div class="legend-dot" style="background:#e63946"></div><span>Dombivli/Outskirts — ₹80 (min ₹299)</span></div>
+    <div class="legend-row" style="margin-top:10px"><div style="width:14px;height:14px;background:#ff6b35;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem">🏪</div><span>Our Shop</span></div>
+  </div>
+</div>
+<script>
+const WA='919892360874';
+const map=L.map('map').setView([19.2183,72.9781],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors'}).addTo(map);
+
+// Zones
+L.polygon([[19.2350,72.9600],[19.2350,72.9850],[19.2100,72.9850],[19.2100,72.9600]],{color:'#2d6a4f',fillColor:'#2d6a4f',fillOpacity:.25,weight:2}).addTo(map).bindPopup('<b>Thane West</b><br>Free delivery above ₹499<br>ETA: 45–60 min');
+L.polygon([[19.2350,72.9850],[19.2350,73.0100],[19.2100,73.0100],[19.2100,72.9850]],{color:'#ff6b35',fillColor:'#ff6b35',fillOpacity:.25,weight:2}).addTo(map).bindPopup('<b>Thane East</b><br>₹40 delivery<br>ETA: 60–75 min');
+L.polygon([[19.2100,72.9600],[19.2100,73.0100],[19.1800,73.0100],[19.1800,72.9600]],{color:'#0077b6',fillColor:'#0077b6',fillOpacity:.25,weight:2}).addTo(map).bindPopup('<b>Kalwa / Mumbra</b><br>₹60 delivery<br>ETA: 75–90 min');
+L.polygon([[19.2350,72.9600],[19.2600,72.9600],[19.2600,73.0100],[19.2350,73.0100]],{color:'#e63946',fillColor:'#e63946',fillOpacity:.25,weight:2}).addTo(map).bindPopup('<b>Dombivli / Outskirts</b><br>₹80 delivery, min order ₹299<br>ETA: 80–100 min');
+
+// Shop marker
+const shopIcon=L.divIcon({html:'<div style="background:#ff6b35;color:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 3px 12px rgba(0,0,0,.3);border:3px solid white">🏪</div>',iconSize:[44,44],iconAnchor:[22,22],popupAnchor:[0,-22]});
+L.marker([19.2183,72.9781],{icon:shopIcon}).addTo(map).bindPopup('<b>Indian Dairy & Spices</b><br>📞 +91 98923 60874').openPopup();
+
+// Localities
+const locs=[
+  {name:'Thane Station',lat:19.1890,lng:72.9615,charge:40,eta:'45–60 min'},
+  {name:'Ghodbunder Road',lat:19.2630,lng:72.9600,charge:40,eta:'50–70 min'},
+  {name:'Hiranandani Estate',lat:19.2510,lng:72.9700,charge:40,eta:'50–65 min'},
+  {name:'Majiwada',lat:19.2280,lng:72.9830,charge:40,eta:'40–55 min'},
+  {name:'Kopri',lat:19.2090,lng:72.9920,charge:40,eta:'50–65 min'},
+  {name:'Wagle Estate',lat:19.1950,lng:72.9640,charge:40,eta:'45–60 min'},
+  {name:'Kalwa',lat:19.1910,lng:73.0010,charge:60,eta:'60–75 min'},
+  {name:'Mumbra',lat:19.1710,lng:73.0200,charge:60,eta:'70–90 min'},
+  {name:'Diva',lat:19.1930,lng:73.0400,charge:80,eta:'75–90 min'},
+  {name:'Bhiwandi outskirts',lat:19.2990,lng:73.0540,charge:80,eta:'80–100 min'}
+];
+locs.forEach(l=>{
+  const icon=L.divIcon({html:`<div style="background:white;border:2px solid #ff6b35;color:#ff6b35;padding:3px 8px;border-radius:12px;font-size:.7rem;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15)">${l.name}</div>`,className:'',iconAnchor:[0,0]});
+  L.marker([l.lat,l.lng],{icon}).addTo(map).bindPopup(`<b>${l.name}</b><br>Delivery: ₹${l.charge}<br>ETA: ${l.eta}<br><a href="https://wa.me/${WA}?text=Hi!%20I%20want%20to%20order%20from%20${encodeURIComponent(l.name)}" target="_blank" style="color:#ff6b35;font-weight:700">📱 Order Now</a>`);
+});
+
+// Check area
+const KNOWN=[
+  {kw:'thane',name:'Thane',charge:40,eta:'45–60 min',lat:19.2183,lng:72.9781},
+  {kw:'ghodbunder',name:'Ghodbunder Road',charge:40,eta:'50–70 min',lat:19.2630,lng:72.9600},
+  {kw:'hiranandani',name:'Hiranandani Estate',charge:40,eta:'50–65 min',lat:19.2510,lng:72.9700},
+  {kw:'majiwada',name:'Majiwada',charge:40,eta:'40–55 min',lat:19.2280,lng:72.9830},
+  {kw:'kopri',name:'Kopri',charge:40,eta:'50–65 min',lat:19.2090,lng:72.9920},
+  {kw:'wagle',name:'Wagle Estate',charge:40,eta:'45–60 min',lat:19.1950,lng:72.9640},
+  {kw:'kalwa',name:'Kalwa',charge:60,eta:'60–75 min',lat:19.1910,lng:73.0010},
+  {kw:'mumbra',name:'Mumbra',charge:60,eta:'70–90 min',lat:19.1710,lng:73.0200},
+  {kw:'diva',name:'Diva',charge:80,eta:'75–90 min',lat:19.1930,lng:73.0400},
+  {kw:'bhiwandi',name:'Bhiwandi outskirts',charge:80,eta:'80–100 min',lat:19.2990,lng:73.0540}
+];
+function checkArea(){
+  const q=document.getElementById('areaInput').value.toLowerCase().trim();
+  const el=document.getElementById('checkResult'); el.style.display='block';
+  const match=KNOWN.find(k=>q.includes(k.kw));
+  if(match){
+    el.innerHTML=`✅ We deliver to <strong>${match.name}</strong>! Charge: ₹${match.charge} · ETA: ${match.eta} · <a href="https://wa.me/${WA}?text=Hi!%20I%20want%20to%20order%20from%20${encodeURIComponent(match.name)}" target="_blank" style="color:#ff6b35;font-weight:700">Order on WhatsApp →</a>`;
+    el.style.background='#f0fdf4'; el.style.color='#166534';
+    map.setView([match.lat,match.lng],14);
+  } else {
+    el.innerHTML=`❌ We don't currently deliver to that area. <a href="https://wa.me/${WA}?text=Hi%20I%20want%20delivery%20to%20${encodeURIComponent(q)}" target="_blank" style="color:#ff6b35;font-weight:700">WhatsApp us to check!</a>`;
+    el.style.background='#fef2f2'; el.style.color='#991b1b';
+  }
+}
+</script>
+</body>
+</html>

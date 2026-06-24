@@ -455,10 +455,7 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 .flash-sale-banner { background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%); color: #fff; padding: 15px; text-align: center; border-radius: 15px; margin: 2rem auto; max-width: 1200px; display: flex; align-items: center; justify-content: center; gap: 20px; box-shadow: 0 5px 15px rgba(255,78,80,0.3); }
 .flash-sale-banner h3 { margin: 0; font-size: 1.2rem; }
 .timer { font-size: 1.5rem; font-weight: 700; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 10px; font-family: monospace; }
-
-  @keyframes pulseDot { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-  #mapSection { background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin: 3rem auto; max-width: 1200px; border: 1px solid var(--border); }
-  </style>
+</style>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
@@ -702,10 +699,6 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
     <button class="pin-btn" onclick="checkPincode()">Check Delivery</button>
   </div>
   <div class="pin-result" id="pinResult"></div>
-  <div id="mapSection" style="margin-top: 2rem; display: none;">
-    <h3 style="margin-bottom: 1rem; color: var(--dark); font-weight: 800; font-family: Outfit, sans-serif; display: flex; align-items: center; gap: 10px;"><span class="live-dot" style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%; animation: pulseDot 1.5s infinite;"></span> Live Delivery Map Tracking</h3>
-    <iframe id="deliveryMap" width="100%" height="300" style="border:0; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </div>
 </div>
 
 <!-- TRUST -->
@@ -900,35 +893,352 @@ const DEFAULT_PRODUCTS = [
 let PRODUCTS = [...DEFAULT_PRODUCTS];
 async function loadProducts() {
   try {
-    const loader = document.getElementById('loader');
-    if(loader) loader.style.display = 'block';
-
-    // IMPORTANT SYNC: Read from localStorage first so Admin changes show instantly
-    const localAdminData = localStorage.getItem('ids_products');
-    if (localAdminData) {
-      products = JSON.parse(localAdminData);
-      console.log('Loaded products from Admin Sync (localStorage)');
-    } else {
-      // Fallback to fetch if no admin data exists
-      try {
-        const res = await fetch(API_URL + '/products');
-        if (res.ok) {
-          products = await res.json();
-        } else {
-          products = [...DEFAULT_PRODUCTS];
-        }
-      } catch (err) {
-        products = [...DEFAULT_PRODUCTS];
-      }
+    const res = await fetch(API_URL + '/products');
+    if (!res.ok) throw new Error('API down');
+    const data = await res.json();
+    if(data && data.length > 0) {
+      PRODUCTS = data.map(p => ({
+        id: p.id,
+        name: p.name,
+        hindi: p.hindi_name || p.name,
+        cat: p.category_id === 1 ? 'spice' : (p.category_id === 2 ? 'dairy' : 'cake'),
+        price: p.price,
+        mrp: p.mrp || (p.price + 50),
+        weight: '1 pc',
+        img: p.image_url || 'https://via.placeholder.com/150',
+        badges: p.is_bestseller ? ['bestseller'] : [],
+        rating: 5, reviews: Math.floor(Math.random()*500), tags: []
+      }));
     }
-    
-    if(loader) loader.style.display = 'none';
-    renderProducts();
-  } catch (error) {
-    console.error('Error loading products:', error);
-    products = [...DEFAULT_PRODUCTS];
-    renderProducts();
+    } catch (e) {
+      console.warn('Backend unavailable, using fallback');
+    }
   }
+
+
+// FLASH SALE TIMER
+function startFlashSale() {
+  let time = 5 * 3600 + 23 * 60 + 45; // 5h 23m 45s
+  setInterval(() => {
+    time--;
+    const h = String(Math.floor(time / 3600)).padStart(2, '0');
+    const m = String(Math.floor((time % 3600) / 60)).padStart(2, '0');
+    const s = String(time % 60).padStart(2, '0');
+    const el = document.getElementById('flashTimer');
+    if(el) el.textContent = `${h}:${m}:${s}`;
+  }, 1000);
+}
+startFlashSale();
+
+// CHATBOT LOGIC
+let chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const widget = document.getElementById('chatbotWidget');
+  if(chatOpen) {
+    widget.classList.add('open');
+    document.getElementById('chatInput').focus();
+  } else {
+    widget.classList.remove('open');
+  }
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  
+  const chatBody = document.getElementById('chatBody');
+  // User msg
+  const userDiv = document.createElement('div');
+  userDiv.className = 'chat-msg user';
+  userDiv.textContent = msg;
+  chatBody.appendChild(userDiv);
+  input.value = '';
+  
+  // Scroll to bottom
+  chatBody.scrollTop = chatBody.scrollHeight;
+  
+  // Bot reply
+  setTimeout(() => {
+    const botDiv = document.createElement('div');
+    botDiv.className = 'chat-msg bot';
+    let reply = "I'm sorry, I couldn't understand that. You can browse our categories above or reach us on WhatsApp!";
+    const lower = msg.toLowerCase();
+    
+    if(lower.includes('hello') || lower.includes('hi')) reply = "Hello! Looking for fresh paneer or spices?";
+    else if(lower.includes('price') || lower.includes('cost')) reply = "Our prices are very competitive! A2 Ghee starts at ₹650.";
+    else if(lower.includes('delivery') || lower.includes('time') || lower.includes('thane') || lower.includes('400080')) reply = "Yes! We deliver across Thane city and district (including 400080, Majiwada, Ghodbunder, Kalyan, Bhiwandi). Delivery takes 45-90 mins.";
+    else if(lower.includes('paneer')) reply = "Our Malai Paneer is fresh every morning. Add it to your cart!";
+    else if(lower.includes('ghee')) reply = "100% pure A2 Bilona cow ghee is our bestseller!";
+    else if(lower.includes('contact') || lower.includes('number')) reply = "You can WhatsApp us at +91 9892360874.";
+    
+    botDiv.textContent = reply;
+    chatBody.appendChild(botDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }, 1000);
+}
+
+// MAP LOGIC HOOK
+const originalCheckPincode = checkPincode;
+checkPincode = function() {
+  originalCheckPincode();
+  const pin = document.getElementById('pincodeInput').value.trim();
+  const mapSection = document.getElementById('mapSection');
+  const deliveryMap = document.getElementById('deliveryMap');
+  
+  if(pin.length === 6) {
+    mapSection.style.display = 'block';
+    // Embed a map centered around Thane (using an iframe to Google Maps or OSM)
+    deliveryMap.src = `https://maps.google.com/maps?q=Thane%20Maharashtra%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+  } else {
+    mapSection.style.display = 'none';
+  }
+}
+
+// Ensure catalog is loaded
+document.addEventListener('DOMContentLoaded', loadProducts);
+
+
+function openAddressModal() {
+  const sub = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  if(sub === 0) return;
+  checkoutTotal = sub + (sub >= 499 ? 0 : 40);
+  
+  document.getElementById('addressOverlay').classList.add('open');
+  document.getElementById('addressSidebar').classList.add('open');
+  document.getElementById('finalPayBtn').textContent = 'Pay ₹' + checkoutTotal;
+}
+function closeAddressModal() {
+  document.getElementById('addressOverlay').classList.remove('open');
+  document.getElementById('addressSidebar').classList.remove('open');
+}
+
+function setPay(method) {
+  payMethod = method;
+  document.getElementById('payRazor').style.background = method === 'razorpay' ? '#f3e8ff' : '#fff';
+  document.getElementById('payRazor').style.borderColor = method === 'razorpay' ? 'var(--dairy-accent)' : '#ccc';
+  document.getElementById('payCOD').style.background = method === 'cod' ? '#f3e8ff' : '#fff';
+  document.getElementById('payCOD').style.borderColor = method === 'cod' ? 'var(--dairy-accent)' : '#ccc';
+  
+  document.getElementById('finalPayBtn').textContent = method === 'cod' ? 'Pay via GPay / UPI' : 'Pay ₹' + checkoutTotal;
+}
+
+async function processOrder() {
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const addr = document.getElementById('custAddr').value.trim();
+  if(!name || !phone || !addr) { alert("Please enter delivery details."); return; }
+  
+  if(payMethod === 'razorpay') {
+    const options = {
+      "key": "rzp_test_dummykey", 
+      "amount": checkoutTotal * 100,
+      "currency": "INR",
+      "name": "Indian Dairy & Spices",
+      "description": "Order via Razorpay",
+      "handler": function (res){
+        saveAndSuccess(name, phone, addr, "Razorpay Online", res.razorpay_payment_id);
+      },
+      "prefill": { "name": name, "contact": phone },
+      "theme": { "color": "#7c3aed" }
+    };
+    new Razorpay(options).open();
+  } else {
+    const upiLink = `upi://pay?pa=anuragpandey15@okaxis&pn=IndianDairy&am=${checkoutTotal}&cu=INR&tn=Order Payment`;
+    window.location.href = upiLink;
+    setTimeout(() => {
+      saveAndSuccess(name, phone, addr, "GPay/UPI to Anurag", "UPI_Pending");
+    }, 1500);
+  }
+}
+
+async function saveAndSuccess(name, phone, addr, method, payId) {
+  const orderData = {
+    customer_name: name,
+    customer_phone: phone,
+    delivery_address: addr,
+    total_amount: checkoutTotal,
+    payment_method: method,
+    payment_id: payId,
+    items: cart.map(i => ({ product_id: i.id, quantity: i.qty, price_at_time: i.price }))
+  };
+  
+  try {
+    const res = await fetch(API_URL + '/orders/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
+    const data = await res.json();
+    
+    cart = []; saveCart(); updateCartBadge(); renderCartSidebar();
+    closeAddressModal(); closeCart();
+    document.getElementById('successOverlay').classList.add('open');
+    document.getElementById('successSidebar').classList.add('open');
+    document.getElementById('succId').textContent = "ORD-" + data.id;
+  } catch(e) {
+    alert("Order placement failed. Please try again.");
+    console.error(e);
+  }
+}
+
+
+const COMBOS = [
+  {id:32,name:"🥛 Dairy Delight Box",hindi:"डेयरी डिलाइट बॉक्स",desc:"All your daily dairy essentials in one box. Pure ghee, creamy curd, fresh paneer and refreshing lassi.",price:850,mrp:1050,save:"Save ₹200",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",popular:true,includes:["Desi Ghee 500ml","Curd 400g","Paneer 200g","Lassi 300ml"]},
+  {id:31,name:"🎁 Festival Hamper",hindi:"फेस्टिवल हैम्पर",desc:"The ultimate festive gift! 10 premium spices + A2 Ghee + Fresh Paneer + Khoya.",price:1299,mrp:1649,save:"Save ₹350",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg",popular:false,includes:["10 Premium Spices","A2 Ghee 500ml","Fresh Paneer 200g","Khoya 250g"]},
+  {id:29,name:"🍳 Rasoi Queen Kit",hindi:"रसोई क्वीन किट",desc:"6 everyday spices + Pure Desi Ghee 500ml. Perfect for the queen of the kitchen!",price:699,mrp:879,save:"Save ₹180",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Garam_masala.jpg/640px-Garam_masala.jpg",popular:false,includes:["Turmeric","Red Chilli","Cumin","Coriander","Garam Masala","Hing","Desi Ghee 500ml"]},
+  {id:30,name:"🍚 Biryani Lover Pack",hindi:"बिरयानी लवर पैक",desc:"Special biryani masala + whole spices. Make restaurant-quality biryani at home!",price:549,mrp:669,save:"Save ₹120",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Indian_Spices.jpg/640px-Indian_Spices.jpg",popular:false,includes:["Biryani Masala","Star Anise","Cardamom","Cinnamon","Cloves","Bay Leaves"]},
+  {id:33,name:"🌴 South Indian Tadka Kit",hindi:"साउथ इंडियन तड़का किट",desc:"Everything for authentic south Indian cooking. Sambar powder, mustard seeds, and more.",price:499,mrp:610,save:"Save ₹111",img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Turmeric_powder.jpg/640px-Turmeric_powder.jpg",popular:false,includes:["Sambar Powder","Mustard Seeds","Curry Leaves","Coconut Oil"]},
+];
+
+const REVIEWS = [
+  {name:"Priya S.",city:"Pune",text:"बहुत अच्छी quality! Ghee was pure and aromatic. My family loved it. Will definitely reorder! 🌟",rating:5,color:"#e74c3c",initial:"P"},
+  {name:"Amit K.",city:"Delhi",text:"The Kashmiri Chilli Powder is absolutely amazing - rich red color and perfect heat. Better than any store-bought masala!",rating:5,color:"#3498db",initial:"A"},
+  {name:"Sunita R.",city:"Mumbai",text:"Festival Hamper was the perfect Diwali gift! Beautiful packaging, premium quality. Mere sasural wale bahut khush hue! 😊",rating:5,color:"#27ae60",initial:"S"},
+  {name:"Rajesh M.",city:"Bangalore",text:"Garam Masala ki khushboo bahut achchi hai! It's clearly freshly ground. My curries taste restaurant-quality now.",rating:5,color:"#9b59b6",initial:"R"},
+  {name:"Kavita N.",city:"Hyderabad",text:"The A2 Ghee is out of this world. You can literally smell the freshness when you open the jar. Worth every rupee!",rating:5,color:"#e67e22",initial:"K"},
+  {name:"Deepak V.",city:"Chennai",text:"South Indian Tadka Kit is perfect! Sambar powder has the authentic taste I was looking for. Delivery was super fast too!",rating:5,color:"#1abc9c",initial:"D"},
+  {name:"Meera P.",city:"Jaipur",text:"I've tried many brands but Indian Dairy & Spices is the best. Fresh paneer, pure ghee - everything is top notch! ⭐⭐⭐⭐⭐",rating:5,color:"#e74c3c",initial:"M"},
+  {name:"Vikash T.",city:"Kolkata",text:"Mishti Doi and Shrikhand are amazing! Reminds me of homemade sweets. Will keep ordering every month!",rating:5,color:"#3498db",initial:"V"},
+];
+
+const PINCODES_OK = ["400080","400601","400602","400603","400604","400605","400606","400607","400612","421301","421302","421308","421601","421605","421204","400001","400002","400003"];
+
+// CART
+let cart = JSON.parse(localStorage.getItem('psdCart') || '[]');
+let currentFilter = 'all';
+let searchQuery = '';
+
+// RENDER PRODUCTS
+function getFilteredProducts(){
+  let filtered = PRODUCTS;
+  if(currentFilter === 'bestseller') filtered = PRODUCTS.filter(p => p.tags.includes('bestseller'));
+  else if(currentFilter === 'new') filtered = PRODUCTS.filter(p => p.tags.includes('new'));
+  else if(currentFilter !== 'all') filtered = PRODUCTS.filter(p => p.cat === currentFilter);
+  if(searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.hindi.includes(q));
+  }
+  return filtered;
+}
+
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  const filtered = getFilteredProducts();
+  document.getElementById('resultsCount').textContent = `Showing ${filtered.length} of ${PRODUCTS.length} products`;
+  if(filtered.length === 0){
+    grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><p>No products found. Try a different search or filter.</p><button onclick="filterByCategory('all')" style="margin-top:12px;background:var(--dairy-accent);color:#fff;padding:10px 24px;border-radius:30px;border:none;cursor:pointer;font-weight:600">Show All Products</button></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(p => {
+    const saving = p.mrp - p.price;
+    const savePct = Math.round((saving / p.mrp) * 100);
+    const stars = '⭐'.repeat(Math.round(p.rating));
+    const badgeHTML = p.badges.map(b => {
+      if(b==='bestseller') return `<span class="badge badge-bestseller">🔥 Best Seller</span>`;
+      if(b==='new') return `<span class="badge badge-new">✨ New</span>`;
+      if(b==='organic') return `<span class="badge badge-organic">🌿 Organic</span>`;
+      if(b==='combo') return `<span class="badge badge-combo">🎁 Combo</span>`;
+      return '';
+    }).join('');
+    const inCart = cart.find(c => c.id === p.id);
+    return `
+    <div class="product-card ${p.cat === 'dairy' ? 'dairy' : p.cat === 'spice' ? 'spice' : ''} ${p.cat === 'combo' ? 'combo' : ''}">
+      <div class="card-img">
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg'">
+        <div class="card-badges">${badgeHTML}</div>
+        <div class="wa-quick" onclick="whatsappOrder(${p.id})" title="Order via WhatsApp">💬</div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${p.cat === 'spice' ? '🌶️ Spice' : p.cat === 'dairy' ? '🥛 Dairy' : '🎁 Combo'}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-name-hindi hindi">${p.hindi}</div>
+        <div class="card-rating">
+          <span class="stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</span>
+          <span class="review-count">(${p.reviews.toLocaleString()})</span>
+        </div>
+        <div class="card-price-row">
+          <div>
+            <span class="card-price">₹${p.price}</span>
+            <span class="card-mrp" style="margin-left:6px">₹${p.mrp}</span>
+          </div>
+          ${saving > 0 ? `<span class="card-save">-${savePct}%</span>` : ''}
+        </div>
+        <div class="card-weight">📦 ${p.weight}</div>
+        <div class="card-actions">
+          <button class="btn-cart" onclick="addToCart(${p.id})" id="btn-${p.id}">
+            ${inCart ? `✅ In Cart (${inCart.qty})` : '🛒 Add to Cart'}
+          </button>
+          <button class="btn-wa" onclick="whatsappOrder(${p.id})" title="WhatsApp Order">💬</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCombos(){
+  const grid = document.getElementById('comboGrid');
+  let timerVal = Math.floor(Math.random()*8)+4;
+  grid.innerHTML = COMBOS.map(c => `
+    <div class="combo-card">
+      ${c.popular ? '<div class="most-popular">🏆 Most Popular</div>' : ''}
+      <div class="combo-img">
+        <img src="${c.img}" alt="${c.name}" loading="lazy">
+      </div>
+      <div class="combo-body">
+        <div class="combo-name">${c.name}</div>
+        <div class="card-name-hindi hindi" style="margin-bottom:8px">${c.hindi}</div>
+        <div class="combo-desc">${c.desc}</div>
+        <div style="margin-bottom:12px;font-size:.8rem;color:var(--gray)">
+          📦 Includes: ${c.includes.join(' • ')}
+        </div>
+        <div class="combo-price-row">
+          <span class="combo-price">₹${c.price}</span>
+          <span class="combo-original">₹${c.mrp}</span>
+          <span class="combo-save">${c.save}</span>
+        </div>
+        <div class="combo-timer">⏰ Offer ends in ${timerVal}h 23m 45s</div>
+        <div class="combo-actions">
+          <button class="btn-combo" onclick="addToCart(${c.id})">🛒 Add to Cart</button>
+          <button class="btn-combo" style="background:linear-gradient(135deg,#25D366,#1ebe5d)" onclick="whatsappCombo(${c.id})">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderReviews(){
+  const track = document.getElementById('reviewsTrack');
+  const doubled = [...REVIEWS, ...REVIEWS];
+  track.innerHTML = doubled.map(r => `
+    <div class="review-card">
+      <div class="reviewer">
+        <div class="avatar" style="background:${r.color}">${r.initial}</div>
+        <div class="reviewer-info">
+          <h4>${r.name}</h4>
+          <p>📍 ${r.city}</p>
+        </div>
+      </div>
+      <div class="review-stars">${'★'.repeat(r.rating)}</div>
+      <div class="review-text">${r.text}</div>
+    </div>
+  `).join('');
+}
+
+// FILTER
+function filterByCategory(cat){
+  currentFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  renderProducts();
+  document.getElementById('products').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function searchProducts(q){
+  searchQuery = q;
+  renderProducts();
 }
 
 // CART FUNCTIONS
@@ -1029,40 +1339,14 @@ function renderCartSidebar(){
   footer.style.display = 'block';
 }
 
-
-function sendCheckoutOTP() {
-  const phone = document.getElementById('checkoutPhone').value;
-  if(phone.length < 10) { alert('Enter valid number'); return; }
-  document.getElementById('loginStep1').style.display = 'none';
-  document.getElementById('loginStep2').style.display = 'block';
-  alert('OTP sent to ' + phone + '. Use any 4 digit OTP for demo.');
-}
-function verifyCheckoutOTP() {
-  const otp = document.getElementById('checkoutOTP').value;
-  if(otp.length === 4) {
-    localStorage.setItem('isLoggedIn', 'true');
-    document.getElementById('checkoutLoginModal').style.display = 'none';
-    processWhatsAppOrder();
-  } else {
-    alert('Invalid OTP');
-  }
-}
-function checkoutWhatsApp() {
+function checkoutWhatsApp(){
   if(cart.length === 0) return;
-  if(localStorage.getItem('isLoggedIn') === 'true') {
-    processWhatsAppOrder();
-  } else {
-    document.getElementById('checkoutLoginModal').style.display = 'flex';
-  }
-}
-function processWhatsAppOrder() {
-  const items = cart.map(i => `✅ ${i.name} (${i.weight}) x ${i.qty} = ₹${i.price*i.qty}`).join('\n');
+  const items = cart.map(i => `• ${i.name} (${i.weight}) × ${i.qty} = ₹${i.price*i.qty}`).join('\n');
   const subtotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
   const delivery = subtotal >= 499 ? 0 : 40;
-  const msg = `🛒 *New Order - Indian Dairy & Spices*\n\n${items}\n\n💰 Subtotal: ₹${subtotal}\n🚚 Delivery: ₹${delivery}\n🧾 *Total: ₹${subtotal+delivery}*\n\nPlease confirm my order! `;
+  const msg = `🥛 *New Order — Indian Dairy & Spices*\n\n${items}\n\n📦 Subtotal: ₹${subtotal}\n🚚 Delivery: ₹${delivery}\n💰 *Total: ₹${subtotal+delivery}*\n\nPlease confirm my order and share delivery details. Thank you!`;
   window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
 }
-
 
 function whatsappOrder(id){
   const p = PRODUCTS.find(x => x.id === id);
@@ -1204,90 +1488,6 @@ document.addEventListener('DOMContentLoaded', () => {
 const style = document.createElement('style');
 style.textContent = '@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
 document.head.appendChild(style);
-
-// CHATBOT LOGIC
-let chatOpen = false;
-function toggleChat() {
-  chatOpen = !chatOpen;
-  const widget = document.getElementById('chatbotWidget');
-  if(chatOpen) {
-    widget.classList.add('open');
-    document.getElementById('chatInput').focus();
-  } else {
-    widget.classList.remove('open');
-  }
-}
-
-function sendChat() {
-  const input = document.getElementById('chatInput');
-  const msg = input.value.trim();
-  if(!msg) return;
-  
-  const chatBody = document.getElementById('chatBody');
-  // User msg
-  const userDiv = document.createElement('div');
-  userDiv.className = 'chat-msg user';
-  userDiv.textContent = msg;
-  chatBody.appendChild(userDiv);
-  input.value = '';
-  
-  // Scroll to bottom
-  chatBody.scrollTop = chatBody.scrollHeight;
-  
-  // Bot reply
-  setTimeout(() => {
-    const botDiv = document.createElement('div');
-    botDiv.className = 'chat-msg bot';
-    let reply = "I'm sorry, I couldn't understand that. You can browse our categories above or reach us on WhatsApp!";
-    const lower = msg.toLowerCase();
-    
-    if(lower.includes('hello') || lower.includes('hi')) reply = "Hello! Looking for fresh paneer or spices?";
-    else if(lower.includes('price') || lower.includes('cost')) reply = "Our prices are very competitive! A2 Ghee starts at ₹650.";
-    else if(lower.includes('delivery') || lower.includes('time')) reply = "We deliver within 45-90 minutes across Thane district.";
-    else if(lower.includes('paneer')) reply = "Our Malai Paneer is fresh every morning. Add it to your cart!";
-    else if(lower.includes('ghee')) reply = "100% pure A2 Bilona cow ghee is our bestseller!";
-    else if(lower.includes('contact') || lower.includes('number')) reply = "You can WhatsApp us at +91 9892360874.";
-    
-    botDiv.textContent = reply;
-    chatBody.appendChild(botDiv);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }, 1000);
-}
-
-// MAP LOGIC HOOK
-const originalCheckPincode = checkPincode;
-checkPincode = function() {
-  originalCheckPincode();
-  const pin = document.getElementById('pincodeInput').value.trim();
-  const mapSection = document.getElementById('mapSection');
-  const deliveryMap = document.getElementById('deliveryMap');
-  
-  if(pin.length === 6) {
-    mapSection.style.display = 'block';
-    // Embed a map centered around Thane
-    deliveryMap.src = `https://maps.google.com/maps?q=Thane%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
-  } else {
-    mapSection.style.display = 'none';
-  }
-}
 </script>
-
-<!-- LOGIN MODAL -->
-<div id="checkoutLoginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; align-items:center; justify-content:center;">
-  <div style="background:#fff; padding:2rem; border-radius:15px; width:90%; max-width:400px; text-align:center;">
-    <h2 style="color:var(--saffron); margin-bottom:1rem;">Login to Order</h2>
-    <p style="margin-bottom:1.5rem; color:#666;">Please verify your phone number to proceed with your order.</p>
-    <div id="loginStep1">
-      <input type="tel" id="checkoutPhone" placeholder="+91 Enter Mobile Number" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; margin-bottom:1rem; font-size:1rem;">
-      <button onclick="sendCheckoutOTP()" style="width:100%; background:var(--saffron); color:#fff; padding:12px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Send OTP</button>
-    </div>
-    <div id="loginStep2" style="display:none;">
-      <input type="text" id="checkoutOTP" placeholder="Enter 4-digit OTP" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; margin-bottom:1rem; font-size:1rem; text-align:center; letter-spacing:5px;">
-      <button onclick="verifyCheckoutOTP()" style="width:100%; background:var(--saffron); color:#fff; padding:12px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Verify & Order</button>
-    </div>
-    <button onclick="document.getElementById('checkoutLoginModal').style.display='none'" style="margin-top:1rem; background:none; border:none; color:#888; cursor:pointer; text-decoration:underline;">Cancel</button>
-  </div>
-</div>
-
 </body>
 </html>
