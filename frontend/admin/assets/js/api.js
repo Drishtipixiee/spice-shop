@@ -58,7 +58,7 @@ class AdminAPI {
 
   async getDashboardStats() {
     const orders = await this.fetch('/admin/orders');
-    const products = await fetch(API_BASE + '/api/products').then(r => r.json());
+    const products = await fetch(API_BASE + '/products').then(r => r.json());
     
     let totalRev = 0;
     let pending = 0;
@@ -82,7 +82,7 @@ class AdminAPI {
   }
 
   async getProducts() {
-    return await fetch(API_BASE + '/api/products').then(r => r.json());
+    return await fetch(API_BASE + '/products').then(r => r.json());
   }
 
   async saveProduct(id, payload) {

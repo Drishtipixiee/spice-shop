@@ -1,5 +1,5 @@
 {
   "framework": null,
   "buildCommand": "echo 'No build required'",
-  "outputDirectory": "site"
+  "outputDirectory": "frontend"
 }

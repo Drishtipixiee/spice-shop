@@ -846,11 +846,107 @@ footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
 // ===== PRODUCT DATA =====
 let PRODUCTS = [];
 
-const API_URL = 'https://spice-shop-backend.onrender.com/api';
+const API_URL = 'https://spice-shop-backend.onrender.com';
 let payMethod = 'razorpay';
 let checkoutTotal = 0;
 
+function mapLocalProducts(items) {
+  return items.map(p => {
+    let cat = p.cat || p.category || '';
+    if (cat === 'spices') cat = 'spice';
+    
+    let img = p.img || p.image || '';
+    let hindi = p.hindi || p.desc || '';
+    
+    let badges = [];
+    if (p.badges) {
+      badges = Array.isArray(p.badges) ? p.badges : [p.badges];
+    } else if (p.badge) {
+      badges = [p.badge];
+    }
+    
+    let stock = p.stock !== undefined ? p.stock : (p.mrp !== undefined ? p.mrp : 10);
+    const overrideStock = localStorage.getItem('stock_' + p.name);
+    if (overrideStock !== null) {
+      stock = parseInt(overrideStock);
+    }
+    
+    return {
+      id: p.id,
+      name: p.name,
+      hindi: hindi,
+      cat: cat,
+      price: Number(p.price) || 0,
+      mrp: Number(p.mrp) || Number(p.price) || 0,
+      weight: p.weight || '1 pc',
+      img: img,
+      badges: badges,
+      rating: Number(p.rating) || 5,
+      reviews: Number(p.reviews) || 0,
+      tags: p.tags || badges,
+      stock: stock
+    };
+  });
+}
+
+function updateCategoryCounts() {
+  const countAll = document.getElementById('count-all');
+  if (countAll) countAll.textContent = PRODUCTS.length;
+  
+  const countSpice = document.getElementById('count-spice');
+  if (countSpice) countSpice.textContent = PRODUCTS.filter(p => p.cat === 'spice' || p.cat === 'spices').length;
+  
+  const countDairy = document.getElementById('count-dairy');
+  if (countDairy) countDairy.textContent = PRODUCTS.filter(p => p.cat === 'dairy').length;
+  
+  const countCombo = document.getElementById('count-combo');
+  if (countCombo) countCombo.textContent = PRODUCTS.filter(p => p.cat === 'combo').length;
+  
+  const countCake = document.getElementById('count-cake');
+  if (countCake) countCake.textContent = PRODUCTS.filter(p => p.cat === 'cake').length;
+}
+
 async function loadProducts() {
+  // 1. Try local storage first
+  const localProducts = localStorage.getItem('ids_products') || localStorage.getItem('products');
+  if (localProducts) {
+    try {
+      const items = JSON.parse(localProducts);
+      if (items && items.length > 0) {
+        PRODUCTS = mapLocalProducts(items);
+        renderProducts();
+        updateCategoryCounts();
+        return;
+      }
+    } catch(e) {
+      console.error("Failed to parse local storage products", e);
+    }
+  }
+
+  // 2. Try fetching from products.js (Vercel static file fallback)
+  try {
+    const res = await fetch('products.js');
+    if (res.ok) {
+      const text = await res.text();
+      const startIdx = text.indexOf('[');
+      const endIdx = text.lastIndexOf(']') + 1;
+      if (startIdx !== -1 && endIdx !== -1) {
+        const jsonText = text.substring(startIdx, endIdx);
+        const parsed = new Function(`return ${jsonText};`)();
+        if (parsed && parsed.length > 0) {
+          PRODUCTS = mapLocalProducts(parsed);
+          localStorage.setItem('ids_products', JSON.stringify(PRODUCTS));
+          renderProducts();
+          updateCategoryCounts();
+          return;
+        }
+      }
+    }
+  } catch(e) {
+    console.error("Failed to load products.js", e);
+  }
+
+  // 3. Fallback to API
   try {
     const res = await fetch(API_URL + '/products');
     const data = await res.json();
@@ -867,13 +963,10 @@ async function loadProducts() {
         badges: p.is_bestseller ? ['bestseller'] : [],
         rating: 5, reviews: Math.floor(Math.random()*500), tags: []
       }));
+      PRODUCTS = mapLocalProducts(PRODUCTS);
+      localStorage.setItem('ids_products', JSON.stringify(PRODUCTS));
       renderProducts();
-      
-      const cc = document.getElementById('count-cake');
-      if(cc) cc.textContent = PRODUCTS.filter(p=>p.cat==='cake').length;
-      document.getElementById('count-all').textContent = PRODUCTS.length;
-      document.getElementById('count-spice').textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
-      document.getElementById('count-dairy').textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
+      updateCategoryCounts();
     }
   } catch(e) {
     console.error("Failed to load API products", e);
@@ -935,6 +1028,24 @@ async function processOrder() {
 }
 
 async function saveAndSuccess(name, phone, addr, method, payId) {
+  const orderId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
+  
+  // Also save the order to localStorage so the admin portal's Live Orders tab updates!
+  const localOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+  const newOrder = {
+    id: orderId,
+    name: name,
+    phone: phone,
+    area: addr,
+    total: checkoutTotal,
+    payment: method,
+    time: new Date().toISOString(),
+    status: 'Pending',
+    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price }))
+  };
+  localOrders.push(newOrder);
+  localStorage.setItem('orders', JSON.stringify(localOrders));
+
   const orderData = {
     customer_name: name,
     customer_phone: phone,
@@ -952,16 +1063,20 @@ async function saveAndSuccess(name, phone, addr, method, payId) {
       body: JSON.stringify(orderData)
     });
     const data = await res.json();
-    
-    cart = []; saveCart(); updateCartBadge(); renderCartSidebar();
-    closeAddressModal(); closeCart();
-    document.getElementById('successOverlay').classList.add('open');
-    document.getElementById('successSidebar').classList.add('open');
-    document.getElementById('succId').textContent = "ORD-" + data.id;
+    if (data && data.id) {
+      document.getElementById('succId').textContent = "ORD-" + data.id;
+    } else {
+      document.getElementById('succId').textContent = orderId;
+    }
   } catch(e) {
-    alert("Order placement failed. Please try again.");
-    console.error(e);
+    console.error("Failed to post order to backend:", e);
+    document.getElementById('succId').textContent = orderId;
   }
+  
+  cart = []; saveCart(); updateCartBadge(); renderCartSidebar();
+  closeAddressModal(); closeCart();
+  document.getElementById('successOverlay').classList.add('open');
+  document.getElementById('successSidebar').classList.add('open');
 }
 
 
@@ -1048,14 +1163,15 @@ function renderProducts(){
         </div>
         <div class="card-weight">📦 ${p.weight}</div>
         <div class="card-actions">
-          <button class="btn-cart" onclick="addToCart(${p.id})" id="btn-${p.id}">
-            ${inCart ? `✅ In Cart (${inCart.qty})` : '🛒 Add to Cart'}
+          <button class="btn-cart" onclick="${p.stock <= 0 ? '' : `addToCart(${p.id})`}" id="btn-${p.id}" ${p.stock <= 0 ? 'disabled style="background:#ccc;color:#666;cursor:not-allowed;border:none;"' : ''}>
+            ${p.stock <= 0 ? '❌ Out of Stock' : (inCart ? `✅ In Cart (${inCart.qty})` : '🛒 Add to Cart')}
           </button>
           <button class="btn-wa" onclick="whatsappOrder(${p.id})" title="WhatsApp Order">💬</button>
         </div>
       </div>
     </div>`;
   }).join('');
+  updateCategoryCounts();
 }
 
 function renderCombos(){

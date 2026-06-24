@@ -1,4 +1,0 @@
-[build]
-  base    = "site"
-  publish = "."
-  command = "echo 'No build required for pure HTML site'"
