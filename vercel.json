@@ -8,7 +8,6 @@
     { "source": "/admin/", "destination": "/admin/index.html" },
     { "source": "/shop", "destination": "/shop.html" },
     { "source": "/login", "destination": "/login.html" },
-    { "source": "/delivery-map", "destination": "/delivery-map.html" },
-    { "source": "/api/:path*", "destination": "/api/:path*" }
+    { "source": "/delivery-map", "destination": "/delivery-map.html" }
   ]
 }
