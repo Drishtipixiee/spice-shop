@@ -514,9 +514,9 @@
         </div>
       </div>
       <div class="hero-images">
-        <img class="img-large" src="https://images.unsplash.com/photo-1627998692723-8686e06b3a0f?auto=format&fit=crop&q=80&w=800" alt="A2 Ghee">
-        <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc0?auto=format&fit=crop&q=80&w=800" alt="Fresh Paneer">
-        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800" alt="Pure Spices">
+        <img class="img-large" src="https://t4.ftcdn.net/jpg/13/15/19/43/360_F_1315194377_Ro8c5tjMXYc3oEXUJ6zgyeIENDkdQyJX.jpg" alt="A2 Ghee">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM3UCTqqG6vIXSwZFScLSPp5JPbWuMhEkwCg&s" alt="Fresh Paneer">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s" alt="Pure Spices">
       </div>
     </div>
   </header>
@@ -819,11 +819,11 @@
     let discountPercent = 0;
 
     const DEFAULT_PRODUCTS = [
-      { id:'d1', name:'Pure Desi Ghee', name_hindi:'शुद्ध देसी घी', category:'dairy', price:450, mrp:520, image_url:'https://images.unsplash.com/photo-1627998692723-8686e06b3a0f?auto=format&fit=crop&q=80&w=800', description:'Farm-fresh A2 cow ghee, slow-churned the traditional way.', weight:'500ml', is_bestseller:true, is_new:false, rating:4.9, review_count:2847, in_stock:true },
-      { id:'d2', name:'Fresh Paneer', name_hindi:'ताज़ा पनीर', category:'dairy', price:180, mrp:200, image_url:'https://images.unsplash.com/photo-1631452180519-c014fe946bc0?auto=format&fit=crop&q=80&w=800', description:'Soft, fresh paneer made daily from full-fat cow milk.', weight:'200g', is_bestseller:true, is_new:false, rating:4.8, review_count:1923, in_stock:true },
-      { id:'s1', name:'Turmeric Powder', name_hindi:'हल्दी पाउडर', category:'spices', price:120, mrp:150, image_url:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800', description:'Pure haldi sourced from Erode farms.', weight:'200g', is_bestseller:true, is_new:false, rating:4.9, review_count:3241, in_stock:true },
-      { id:'s2', name:'Garam Masala', name_hindi:'गरम मसाला', category:'spices', price:90, mrp:110, image_url:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800', description:'Authentic blend of 18 spices.', weight:'100g', is_bestseller:true, is_new:false, rating:4.8, review_count:2156, in_stock:true },
-      { id:'c1', name:'Starter Pack', name_hindi:'स्टार्टर पैक', category:'combos', price:599, mrp:750, image_url:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800', description:'Ghee + Paneer + 3 spices.', weight:'5 items', is_bestseller:true, is_new:true, rating:4.9, review_count:562, in_stock:true }
+      { id:'d1', name:'Pure Desi Ghee', name_hindi:'शुद्ध देसी घी', category:'dairy', price:450, mrp:520, image_url:'https://t4.ftcdn.net/jpg/13/15/19/43/360_F_1315194377_Ro8c5tjMXYc3oEXUJ6zgyeIENDkdQyJX.jpg', description:'Farm-fresh A2 cow ghee, slow-churned the traditional way.', weight:'500ml', is_bestseller:true, is_new:false, rating:4.9, review_count:2847, in_stock:true },
+      { id:'d2', name:'Fresh Paneer', name_hindi:'ताज़ा पनीर', category:'dairy', price:180, mrp:200, image_url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM3UCTqqG6vIXSwZFScLSPp5JPbWuMhEkwCg&s', description:'Soft, fresh paneer made daily from full-fat cow milk.', weight:'200g', is_bestseller:true, is_new:false, rating:4.8, review_count:1923, in_stock:true },
+      { id:'s1', name:'Turmeric Powder', name_hindi:'हल्दी पाउडर', category:'spices', price:120, mrp:150, image_url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s', description:'Pure haldi sourced from Erode farms.', weight:'200g', is_bestseller:true, is_new:false, rating:4.9, review_count:3241, in_stock:true },
+      { id:'s2', name:'Garam Masala', name_hindi:'गरम मसाला', category:'spices', price:90, mrp:110, image_url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s', description:'Authentic blend of 18 spices.', weight:'100g', is_bestseller:true, is_new:false, rating:4.8, review_count:2156, in_stock:true },
+      { id:'c1', name:'Starter Pack', name_hindi:'स्टार्टर पैक', category:'combos', price:599, mrp:750, image_url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s', description:'Ghee + Paneer + 3 spices.', weight:'5 items', is_bestseller:true, is_new:true, rating:4.9, review_count:562, in_stock:true }
     ];
 
     // Initialize application settings & configs from endpoints
