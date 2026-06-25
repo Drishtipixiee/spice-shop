@@ -118,17 +118,31 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Product Image (JPEG/JPG Photo or URL Link)</label>
-      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
-        <input type="file" id="pImgFile" accept="image/jpeg, image/jpg" class="form-control" style="padding: 6px 12px; height: auto;">
-        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">OR</span>
-        <input type="text" id="pImg" class="form-control" placeholder="Paste direct image URL..." style="flex: 1;">
+    <div class="form-group" style="background: #fafbfc; border: 1px solid var(--border); padding: 16px; border-radius: 10px; margin-bottom: 20px;">
+      <label class="form-label" style="font-weight: 700; color: var(--text-main); margin-bottom: 12px; font-size: 0.95rem;">Product Photo</label>
+      
+      <!-- Option A: File Upload -->
+      <div style="margin-bottom: 12px;">
+        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block;">Option 1: Upload from Device (JPG/JPEG)</label>
+        <input type="file" id="pImgFile" accept="image/jpeg, image/jpg" class="form-control" style="padding: 6px 12px; height: auto; background: #fff;">
       </div>
-      <div id="uploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Upload a JPEG/JPG photo from your gallery or paste a direct image URL.</div>
+      
+      <!-- OR Separator -->
+      <div style="text-align: center; margin: 8px 0; font-size: 0.8rem; color: var(--text-muted); position: relative;">
+        <span style="background: #fafbfc; padding: 0 10px; position: relative; z-index: 2; font-weight: 700;">— OR —</span>
+        <div style="border-bottom: 1px solid var(--border); position: absolute; top: 50%; left: 0; right: 0; z-index: 1;"></div>
+      </div>
+      
+      <!-- Option B: Direct URL -->
+      <div style="margin-bottom: 8px;">
+        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block;">Option 2: Paste Direct Image URL</label>
+        <input type="text" id="pImg" class="form-control" placeholder="https://example.com/photo.jpg" style="background: #fff;">
+      </div>
+      
+      <div id="uploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">Select a photo from your gallery or paste a direct image link.</div>
       
       <!-- Image Preview Container -->
-      <div id="previewContainer" style="margin-top: 12px; display: none; text-align: center; border: 1px dashed var(--border); border-radius: 8px; padding: 12px; background: #fafbfc; position: relative;">
+      <div id="previewContainer" style="margin-top: 12px; display: none; text-align: center; border: 1px dashed var(--border); border-radius: 8px; padding: 12px; background: #fff; position: relative;">
         <img id="pImgPreview" src="" style="max-height: 140px; max-width: 100%; border-radius: 6px; object-fit: cover; box-shadow: var(--shadow-sm);">
         <div style="margin-top: 8px;">
           <button type="button" class="btn btn-sm btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearPreview()">Remove Photo</button>

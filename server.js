@@ -43,7 +43,7 @@ const server = http.createServer((req, res) => {
   // Route API requests to api/ directory
   if (pathname.startsWith('/api/')) {
     const apiName = pathname.substring(5); // Remove '/api/'
-    const apiPath = path.join(__dirname, 'frontend', 'api', `${apiName}.js`);
+    const apiPath = path.join(__dirname, 'api', `${apiName}.js`);
 
     if (fs.existsSync(apiPath)) {
       // Clear require cache for development hot reloading

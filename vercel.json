@@ -1,22 +1,10 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "frontend/api/*.js", "use": "@vercel/node" },
-    { "src": "frontend/admin/**", "use": "@vercel/static" },
-    { "src": "frontend/**/*.html", "use": "@vercel/static" },
-    { "src": "frontend/**/*.css", "use": "@vercel/static" },
-    { "src": "frontend/**/*.js", "use": "@vercel/static" },
-    { "src": "frontend/**/*.png", "use": "@vercel/static" },
-    { "src": "frontend/**/*.jpg", "use": "@vercel/static" },
-    { "src": "frontend/**/*.jpeg", "use": "@vercel/static" },
-    { "src": "frontend/**/*.svg", "use": "@vercel/static" },
-    { "src": "frontend/**/*.ico", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/frontend/api/$1" },
-    { "src": "/admin/(.*)", "dest": "/frontend/admin/$1" },
-    { "src": "/admin$", "dest": "/frontend/admin/index.html" },
-    { "src": "/admin", "dest": "/frontend/admin/index.html" },
-    { "src": "/(.*)", "dest": "/frontend/$1" }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/admin", "destination": "/frontend/admin/index.html" },
+    { "source": "/admin/:path*", "destination": "/frontend/admin/:path*" },
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/(.*)", "destination": "/frontend/$1" }
   ]
 }
