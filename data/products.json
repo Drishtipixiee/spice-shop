@@ -1,0 +1,32 @@
+[
+  {
+    "id": "d1",
+    "name": "Pure Desi Ghee",
+    "name_hindi": "शुद्ध देसी घी",
+    "category": "dairy",
+    "price": 450,
+    "mrp": 520,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg",
+    "description": "Farm-fresh A2 cow ghee, slow-churned the traditional way.",
+    "weight": "500ml",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-06-25T10:00:00Z"
+  },
+  {
+    "id": "s1",
+    "name": "Turmeric Powder",
+    "name_hindi": "हल्दी पाउडर",
+    "category": "spices",
+    "price": 120,
+    "mrp": 150,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg",
+    "description": "Pure haldi sourced from Erode farms.",
+    "weight": "200g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-06-25T10:00:00Z"
+  }
+]

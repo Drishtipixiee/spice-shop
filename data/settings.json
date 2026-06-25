@@ -1,0 +1,6 @@
+{
+  "shipping_pincodes": "411001,411002,411003",
+  "min_order_amount": 200,
+  "owner_whatsapp": "919876543210",
+  "razorpay_key": "rzp_test_123456789"
+}
