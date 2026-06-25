@@ -594,7 +594,7 @@
   <!-- Pincode Section -->
   <div class="pincode-section">
     <h2>📍 Check Delivery Availability</h2>
-    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we service your area in Mumbai &amp; Thane</p>
+    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we service your area in Mumbai, Thane &amp; Palghar</p>
     <div class="pincode-form">
       <input class="pincode-input" id="pincode-input" type="text" maxlength="6" placeholder="Enter 6-digit Pincode">
       <button class="pin-btn" onclick="checkPincode()">Check</button>
@@ -796,7 +796,9 @@
     // Supported delivery pincodes
     const PINCODES_OK = [
       "400601", "400602", "400603", "400604", "400605", "400606", "400607", "400608", "400609", "400610",
-      "400615", "400708", "401105", "401107"
+      "400615", "400708", "401105", "401107",
+      // Palghar / Vasai / Virar / Nallasopara pincodes
+      "401209", "401203", "401201", "401202", "401207", "401208", "401303", "401305", "401404", "401501", "401502", "401504", "401506", "401601", "401602"
     ];
 
     // Testimonials List
@@ -1263,11 +1265,15 @@
 
     async function placeOrder() {
       const name    = document.getElementById('cust-name').value.trim();
-      const phone   = document.getElementById('cust-phone').value.trim();
+      const phoneRaw = document.getElementById('cust-phone').value.trim();
       const address = document.getElementById('cust-address').value.trim();
       const pincode = document.getElementById('cust-pincode').value.trim();
 
-      if (!name || !phone || !address || !pincode) { alert('Please fill all required fields'); return; }
+      if (!name || !phoneRaw || !address || !pincode) { alert('Please fill all required fields'); return; }
+      
+      // Clean phone number: remove spaces, dashes, and leading +91 / 91 / 0
+      const phone = phoneRaw.replace(/[\s-]/g, '').replace(/^\+91/, '').replace(/^91(?=\d{10})/, '').replace(/^0/, '');
+
       if (!/^[6-9]\d{9}$/.test(phone)) { alert('Please enter a valid 10-digit mobile number'); return; }
       if (!/^\d{6}$/.test(pincode)) { alert('Please enter a valid 6-digit pincode'); return; }
 
@@ -1422,14 +1428,14 @@
       }
 
       if (PINCODES_OK.includes(pin)) {
-        result.textContent = `✅ Delivery available to Thane / Mumbai Area ${pin}! Sourced fresh, arriving in 1-2 days.`;
+        result.textContent = `✅ Delivery available to Thane / Mumbai / Palghar Area ${pin}! Sourced fresh, arriving in 1-2 days.`;
         result.className = 'pin-result ok';
         
-        // Show real embedded Google Map centered at Thane / Mumbai Pincode
+        // Show real embedded Google Map centered at Thane / Mumbai / Palghar Pincode
         mapSection.style.display = 'block';
-        gMap.src = `https://maps.google.com/maps?q=Mumbai%20Thane%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        gMap.src = `https://maps.google.com/maps?q=Mumbai%20Thane%20Palghar%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       } else {
-        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver inside Thane, Mumbai & Navi Mumbai.`;
+        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver inside Thane, Mumbai, Navi Mumbai & Palghar.`;
         result.className = 'pin-result no';
         mapSection.style.display = 'none';
       }
