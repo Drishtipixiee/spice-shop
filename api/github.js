@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const REPO = "Drishtipixiee/spice-shop";
+const memoryCache = {}; // Cache data across hot lambda invocations
 
 // Helper to fetch file from GitHub
 async function fetchFromGitHub(filePath) {
@@ -55,11 +56,17 @@ async function commitToGitHub(filePath, content, message, sha) {
 
 // Read data file (local fast read, fallback to github)
 async function readData(fileName) {
+  if (memoryCache[fileName]) {
+    return JSON.parse(JSON.stringify(memoryCache[fileName])); // Return deep copy
+  }
+
   try {
     const localPath = path.join(process.cwd(), 'data', fileName);
     if (fs.existsSync(localPath)) {
       const data = fs.readFileSync(localPath, 'utf8');
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      memoryCache[fileName] = parsed; // Cache it
+      return parsed;
     }
   } catch (e) {
     console.error("Local read failed:", e);
@@ -67,8 +74,12 @@ async function readData(fileName) {
   return null;
 }
 
-// Save data file to GitHub
+// Save data file to GitHub and update local memory cache
 async function saveData(fileName, dataObj, message) {
+  // 1. Update memory cache instantly so the admin UI sees changes immediately
+  memoryCache[fileName] = JSON.parse(JSON.stringify(dataObj));
+
+  // 2. Commit to GitHub to trigger Vercel deploy for the storefront
   const filePath = `data/${fileName}`;
   const contentStr = JSON.stringify(dataObj, null, 2);
   

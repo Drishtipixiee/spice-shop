@@ -34,7 +34,10 @@ module.exports = async function handler(req, res) {
       };
       
       products.push(newProduct);
-      saveData('products.json', products, `Add product: ${name}`);
+      
+      // MUST await so Vercel doesn't kill the lambda
+      await saveData('products.json', products, `Add product: ${name}`);
+      
       return res.status(201).json(newProduct);
     }
 
@@ -60,7 +63,8 @@ module.exports = async function handler(req, res) {
         in_stock: in_stock !== undefined ? in_stock : true,
       };
       
-      saveData('products.json', products, `Update product: ${name}`);
+      await saveData('products.json', products, `Update product: ${name}`);
+      
       return res.status(200).json(products[index]);
     }
 
@@ -71,7 +75,8 @@ module.exports = async function handler(req, res) {
       const filtered = products.filter(p => p.id !== id);
       if (filtered.length === products.length) return res.status(404).json({ error: 'Product not found' });
       
-      saveData('products.json', filtered, `Delete product ID: ${id}`);
+      await saveData('products.json', filtered, `Delete product ID: ${id}`);
+      
       return res.status(200).json({ success: true, message: 'Product deleted' });
     }
 

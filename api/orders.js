@@ -16,7 +16,6 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      // In reality, orders are created via create-order.js
       return res.status(405).json({ error: 'Method not allowed' });
     }
 
@@ -30,7 +29,7 @@ module.exports = async function handler(req, res) {
       orders[index].status = status;
       orders[index].updated_at = new Date().toISOString();
       
-      saveData('orders.json', orders, `Update order ${id} status to ${status}`);
+      await saveData('orders.json', orders, `Update order ${id} status to ${status}`);
       
       return res.status(200).json(orders[index]);
     }

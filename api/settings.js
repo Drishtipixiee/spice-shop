@@ -22,7 +22,7 @@ module.exports = async function handler(req, res) {
       
       settingsObj[key] = value;
       
-      saveData('settings.json', settingsObj, `Update setting ${key}`);
+      await saveData('settings.json', settingsObj, `Update setting ${key}`);
       
       return res.status(200).json({ key, value });
     }
