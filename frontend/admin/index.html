@@ -104,34 +104,52 @@
 <script src="assets/js/api.js"></script>
 <script>
 async function initDashboard() {
-  const stats = await api.getDashboardStats();
-  
-  document.getElementById('valRev').textContent = formatMoney(stats.revenue);
-  document.getElementById('valOrders').textContent = stats.totalOrders;
-  document.getElementById('valPending').textContent = stats.pending;
-  document.getElementById('valProducts').textContent = stats.totalProducts;
+  try {
+    const stats = await api.getDashboardStats();
+    
+    document.getElementById('valRev').textContent = formatMoney(stats.revenue);
+    document.getElementById('valOrders').textContent = stats.totalOrders;
+    document.getElementById('valPending').textContent = stats.pending;
+    document.getElementById('valProducts').textContent = stats.totalProducts;
 
-  const tbody = document.getElementById('recentTable');
-  const recent = stats.orders.slice(0, 5); // top 5
-  if(recent.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No orders yet.</td></tr>';
-    return;
-  }
+    const tbody = document.getElementById('recentTable');
+    const recent = stats.orders.slice(0, 5); // top 5
+    if(recent.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No orders yet.</td></tr>';
+      return;
+    }
 
-  tbody.innerHTML = recent.map(o => {
-    let badge = 'badge-pending';
-    if(o.status==='SHIPPED') badge = 'badge-shipped';
-    if(o.status==='DELIVERED') badge = 'badge-delivered';
-    return `
+    tbody.innerHTML = recent.map(o => {
+      let badge = 'badge-pending';
+      if(o.status==='SHIPPED') badge = 'badge-shipped';
+      if(o.status==='DELIVERED') badge = 'badge-delivered';
+      return `
+        <tr>
+          <td><strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong></td>
+          <td>${o.customer_name}</td>
+          <td>${formatDate(o.created_at)}</td>
+          <td><strong>${formatMoney(o.total_amount)}</strong></td>
+          <td><span class="badge ${badge}">${o.status}</span></td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Dashboard error:", err);
+    document.getElementById('valRev').textContent = 'Error';
+    document.getElementById('valOrders').textContent = 'Error';
+    document.getElementById('valPending').textContent = 'Error';
+    document.getElementById('valProducts').textContent = 'Error';
+    
+    document.getElementById('recentTable').innerHTML = `
       <tr>
-        <td><strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong></td>
-        <td>${o.customer_name}</td>
-        <td>${formatDate(o.created_at)}</td>
-        <td><strong>${formatMoney(o.total_amount)}</strong></td>
-        <td><span class="badge ${badge}">${o.status}</span></td>
+        <td colspan="5" style="text-align:center;padding:40px;color:var(--danger)">
+          <div style="font-weight:600;margin-bottom:8px;">⚠️ Failed to load dashboard analytics.</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${err.message || "Network error or database unreachable."}</div>
+          <button class="btn btn-sm btn-outline" onclick="initDashboard()">Try Again</button>
+        </td>
       </tr>
     `;
-  }).join('');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initDashboard);

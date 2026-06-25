@@ -58,8 +58,10 @@ class AdminAPI {
   }
 
   async getDashboardStats() {
-    const orders = await this.getOrders();
-    const products = await this.getProducts();
+    const [orders, products] = await Promise.all([
+      this.getOrders(),
+      this.getProducts()
+    ]);
     
     let totalRev = 0;
     let pending = 0;

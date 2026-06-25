@@ -75,48 +75,61 @@ async function loadOrders() {
   const tbody = document.getElementById('ordersTable');
   tbody.innerHTML = '<tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>';
   
-  const orders = await api.getOrders();
-  if(orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No orders found.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = orders.map(o => {
-    let badge = 'badge-pending';
-    let actionBtn = '';
-    
-    if(o.status==='PENDING' || o.status==='PLACED') {
-      badge = 'badge-pending';
-      actionBtn = `<button class="btn btn-sm btn-primary" onclick="updateStatus('${o.id}', 'SHIPPED')">Mark Shipped</button>`;
-    } else if (o.status==='SHIPPED') {
-      badge = 'badge-shipped';
-      actionBtn = `<button class="btn btn-sm btn-success" onclick="updateStatus('${o.id}', 'DELIVERED')">Mark Delivered</button>`;
-    } else {
-      badge = 'badge-delivered';
-      actionBtn = `<button class="btn btn-sm btn-outline" disabled>Completed</button>`;
+  try {
+    const orders = await api.getOrders();
+    if(orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No orders found.</td></tr>';
+      return;
     }
 
-    return `
+    tbody.innerHTML = orders.map(o => {
+      let badge = 'badge-pending';
+      let actionBtn = '';
+      
+      if(o.status==='PENDING' || o.status==='PLACED') {
+        badge = 'badge-pending';
+        actionBtn = `<button class="btn btn-sm btn-primary" onclick="updateStatus('${o.id}', 'SHIPPED')">Mark Shipped</button>`;
+      } else if (o.status==='SHIPPED') {
+        badge = 'badge-shipped';
+        actionBtn = `<button class="btn btn-sm btn-success" onclick="updateStatus('${o.id}', 'DELIVERED')">Mark Delivered</button>`;
+      } else {
+        badge = 'badge-delivered';
+        actionBtn = `<button class="btn btn-sm btn-outline" disabled>Completed</button>`;
+      }
+
+      return `
+        <tr>
+          <td>
+            <strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong><br>
+            <span style="font-size:0.8rem;color:var(--text-muted)">${formatDate(o.created_at)}</span>
+          </td>
+          <td>
+            <strong>${o.customer_name}</strong><br>
+            <span style="font-size:0.8rem;color:var(--text-muted)">📞 ${o.customer_phone}</span><br>
+            <span style="font-size:0.8rem;color:var(--text-muted)">${o.delivery_address}</span>
+          </td>
+          <td>
+            <strong>${formatMoney(o.total_amount)}</strong><br>
+            <span style="font-size:0.8rem;color:var(--text-muted)">${o.payment_method}</span><br>
+            <span style="font-size:0.75rem;color:#adb5bd">${o.payment_id || 'Pending'}</span>
+          </td>
+          <td><span class="badge ${badge}">${o.status}</span></td>
+          <td>${actionBtn}</td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Error loading orders:", err);
+    tbody.innerHTML = `
       <tr>
-        <td>
-          <strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong><br>
-          <span style="font-size:0.8rem;color:var(--text-muted)">${formatDate(o.created_at)}</span>
+        <td colspan="5" style="text-align:center;padding:40px;color:var(--danger)">
+          <div style="font-weight:600;margin-bottom:8px;">⚠️ Failed to load orders.</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${err.message || "Network error or session expired."}</div>
+          <button class="btn btn-sm btn-outline" onclick="loadOrders()">Try Again</button>
         </td>
-        <td>
-          <strong>${o.customer_name}</strong><br>
-          <span style="font-size:0.8rem;color:var(--text-muted)">📞 ${o.customer_phone}</span><br>
-          <span style="font-size:0.8rem;color:var(--text-muted)">${o.delivery_address}</span>
-        </td>
-        <td>
-          <strong>${formatMoney(o.total_amount)}</strong><br>
-          <span style="font-size:0.8rem;color:var(--text-muted)">${o.payment_method}</span><br>
-          <span style="font-size:0.75rem;color:#adb5bd">${o.payment_id || 'Pending'}</span>
-        </td>
-        <td><span class="badge ${badge}">${o.status}</span></td>
-        <td>${actionBtn}</td>
       </tr>
     `;
-  }).join('');
+  }
 }
 
 async function updateStatus(id, st) {

@@ -119,9 +119,21 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">Photo URL (Link)</label>
-      <input type="text" id="pImg" class="form-control" placeholder="https://...">
-      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Upload to Imgur or copy a valid image link.</div>
+      <label class="form-label">Product Image (JPEG/JPG Photo or URL Link)</label>
+      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+        <input type="file" id="pImgFile" accept="image/jpeg, image/jpg" class="form-control" style="padding: 6px 12px; height: auto;">
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">OR</span>
+        <input type="text" id="pImg" class="form-control" placeholder="Paste direct image URL..." style="flex: 1;">
+      </div>
+      <div id="uploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Upload a JPEG/JPG photo from your gallery or paste a direct image URL.</div>
+      
+      <!-- Image Preview Container -->
+      <div id="previewContainer" style="margin-top: 12px; display: none; text-align: center; border: 1px dashed var(--border); border-radius: 8px; padding: 12px; background: #fafbfc; position: relative;">
+        <img id="pImgPreview" src="" style="max-height: 140px; max-width: 100%; border-radius: 6px; object-fit: cover; box-shadow: var(--shadow-sm);">
+        <div style="margin-top: 8px;">
+          <button type="button" class="btn btn-sm btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearPreview()">Remove Photo</button>
+        </div>
+      </div>
     </div>
 
     <div class="grid-2" style="margin-top: 12px; margin-bottom: 8px;">
@@ -149,43 +161,63 @@ async function loadProducts() {
   const tbody = document.getElementById('productsTable');
   tbody.innerHTML = '<tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>';
   
-  allProducts = await api.getProducts();
-  if(allProducts.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No products found.</td></tr>';
-    return;
-  }
+  try {
+    allProducts = await api.getProducts();
+    if(allProducts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No products found.</td></tr>';
+      return;
+    }
 
-  tbody.innerHTML = allProducts.map(p => {
-    let catBadge = 'badge-spice';
-    let catText = 'Spices';
-    if(p.category_id === 2) { catBadge = 'badge-dairy'; catText = 'Dairy'; }
-    if(p.category_id === 3) { catBadge = 'badge-combo'; catText = 'Combos'; }
-    if(p.category_id === 4) { catBadge = 'badge-cake'; catText = 'Cakes'; }
+    tbody.innerHTML = allProducts.map(p => {
+      let catBadge = 'badge-spice';
+      let catText = 'Spices';
+      if(p.category_id === 2) { catBadge = 'badge-dairy'; catText = 'Dairy'; }
+      if(p.category_id === 3) { catBadge = 'badge-combo'; catText = 'Combos'; }
+      if(p.category_id === 4) { catBadge = 'badge-cake'; catText = 'Cakes'; }
 
-    return `
-      <tr>
-        <td>
-          <div class="prod-cell">
-            <img src="${p.image_url}" class="prod-img">
-            <div class="prod-meta">
-              <strong>${p.name}</strong>
-              <span style="font-size:0.8rem;color:var(--text-muted)">${p.weight || '1 pc'}</span>
+      return `
+        <tr>
+          <td>
+            <div class="prod-cell">
+              <img src="${p.image_url}" class="prod-img" onerror="this.src='https://via.placeholder.com/48x48?text=Product'">
+              <div class="prod-meta">
+                <strong>${p.name}</strong>
+                <span style="font-size:0.8rem;color:var(--text-muted)">${p.weight || '1 pc'}</span>
+              </div>
             </div>
-          </div>
-        </td>
-        <td><span class="badge ${catBadge}">${catText}</span></td>
-        <td><strong>${formatMoney(p.price)}</strong></td>
-        <td><strike style="color:var(--text-muted)">${formatMoney(p.mrp || p.price)}</strike></td>
-        <td>
-          <button class="btn btn-sm btn-outline" onclick="openModal('${p.id}')">Edit</button>
+          </td>
+          <td><span class="badge ${catBadge}">${catText}</span></td>
+          <td><strong>${formatMoney(p.price)}</strong></td>
+          <td><strike style="color:var(--text-muted)">${formatMoney(p.mrp || p.price)}</strike></td>
+          <td>
+            <button class="btn btn-sm btn-outline" onclick="openModal('${p.id}')">Edit</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error("Error loading products:", err);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align:center;padding:40px;color:var(--danger)">
+          <div style="font-weight:600;margin-bottom:8px;">⚠️ Failed to load products inventory.</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${err.message || "Network error or database unreachable."}</div>
+          <button class="btn btn-sm btn-outline" onclick="loadProducts()">Try Again</button>
         </td>
       </tr>
     `;
-  }).join('');
+  }
 }
 
 function openModal(id = null) {
   document.getElementById('modalTitle').textContent = id ? "Edit Product" : "Add New Product";
+  
+  // Clear any status messages
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.textContent = "Upload a JPEG/JPG photo from your gallery or paste a direct image URL.";
+  statusEl.style.color = "var(--text-muted)";
+  document.getElementById('pImgFile').value = "";
+
   if(id) {
     const p = allProducts.find(x => x.id === id);
     document.getElementById('pId').value = p.id;
@@ -210,6 +242,8 @@ function openModal(id = null) {
     document.getElementById('pNew').checked = false;
   }
   
+  updatePreview();
+  
   document.getElementById('overlay').classList.add('open');
   document.getElementById('prodModal').classList.add('open');
 }
@@ -226,7 +260,7 @@ async function saveProduct() {
     name_hindi: document.getElementById('pNameHindi').value.trim(),
     category_id: parseInt(document.getElementById('pCat').value),
     price: parseInt(document.getElementById('pPrice').value),
-    mrp: parseInt(document.getElementById('pMrp').value),
+    mrp: parseInt(document.getElementById('pMrp').value) || parseInt(document.getElementById('pPrice').value),
     weight: document.getElementById('pWeight').value.trim(),
     image_url: document.getElementById('pImg').value.trim(),
     is_bestseller: document.getElementById('pBestseller').checked,
@@ -234,7 +268,9 @@ async function saveProduct() {
     description: "Authentic Product"
   };
   
-  if(!payload.name || !payload.image_url) { alert("Name and Photo URL required."); return; }
+  if(!payload.name) { alert("Product name is required."); return; }
+  if(!payload.image_url) { alert("Product photo (upload or link) is required."); return; }
+  if(isNaN(payload.price) || payload.price <= 0) { alert("Please enter a valid selling price."); return; }
   
   try {
     await api.saveProduct(idStr || null, payload);
@@ -245,7 +281,111 @@ async function saveProduct() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadProducts);
+// Preview and upload functions
+function updatePreview() {
+  const urlVal = document.getElementById('pImg').value.trim();
+  const previewImg = document.getElementById('pImgPreview');
+  const previewContainer = document.getElementById('previewContainer');
+  if (urlVal) {
+    previewImg.src = urlVal;
+    previewContainer.style.display = 'block';
+  } else {
+    previewContainer.style.display = 'none';
+  }
+}
+
+function clearPreview() {
+  document.getElementById('pImg').value = "";
+  document.getElementById('pImgFile').value = "";
+  updatePreview();
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.textContent = "Upload a JPEG/JPG photo from your gallery or paste a direct image URL.";
+  statusEl.style.color = "var(--text-muted)";
+}
+
+function compressAndLoadImage(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) return reject(new Error("No file selected"));
+    
+    // Validate image format strictly
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/pjpeg'];
+    const extension = file.name.split('.').pop().toLowerCase();
+    if (!validTypes.includes(file.type) && !['jpg', 'jpeg'].includes(extension)) {
+      return reject(new Error("Please upload a JPG or JPEG photo only."));
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 400; // Keep base64 data URL size small
+        const MAX_HEIGHT = 300;
+        let width = img.width;
+        let height = img.height;
+        
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Compress as JPEG at 70% quality (excellent quality-to-size trade off)
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
+      };
+      img.onerror = function() {
+        reject(new Error("Invalid image format or corrupted file."));
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = function() {
+      reject(new Error("Failed to read the file."));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// Setup event listeners
+document.addEventListener('DOMContentLoaded', () => {
+  loadProducts();
+  
+  // URL Input Listener
+  document.getElementById('pImg').addEventListener('input', updatePreview);
+  
+  // File Input Listener
+  document.getElementById('pImgFile').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const statusEl = document.getElementById('uploadStatus');
+    statusEl.textContent = "⏳ Reading and compressing image...";
+    statusEl.style.color = "var(--primary)";
+    
+    try {
+      const base64Str = await compressAndLoadImage(file);
+      document.getElementById('pImg').value = base64Str;
+      updatePreview();
+      statusEl.textContent = "✅ Image loaded & compressed successfully.";
+      statusEl.style.color = "var(--success)";
+    } catch(err) {
+      statusEl.textContent = `❌ ${err.message}`;
+      statusEl.style.color = "var(--danger)";
+      e.target.value = "";
+    }
+  });
+});
 </script>
 </body>
 </html>
