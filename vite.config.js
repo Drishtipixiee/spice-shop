@@ -2,23 +2,22 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  root: 'frontend',
-  publicDir: '../public',
+  publicDir: 'public',
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'frontend/index.html'),
-        shop: resolve(__dirname, 'frontend/shop.html'),
-        login: resolve(__dirname, 'frontend/login.html'),
-        adminRedirect: resolve(__dirname, 'frontend/admin.html'),
-        deliveryMap: resolve(__dirname, 'frontend/delivery-map.html'),
-        adminIndex: resolve(__dirname, 'frontend/admin/index.html'),
-        adminProducts: resolve(__dirname, 'frontend/admin/products.html'),
-        adminOrders: resolve(__dirname, 'frontend/admin/orders.html'),
-        adminSettings: resolve(__dirname, 'frontend/admin/settings.html'),
-        adminLogin: resolve(__dirname, 'frontend/admin/login.html')
+        main: resolve(__dirname, 'index.html'),
+        shop: resolve(__dirname, 'shop.html'),
+        login: resolve(__dirname, 'login.html'),
+        adminRedirect: resolve(__dirname, 'admin.html'),
+        deliveryMap: resolve(__dirname, 'delivery-map.html'),
+        adminIndex: resolve(__dirname, 'admin/index.html'),
+        adminProducts: resolve(__dirname, 'admin/products.html'),
+        adminOrders: resolve(__dirname, 'admin/orders.html'),
+        adminSettings: resolve(__dirname, 'admin/settings.html'),
+        adminLogin: resolve(__dirname, 'admin/login.html')
       }
     }
   }
