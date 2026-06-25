@@ -8,13 +8,13 @@ class AdminAPI {
     const loginTime = parseInt(localStorage.getItem('adminLoginTime') || '0');
     const EIGHT_HOURS = 8 * 60 * 60 * 1000;
     const path = window.location.pathname;
-    const isLogin = path.includes('login.html');
+    const isLogin = path.includes('login');
     
     if (!loggedIn || Date.now() - loginTime > EIGHT_HOURS) {
       localStorage.removeItem('adminLoggedIn');
-      if (!isLogin) window.location.href = 'login.html';
+      if (!isLogin) window.location.href = '/admin/login';
     } else {
-      if (isLogin) window.location.href = 'index.html';
+      if (isLogin) window.location.href = '/admin/index.html';
     }
   }
 
@@ -22,12 +22,12 @@ class AdminAPI {
     // Simple hardcoded credentials for now
     // TODO: Replace with Supabase auth later
     const ADMIN_EMAIL    = 'admin@spiceshop.in';
-    const ADMIN_PASSWORD = 'SpiceAdmin@2024';
+    const ADMIN_PASSWORD = 'Admin@1234';
     
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       localStorage.setItem('adminLoggedIn', 'true');
       localStorage.setItem('adminLoginTime', Date.now().toString());
-      window.location.href = 'index.html'; // show Dashboard
+      window.location.href = '/admin/index.html'; // show Dashboard
     } else {
       alert('Invalid credentials. Please try again.');
     }
@@ -36,7 +36,7 @@ class AdminAPI {
   logout() {
     localStorage.removeItem('adminLoggedIn');
     localStorage.removeItem('adminLoginTime');
-    window.location.href = 'login.html';
+    window.location.href = '/admin/login';
   }
 
   async fetch(url, options = {}) {
