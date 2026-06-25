@@ -1,5 +1,6 @@
 {
-  "framework": null,
-  "buildCommand": "echo 'No build required'",
-  "outputDirectory": "frontend"
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/:path*", "destination": "/frontend/:path*" }
+  ]
 }
