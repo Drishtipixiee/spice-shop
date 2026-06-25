@@ -1,5 +1,8 @@
 {
   "name": "spice-shop",
   "version": "1.0.0",
+  "scripts": {
+    "build": "mkdir -p dist && cp -r admin dist/ && cp -r public dist/ && cp index.html dist/ && cp login.html dist/ && cp delivery-map.html dist/ && cp 404.html dist/ || true"
+  },
   "dependencies": {}
 }
