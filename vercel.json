@@ -3,5 +3,12 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "framework": "vite"
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/", "destination": "/admin/index.html" },
+    { "source": "/shop", "destination": "/shop.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/delivery-map", "destination": "/delivery-map.html" },
+    { "source": "/api/:path*", "destination": "/api/:path*" }
+  ]
 }
