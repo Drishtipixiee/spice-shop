@@ -3,7 +3,7 @@
     "pg": "^8.22.0"
   },
   "scripts": {
-    "build": "echo 'No build required'"
+    "build": "node -e \"const fs = require('fs'); fs.rmSync('dist', { recursive: true, force: true }); fs.cpSync('frontend', 'dist', { recursive: true })\""
   },
   "devDependencies": {
     "vercel": "^54.17.1"
