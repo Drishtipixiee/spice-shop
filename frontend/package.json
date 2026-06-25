@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "pg": "^8.22.0"
+  },
+  "scripts": {},
+  "devDependencies": {
+    "vercel": "^54.17.1"
+  }
+}
