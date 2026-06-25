@@ -153,11 +153,11 @@ class AdminAPI {
   }
 }
 
-const api = new AdminAPI();
+window.api = new AdminAPI();
 
-function formatMoney(amount) {
+window.formatMoney = function(amount) {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
-}
-function formatDate(isoStr) {
+};
+window.formatDate = function(isoStr) {
   return new Date(isoStr).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
-}
+};
