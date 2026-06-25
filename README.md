@@ -9,8 +9,8 @@ This repository has a dual-architecture setup (Python FastAPI backend for tradit
 ## 🖥️ Architecture & Tech Stack
 
 ### Frontend
-- **Vanilla HTML5, CSS3, & JavaScript** (located inside the [frontend/](file:///c:/Users/pande/New%20folder/spice-shop/frontend) directory). No React, Next.js, or Tailwind compiler overhead.
-- Includes a Customer Storefront ([index.html](file:///c:/Users/pande/New%20folder/spice-shop/frontend/index.html)), a Commercial Landing Catalog ([shop.html](file:///c:/Users/pande/New%20folder/spice-shop/frontend/shop.html)), and an Admin Portal ([admin/index.html](file:///c:/Users/pande/New%20folder/spice-shop/frontend/admin/index.html)).
+- **Vanilla HTML5, CSS3, & JavaScript**. No React, Next.js, or Tailwind compiler overhead.
+- Includes a Customer Storefront (`index.html`), a Commercial Landing Catalog (`shop.html`), and an Admin Portal (`admin/index.html`). All located in the root directory.
 
 ### Database
 - **Supabase PostgreSQL** — Live database server storing products, categories, and customer orders.
@@ -65,10 +65,16 @@ If you prefer running the Python backend:
 ---
 
 ## 📦 Live Deployments on Vercel
-This repository is pre-configured for Vercel deployment using **Vite**:
-- **Live Demo Link:** [https://spice-shop-7c83hodmq-drishtipixiees-projects.vercel.app](https://spice-shop-7c83hodmq-drishtipixiees-projects.vercel.app)
-- **Branch Preview:** [https://spice-shop-git-main-drishtipixiees-projects.vercel.app](https://spice-shop-git-main-drishtipixiees-projects.vercel.app)
-- Vercel executes the root build command: `npm run build` which uses Vite to bundle the static files from `frontend/` to `dist/`.
+This repository is pre-configured for Vercel deployment using **Vite**.
+
+### Live Links:
+- **🏠 Main Storefront:** [https://spice-shop-git-main-drishtipixiees-projects.vercel.app](https://spice-shop-git-main-drishtipixiees-projects.vercel.app)
+- **🛒 Product Catalog:** [https://spice-shop-git-main-drishtipixiees-projects.vercel.app/shop](https://spice-shop-git-main-drishtipixiees-projects.vercel.app/shop)
+- **👨‍💼 Admin Dashboard:** [https://spice-shop-git-main-drishtipixiees-projects.vercel.app/admin/index.html](https://spice-shop-git-main-drishtipixiees-projects.vercel.app/admin/index.html)
+- **🔑 Admin Login:** [https://spice-shop-git-main-drishtipixiees-projects.vercel.app/admin/login.html](https://spice-shop-git-main-drishtipixiees-projects.vercel.app/admin/login.html)
+
+### Vercel Architecture Details:
+- Vercel executes the root build command: `npm run build` which uses Vite to bundle the static files from the root directory to `dist/`.
 - Vercel deploys the contents of `dist/` as the static website root.
 - Vercel deploys the JavaScript files in the root `api/` directory as live serverless functions.
 - Local configuration is handled securely via Vercel Environment Variables.
