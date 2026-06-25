@@ -1,11 +1,5 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "outputDirectory": ".",
-  "rewrites": [
-    { "source": "/admin", "destination": "/frontend/admin/index.html" },
-    { "source": "/admin/:path*", "destination": "/frontend/admin/:path*" },
-    { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/:path*", "destination": "/frontend/:path*" }
-  ]
+  "outputDirectory": "frontend"
 }
