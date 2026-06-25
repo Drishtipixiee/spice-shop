@@ -1,50 +1,41 @@
 class AdminAPI {
   constructor() {
-    this.token = localStorage.getItem('zomatoAdminToken');
-    this.checkAuth();
+    this.checkSession();
   }
 
-  checkAuth() {
+  checkSession() {
+    const loggedIn  = localStorage.getItem('adminLoggedIn');
+    const loginTime = parseInt(localStorage.getItem('adminLoginTime') || '0');
+    const EIGHT_HOURS = 8 * 60 * 60 * 1000;
     const path = window.location.pathname;
     const isLogin = path.includes('login.html');
-    if (!this.token && !isLogin) {
-      window.location.href = 'login.html';
-    } else if (this.token && isLogin) {
-      window.location.href = 'index.html';
+    
+    if (!loggedIn || Date.now() - loginTime > EIGHT_HOURS) {
+      localStorage.removeItem('adminLoggedIn');
+      if (!isLogin) window.location.href = 'login.html';
+    } else {
+      if (isLogin) window.location.href = 'index.html';
     }
   }
 
   async login(email, password) {
-    try {
-      const res = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      if (!res.ok) {
-        if (res.status === 404) {
-          throw new Error('Authentication API endpoint not found (404). Please wait a moment for the new Vercel deployment to finish building, or verify project settings.');
-        }
-        let errorMsg = 'Invalid credentials';
-        try {
-          const errData = await res.json();
-          if (errData && errData.error) {
-            errorMsg = errData.error;
-          }
-        } catch (_) {}
-        throw new Error(errorMsg);
-      }
-      const data = await res.json();
-      this.token = data.access_token;
-      localStorage.setItem('zomatoAdminToken', this.token);
-      window.location.href = 'index.html';
-    } catch (e) {
-      alert(e.message);
+    // Simple hardcoded credentials for now
+    // TODO: Replace with Supabase auth later
+    const ADMIN_EMAIL    = 'admin@spiceshop.in';
+    const ADMIN_PASSWORD = 'SpiceAdmin@2024';
+    
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      localStorage.setItem('adminLoggedIn', 'true');
+      localStorage.setItem('adminLoginTime', Date.now().toString());
+      window.location.href = 'index.html'; // show Dashboard
+    } else {
+      alert('Invalid credentials. Please try again.');
     }
   }
 
   logout() {
-    localStorage.removeItem('zomatoAdminToken');
+    localStorage.removeItem('adminLoggedIn');
+    localStorage.removeItem('adminLoginTime');
     window.location.href = 'login.html';
   }
 
