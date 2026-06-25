@@ -1,34 +1,29 @@
-// Vercel Serverless Function: /api/auth
-// Handles OTP verification (Mocked for now)
-
-export default function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
-  
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  if (req.method === 'POST') {
-    const { phone, otp } = req.body;
-    
-    // Hardcoded master OTP for admin
-    if (otp === '7391') {
-      return res.status(200).json({ 
-        success: true, 
-        token: 'mock_jwt_token_admin',
-        user: { phone, role: 'admin' }
-      });
-    }
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-    // In a real app, verify OTP via Twilio or Firebase Admin SDK
+  const { email, password } = req.body;
+  
+  const expectedEmail = process.env.ADMIN_EMAIL || 'admin@spiceshop.in';
+  const expectedPassword = process.env.ADMIN_PASSWORD || 'Admin@1234';
+
+  if (email === expectedEmail && password === expectedPassword) {
     return res.status(200).json({ 
       success: true, 
-      token: 'mock_jwt_token_user',
-      user: { phone, role: 'user' }
+      access_token: 'mock_jwt_token_admin',
+      user: { email, role: 'admin' }
     });
   }
 
-  res.status(405).json({ error: "Method not allowed" });
-}
+  return res.status(401).json({ error: 'Invalid credentials' });
+};

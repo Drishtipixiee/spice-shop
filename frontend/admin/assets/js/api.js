@@ -1,5 +1,3 @@
-const API_BASE = 'https://spice-shop-backend.onrender.com';
-
 class AdminAPI {
   constructor() {
     this.token = localStorage.getItem('zomatoAdminToken');
@@ -18,7 +16,7 @@ class AdminAPI {
 
   async login(email, password) {
     try {
-      const res = await fetch(`${API_BASE}/admin/login`, {
+      const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -45,7 +43,7 @@ class AdminAPI {
       'Content-Type': 'application/json'
     };
     try {
-      const res = await fetch(API_BASE + url, options);
+      const res = await fetch(url, options);
       if (res.status === 401) {
         this.logout();
       }
@@ -57,40 +55,96 @@ class AdminAPI {
   }
 
   async getDashboardStats() {
-    const orders = await this.fetch('/admin/orders');
-    const products = await fetch(API_BASE + '/products').then(r => r.json());
+    const orders = await this.getOrders();
+    const products = await this.getProducts();
     
     let totalRev = 0;
     let pending = 0;
     orders.forEach(o => {
-      totalRev += o.total_amount;
-      if (o.status === 'PENDING') pending++;
+      totalRev += o.total_amount || 0;
+      if (o.status === 'placed' || o.status === 'placed'.toUpperCase()) pending++;
     });
 
-    return { totalOrders: orders.length, revenue: totalRev, pending, totalProducts: products.length, orders, products };
+    return { 
+      totalOrders: orders.length, 
+      revenue: totalRev, 
+      pending, 
+      totalProducts: products.length, 
+      orders, 
+      products 
+    };
   }
 
   async getOrders() {
-    return await this.fetch('/admin/orders');
+    const data = await this.fetch('/api/orders');
+    // Map order fields to match frontend expectation
+    return data.map(o => ({
+      ...o,
+      total_amount: o.total, // map total to total_amount
+      status: (o.order_status || 'placed').toUpperCase(), // map order_status to status
+      payment_id: o.razorpay_payment_id || 'COD'
+    }));
   }
 
   async updateOrderStatus(id, status) {
-    return await this.fetch(`/admin/orders/${id}/status`, {
+    return await this.fetch(`/api/orders`, {
       method: 'PUT',
-      body: JSON.stringify({ status })
+      body: JSON.stringify({ 
+        id, 
+        order_status: status.toLowerCase() 
+      })
     });
   }
 
   async getProducts() {
-    return await fetch(API_BASE + '/products').then(r => r.json());
+    const data = await fetch('/api/products').then(r => r.json());
+    // Map database columns to matches
+    return data.map(p => ({
+      ...p,
+      category_id: p.category === 'dairy' ? 2 : (p.category === 'spices' ? 1 : (p.category === 'cakes' ? 4 : 3))
+    }));
   }
 
   async saveProduct(id, payload) {
+    // Map category_id back to database category string
+    const category = payload.category_id === 2 ? 'dairy' : (payload.category_id === 1 ? 'spices' : (payload.category_id === 4 ? 'cakes' : 'combos'));
+    const body = {
+      name: payload.name,
+      name_hindi: payload.name_hindi || payload.name,
+      category,
+      price: payload.price,
+      mrp: payload.mrp,
+      weight: payload.weight,
+      image_url: payload.image_url,
+      description: payload.description || 'Authentic Product',
+      in_stock: true,
+      is_bestseller: payload.is_bestseller || false,
+      is_new: payload.is_new || false
+    };
+
     if (id) {
-      return await this.fetch(`/admin/products/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+      body.id = id;
+      return await this.fetch(`/api/products`, { 
+        method: 'PUT', 
+        body: JSON.stringify(body) 
+      });
     } else {
-      return await this.fetch(`/admin/products`, { method: 'POST', body: JSON.stringify(payload) });
+      return await this.fetch(`/api/products`, { 
+        method: 'POST', 
+        body: JSON.stringify(body) 
+      });
     }
+  }
+
+  async getSettings() {
+    return await this.fetch('/api/settings');
+  }
+
+  async saveSetting(key, value) {
+    return await this.fetch('/api/settings', {
+      method: 'POST',
+      body: JSON.stringify({ key, value })
+    });
   }
 }
 

@@ -1,0 +1,10 @@
+- `[x]` Upgrade product dialog and forms in admin dashboard
+  - `[x]` Fix the `name_hindi` payload mapping in `frontend/admin/products.html`
+  - `[x]` Add "Is Bestseller" and "Is New" checkboxes to `frontend/admin/products.html`
+  - `[x]` Map the values from form to API calls
+- `[x]` Enhance customer storefront (`frontend/index.html`)
+  - `[x]` Add Order Tracker section to query orders by ID from Supabase
+  - `[x]` Add Free Delivery Progress Bar in cart sidebar
+  - `[x]` Upgrade chatbot with Quick Replies and live product database keyword search
+  - `[x]` Verify pincode check and maps active for Thane & Mumbai pincodes only
+- `[x]` Verify and test the complete workspace locally

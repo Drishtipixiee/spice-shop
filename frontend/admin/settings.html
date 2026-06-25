@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings | Enterprise Admin</title>
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span style="color:var(--text-main)">Spice</span>Shop
+  </div>
+  <div class="sidebar-menu">
+    <div class="menu-label">Main Menu</div>
+    <a href="index.html" class="menu-item">📊 Dashboard</a>
+    <a href="orders.html" class="menu-item">📦 Orders</a>
+    <a href="products.html" class="menu-item">📋 Products Inventory</a>
+    <a href="settings.html" class="menu-item active">⚙️ Site Settings</a>
+    
+    <div class="menu-label">Settings</div>
+    <a href="#" onclick="api.logout()" class="menu-item">🚪 Logout</a>
+  </div>
+</aside>
+
+<main class="main-wrapper">
+  <header class="topbar">
+    <div class="topbar-search">
+      ⚙️ <span style="margin-left: 8px; font-weight: 600;">System Settings</span>
+    </div>
+    <div class="topbar-right">
+      <div class="admin-profile">
+        <div class="admin-avatar">A</div>
+        <div class="admin-info">
+          <span class="admin-name">Admin User</span>
+          <span class="admin-role">Super Admin</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title">Website Settings</h1>
+    </div>
+
+    <!-- Announcement Settings -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <h2 class="card-title">📢 Announcement Bar</h2>
+      </div>
+      <div style="padding: 24px;">
+        <div class="form-group">
+          <label class="form-label">Scrolling Announcement Text</label>
+          <input type="text" id="setting-announcement" class="form-control" placeholder="e.g. Free delivery above ₹499">
+        </div>
+        <button class="btn btn-primary" onclick="saveAnnouncement()">Update Announcement</button>
+      </div>
+    </div>
+
+    <!-- Hero Content Settings -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <h2 class="card-title">🎯 Hero Section Banner</h2>
+      </div>
+      <div style="padding: 24px;">
+        <div class="form-group">
+          <label class="form-label">Main Headline</label>
+          <input type="text" id="setting-headline" class="form-control" placeholder="e.g. Fresh Dairy, Authentic Spices">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sub-headline Description</label>
+          <textarea id="setting-subheadline" class="form-control" rows="3" placeholder="Description of the shop..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveHeroSettings()">Update Banner Text</button>
+      </div>
+    </div>
+
+    <!-- Statistics Counters Settings -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <h2 class="card-title">📈 Homepage Statistics Counters</h2>
+      </div>
+      <div style="padding: 24px;">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Trusted Since (Year)</label>
+            <input type="number" id="setting-stat-since" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">States Delivered</label>
+            <input type="number" id="setting-stat-states" class="form-control">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Active Products Count</label>
+            <input type="number" id="setting-stat-products" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Happy Customers Count</label>
+            <input type="number" id="setting-stat-customers" class="form-control">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveStatsSettings()">Update Counters</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="assets/js/api.js"></script>
+<script>
+let currentSettings = {};
+
+async function loadSettings() {
+  try {
+    const data = await api.getSettings();
+    data.forEach(item => {
+      const val = typeof item.value === 'string' ? JSON.parse(item.value) : item.value;
+      currentSettings[item.key] = val;
+    });
+
+    // Populate UI
+    if (currentSettings.announcement) {
+      document.getElementById('setting-announcement').value = currentSettings.announcement.text || '';
+    }
+    if (currentSettings.hero) {
+      document.getElementById('setting-headline').value = currentSettings.hero.headline || '';
+      document.getElementById('setting-subheadline').value = currentSettings.hero.subheadline || '';
+    }
+    if (currentSettings.stats) {
+      document.getElementById('setting-stat-since').value = currentSettings.stats.since || 2020;
+      document.getElementById('setting-stat-states').value = currentSettings.stats.states || 15;
+      document.getElementById('setting-stat-products').value = currentSettings.stats.products || 33;
+      document.getElementById('setting-stat-customers').value = currentSettings.stats.customers || 10000;
+    }
+  } catch(e) {
+    console.error("Failed to load settings:", e);
+    alert("Failed to load settings.");
+  }
+}
+
+async function saveAnnouncement() {
+  const text = document.getElementById('setting-announcement').value.trim();
+  if(!text) { alert("Announcement text cannot be empty."); return; }
+  
+  try {
+    await api.saveSetting('announcement', { text });
+    alert("Announcement bar updated successfully!");
+  } catch(e) {
+    alert("Failed to update announcement.");
+  }
+}
+
+async function saveHeroSettings() {
+  const headline = document.getElementById('setting-headline').value.trim();
+  const subheadline = document.getElementById('setting-subheadline').value.trim();
+  if(!headline || !subheadline) { alert("Headline and sub-headline description are required."); return; }
+
+  try {
+    await api.saveSetting('hero', { headline, subheadline });
+    alert("Hero banner updated successfully!");
+  } catch(e) {
+    alert("Failed to update hero banner.");
+  }
+}
+
+async function saveStatsSettings() {
+  const since = parseInt(document.getElementById('setting-stat-since').value);
+  const states = parseInt(document.getElementById('setting-stat-states').value);
+  const products = parseInt(document.getElementById('setting-stat-products').value);
+  const customers = parseInt(document.getElementById('setting-stat-customers').value);
+
+  if(isNaN(since) || isNaN(states) || isNaN(products) || isNaN(customers)) {
+    alert("Please fill all statistics fields with valid numbers.");
+    return;
+  }
+
+  try {
+    await api.saveSetting('stats', { since, states, products, customers });
+    alert("Homepage statistics updated successfully!");
+  } catch(e) {
+    alert("Failed to update statistics.");
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadSettings);
+</script>
+</body>
+</html>

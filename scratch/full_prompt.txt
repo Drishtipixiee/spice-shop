@@ -1,0 +1,1033 @@
+﻿<USER_REQUEST>
+# ðŸŒ¶ï¸ INDIAN DAIRY & SPICES â€” COMPLETE COMMERCIAL REBUILD PROMPT
+# One prompt. Zero half-fixes. Production-ready output only.
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+## WHO YOU ARE
+You are a senior full-stack developer with expertise in vanilla JS, 
+Supabase, Razorpay, and Vercel deployments. You write complete, 
+working code â€” not pseudocode, not "fill this in later", not TODOs. 
+Every file you produce must be fully functional as-is.
+
+## WHAT THIS PROJECT IS
+An Indian small business selling dairy products (ghee, paneer, lassi, 
+dahi, butter, shrikhand) and spices (haldi, jeera, garam masala, 
+dhania, mirchi, hing) + combo gift packs. Real customers, real orders, 
+real money. Owner's WhatsApp: +91 98923 60874.
+
+## REPO STRUCTURE
+```
+spice-shop/
+â”œâ”€â”€ frontend/
+â”‚   â””â”€â”€ index.html              â† Main customer-facing site
+â”œâ”€â”€ admin/
+â”‚   â”œâ”€â”€ index.html              â† Admin panel UI
+â”‚   â””â”€â”€ assets/
+â”‚       â”œâ”€â”€ js/
+â”‚       â”‚   â”œâ”€â”€ api.js          â† Currently broken (uses localStorage)
+â”‚       â”‚   â””â”€â”€ app.js          â† Admin app logic
+â”‚       â””â”€â”€ css/
+â”‚           â””â”€â”€ admin.css       â† Admin styles
+â”œâ”€â”€ api/
+â”‚   â””â”€â”€ create-order.js         â† NEW: Razorpay serverless function
+â”œâ”€â”€ vercel.json                 â† Deployment config
+â””â”€â”€ package.json                â† Root dependencies
+```
+
+## LIVE URLS
+- Customer site: https://spice-shop-one.vercel.app
+- Admin panel: https://spice-shop-9ivyza9a5-drishtipixiees-projects.vercel.app/admin/
+- Old backend (to be REPLACED): https://spice-shop-backend.onrender.com
+
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+## STEP 0 â€” SUPABASE SETUP (Do this first, everything depends on it)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+Go to supabase.com â†’ New Project â†’ Copy your Project URL and anon key.
+Then run this SQL in Supabase SQL Editor to create all tables:
+
+```sql
+-- PRODUCTS TABLE
+create table products (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  name_hindi text,
+  category text not null check (category in ('dairy','spices','combos','cakes')),
+  price integer not null,
+  mrp integer not null,
+  image_url text default 'https://via.placeholder.com/400x300?text=Product',
+  description text,
+  weight text,
+  is_bestseller boolean default false,
+  is_new boolean default false,
+  in_stock boolean default true,
+  rating numeric default 4.5,
+  review_count integer default 0,
+  created_at timestamptz default now()
+);
+
+-- ORDERS TABLE
+create table orders (
+  id uuid primary key default gen_random_uuid(),
+  customer_name text not null,
+  customer_phone text not null,
+  customer_address text not null,
+  customer_pincode text,
+  items jsonb not null,
+  subtotal integer not null,
+  delivery_charge integer default 40,
+  total integer not null,
+  payment_method text default 'razorpay' check (payment_method in ('razorpay','cod')),
+  payment_status text default 'pending' check (payment_status in ('pending','paid','failed')),
+  razorpay_order_id text,
+  razorpay_payment_id text,
+  order_status text default 'placed' check (order_status in ('placed','confirmed','packed','shipped','delivered','cancelled')),
+  notes text,
+  created_at timestamptz default now()
+);
+
+-- SITE SETTINGS TABLE (for homepage sections admin can edit)
+create table site_settings (
+  key text primary key,
+  value jsonb,
+  updated_at timestamptz default now()
+);
+
+-- Insert default settings
+insert into site_settings (key, value) values
+  ('hero', '{"headline":"Fresh Dairy, Authentic Spices","subheadline":"Farm-fresh dairy delivered to your doorstep. Handpicked spices from the finest farms of India.","cta_dairy":"Shop Dairy","cta_spices":"Shop Spices"}'),
+  ('announcement', '{"text":"ðŸšš Free delivery above â‚¹499 ðŸ›ï¸ FSSAI Certified ðŸŒ¿ 100% Natural â­ 4.9/5 from 10,000+ customers"}'),
+  ('stats', '{"products":33,"customers":10000,"states":15,"since":2020}'),
+  ('contact', '{"phone1":"+91 98923 60874","phone2":"+91 88793 14335","email1":"pandeyanurag15@gmail.com","email2":"darshanbhalerao07@gmail.com","whatsapp":"919892360874"}');
+
+-- ENABLE Row Level Security but allow anon reads for products
+alter table products enable row level security;
+alter table orders enable row level security;
+alter table site_settings enable row level security;
+
+create policy "Anyone can read products" on products for select using (true);
+create policy "Anyone can read settings" on site_settings for select using (true);
+create policy "Service role manages products" on products for all using (true);
+create policy "Service role manages orders" on orders for all using (true);
+create policy "Service role manages settings" on site_settings for all using (true);
+
+-- SEED 10 sample products
+insert into products (name, name_hindi, category, price, mrp, description, weight, is_bestseller, is_new, rating, review_count) values
+('Pure Desi Ghee', 'à¤¶à¥à¤¦à¥à¤§ à¤¦à¥‡à¤¸à¥€ à¤˜à¥€', 'dairy', 450, 520, 'Farm-fresh A2 cow ghee, slow-churned the traditional way. Rich aroma, golden colour.', '500ml', true, false, 4.9, 2847),
+('Fresh Paneer', 'à¤¤à¤¾à¤œà¤¼à¤¾ à¤ªà¤¨à¥€à¤°', 'dairy', 180, 200, 'Soft, fresh paneer made daily from full-fat cow milk. No preservatives.', '200g', true, false, 4.8, 1923),
+('Sweet Lassi', 'à¤®à¥€à¤ à¥€ à¤²à¤¸à¥à¤¸à¥€', 'dairy', 60, 70, 'Thick, creamy lassi made from pure curd. Chilled and ready to drink.', '300ml', false, true, 4.7, 834),
+('Fresh Dahi', 'à¤¤à¤¾à¤œà¤¼à¥€ à¤¦à¤¹à¥€', 'dairy', 80, 90, 'Set curd from pure cow milk. Perfect for raita, kadhi, and everyday eating.', '500g', false, false, 4.6, 1205),
+('Turmeric Powder', 'à¤¹à¤²à¥à¤¦à¥€ à¤ªà¤¾à¤‰à¤¡à¤°', 'spices', 120, 150, 'Pure haldi sourced from Erode farms. Lab-tested, no added colour or fillers.', '200g', true, false, 4.9, 3241),
+('Garam Masala', 'à¤—à¤°à¤® à¤®à¤¸à¤¾à¤²à¤¾', 'spices', 90, 110, 'Authentic blend of 18 spices. Hand-ground in small batches for maximum aroma.', '100g', true, false, 4.8, 2156),
+('Cumin Seeds', 'à¤œà¥€à¤°à¤¾', 'spices', 75, 90, 'Bold, aromatic jeera from Rajasthan. Essential for tempering dals and vegetables.', '200g', false, false, 4.7, 987),
+('Red Chilli Powder', 'à¤²à¤¾à¤² à¤®à¤¿à¤°à¥à¤š à¤ªà¤¾à¤‰à¤¡à¤°', 'spices', 85, 100, 'Vibrant, spicy red chilli powder. Adds deep colour and heat to curries.', '200g', false, false, 4.6, 1432),
+('Dairy & Spice Starter Pack', 'à¤¡à¥‡à¤¯à¤°à¥€ à¤”à¤° à¤®à¤¸à¤¾à¤²à¤¾ à¤¸à¥à¤Ÿà¤¾à¤°à¥à¤Ÿà¤° à¤ªà¥ˆà¤•', 'combos', 599, 750, 'Perfect starter kit: 200ml Ghee + 200g Paneer + Haldi + Garam Masala + Jeera. Save â‚¹151!', '5 items', true, true, 4.9, 562),
+('Festival Gift Hamper', 'à¤«à¥‡à¤¸à¥à¤Ÿà¤¿à¤µà¤² à¤—à¤¿à¤«à¥à¤Ÿ à¤¹à¥ˆà¤®à¥à¤ªà¤°', 'combos', 1199, 1500, 'Premium gifting box: 500ml Ghee + 400g Paneer + 3 spice packs in a beautiful gift box.', '7 items', false, true, 4.8, 341);
+```
+
+After running SQL, go to Supabase â†’ Storage â†’ Create bucket called 
+"product-images" and set it to PUBLIC.
+
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+## STEP 1 â€” REWRITE frontend/index.html COMPLETELY
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+Replace the entire file with this complete, working version.
+Do not keep any old code. Rewrite from scratch.
+
+### 1A â€” HEAD SECTION
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indian Dairy & Spices â€” à¤¤à¤¾à¤œà¤¼à¤¾ à¤¡à¥‡à¤¯à¤°à¥€, à¤¶à¥à¤¦à¥à¤§ à¤®à¤¸à¤¾à¤²à¥‡</title>
+  <meta name="description" content="Buy fresh Indian dairy products and authentic spices online. FSSAI certified, 100% natural, farm-to-table.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Razorpay -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+```
+
+### 1B â€” CSS VARIABLES & DESIGN SYSTEM
+```css
+:root {
+  --primary:     #D4520A;
+  --primary-dark:#B8440A;
+  --secondary:   #2E7D32;
+  --accent:      #F5A623;
+  --bg-warm:     #FFF8F0;
+  --bg-card:     #FFFFFF;
+  --text-dark:   #1A1A1A;
+  --text-muted:  #6B7280;
+  --border:      #E5DDD4;
+  --wa-green:    #25D366;
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.12);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.16);
+  --radius:      12px;
+  --radius-sm:   8px;
+  --radius-pill: 999px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg-warm); color: var(--text-dark); }
+h1,h2,h3 { font-family: 'Playfair Display', serif; }
+.hindi { font-family: 'Noto Sans Devanagari', sans-serif; }
+img { max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+```
+
+### 1C â€” PRODUCT CARD CSS
+```css
+/* Product Grid */
+#product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px 0;
+}
+@media (max-width: 1024px) { #product-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { #product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+
+.product-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.product-card .badges {
+  position: absolute; top: 10px; left: 10px; right: 10px;
+  display: flex; justify-content: space-between;
+  pointer-events: none;
+}
+.badge-bestseller {
+  background: #E53935; color: #fff;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: var(--radius-pill);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.badge-new {
+  background: var(--secondary); color: #fff;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: var(--radius-pill);
+}
+.badge-discount {
+  background: var(--primary); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: var(--radius-pill);
+}
+.product-image {
+  width: 100%; height: 180px;
+  object-fit: cover; display: block;
+}
+.product-body {
+  padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 6px;
+}
+.product-name-hindi {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 12px; color: var(--text-muted);
+}
+.product-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 600; line-height: 1.3;
+}
+.product-weight { font-size: 12px; color: var(--text-muted); }
+.product-rating { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+.stars { color: #F5A623; }
+.product-pricing { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.price { font-size: 18px; font-weight: 700; color: var(--primary); }
+.mrp { font-size: 13px; color: var(--text-muted); text-decoration: line-through; }
+.discount { font-size: 12px; color: var(--secondary); font-weight: 600; }
+.product-actions { padding: 0 14px 14px; display: flex; gap: 8px; }
+.btn-cart {
+  flex: 1; padding: 10px; border: none;
+  background: var(--primary); color: #fff;
+  border-radius: var(--radius-sm); font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 44px;
+}
+.btn-cart:hover { background: var(--primary-dark); }
+.btn-cart.in-cart {
+  background: var(--secondary);
+}
+.btn-wa {
+  padding: 10px 12px; border: none;
+  background: var(--wa-green); color: #fff;
+  border-radius: var(--radius-sm); font-size: 18px;
+  cursor: pointer; transition: opacity 0.2s;
+  min-height: 44px;
+}
+.btn-wa:hover { opacity: 0.9; }
+
+/* Category Tabs */
+.category-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; padding: 16px 0;
+}
+.tab-btn {
+  padding: 8px 18px; border: 2px solid var(--border);
+  background: #fff; border-radius: var(--radius-pill);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  white-space: nowrap; min-height: 44px;
+}
+.tab-btn.active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+
+/* Search */
+.search-wrap { position: relative; max-width: 480px; margin-bottom: 16px; }
+.search-wrap input {
+  width: 100%; padding: 12px 16px 12px 44px;
+  border: 2px solid var(--border); border-radius: var(--radius-pill);
+  font-size: 15px; font-family: 'DM Sans', sans-serif;
+  background: #fff; outline: none; transition: border-color 0.2s;
+}
+.search-wrap input:focus { border-color: var(--primary); }
+.search-icon {
+  position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%); color: var(--text-muted); font-size: 18px;
+}
+
+/* Floating Buttons */
+.float-wa {
+  position: fixed; left: 20px; bottom: 20px; z-index: 9000;
+  background: var(--wa-green); color: #fff;
+  border-radius: var(--radius-pill); padding: 12px 18px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: var(--shadow-lg); cursor: pointer;
+  text-decoration: none; font-family: 'DM Sans', sans-serif;
+  transition: transform 0.2s;
+}
+.float-wa:hover { transform: scale(1.05); }
+.float-chat {
+  position: fixed; right: 20px; bottom: 20px; z-index: 9000;
+  background: var(--primary); color: #fff;
+  width: 56px; height: 56px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; box-shadow: var(--shadow-lg); cursor: pointer;
+  border: none; transition: transform 0.2s;
+}
+.float-chat:hover { transform: scale(1.1); }
+
+/* Cart Sidebar */
+.cart-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 9990; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.cart-overlay.open { opacity: 1; pointer-events: all; }
+.cart-sidebar {
+  position: fixed; right: 0; top: 0; bottom: 0;
+  width: 360px; max-width: 100vw;
+  background: #fff; z-index: 9999;
+  display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform 0.3s;
+  box-shadow: var(--shadow-lg);
+}
+.cart-sidebar.open { transform: translateX(0); }
+.cart-header {
+  padding: 20px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cart-header h3 { font-size: 18px; font-weight: 700; }
+.cart-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.cart-item {
+  display: flex; gap: 12px; align-items: center;
+  padding: 12px; background: var(--bg-warm); border-radius: var(--radius-sm);
+}
+.cart-item img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-sm); }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-size: 13px; font-weight: 600; }
+.cart-item-price { font-size: 13px; color: var(--primary); font-weight: 700; margin-top: 2px; }
+.qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.qty-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--primary); background: #fff;
+  color: var(--primary); font-size: 16px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.qty-display { font-size: 14px; font-weight: 600; min-width: 24px; text-align: center; }
+.cart-item-remove { background: none; border: none; color: #E53935; cursor: pointer; font-size: 18px; }
+.cart-footer {
+  padding: 20px; border-top: 1px solid var(--border);
+}
+.cart-summary { margin-bottom: 16px; }
+.cart-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+.cart-row.total { font-size: 16px; font-weight: 700; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+.btn-checkout {
+  width: 100%; padding: 14px; background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius); font-size: 16px;
+  font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+}
+.btn-checkout:hover { background: var(--primary-dark); }
+.btn-clear-cart {
+  width: 100%; padding: 8px; margin-top: 8px;
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif;
+}
+
+/* Address Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 10000; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: #fff; border-radius: var(--radius);
+  width: 100%; max-width: 480px;
+  padding: 32px; max-height: 90vh; overflow-y: auto;
+}
+.modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; padding: 12px 14px;
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 15px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
+.payment-options { display: flex; gap: 12px; margin-bottom: 20px; }
+.payment-option {
+  flex: 1; padding: 12px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  text-align: center; transition: all 0.2s;
+}
+.payment-option.selected { border-color: var(--primary); background: #FFF0E8; }
+.payment-option .icon { font-size: 24px; display: block; margin-bottom: 4px; }
+.payment-option .label { font-size: 13px; font-weight: 600; }
+.btn-place-order {
+  width: 100%; padding: 14px; background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius); font-size: 16px;
+  font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+.btn-back { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
+
+/* Order Success */
+.success-modal .modal-box { text-align: center; }
+.success-icon { font-size: 64px; display: block; margin-bottom: 16px; }
+.success-modal h2 { font-size: 24px; margin-bottom: 8px; }
+.success-modal p { color: var(--text-muted); margin-bottom: 24px; }
+.order-id { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+/* Navbar */
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: #fff; box-shadow: var(--shadow-sm);
+  padding: 0 24px;
+}
+.navbar-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center;
+  height: 64px; gap: 32px;
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+.nav-links { display: flex; gap: 24px; flex: 1; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--text-muted); transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cart-btn {
+  position: relative; background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius-pill);
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 8px;
+  font-family: 'DM Sans', sans-serif; min-height: 44px;
+}
+.cart-badge {
+  position: absolute; top: -6px; right: -6px;
+  background: #E53935; color: #fff;
+  width: 20px; height: 20px; border-radius: 50%;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.hamburger {
+  display: none; background: none; border: none;
+  font-size: 24px; cursor: pointer;
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: block; margin-left: auto; }
+}
+
+/* Mobile Menu Drawer */
+.mobile-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 280px;
+  background: #fff; z-index: 10000;
+  transform: translateX(100%); transition: transform 0.3s;
+  padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  box-shadow: var(--shadow-lg);
+}
+.mobile-drawer.open { transform: translateX(0); }
+.drawer-close { background: none; border: none; font-size: 24px; cursor: pointer; align-self: flex-end; }
+.mobile-drawer a { font-size: 16px; font-weight: 500; padding: 12px 0; border-bottom: 1px solid var(--border); display: block; }
+
+/* Announcement Bar */
+.announcement-bar {
+  background: var(--primary); color: #fff;
+  padding: 10px 0; overflow: hidden; white-space: nowrap;
+}
+.marquee { display: inline-block; animation: marquee 30s linear infinite; }
+.marquee span { padding: 0 40px; font-size: 13px; font-weight: 500; }
+@keyframes marquee { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E0 100%);
+  padding: 64px 24px;
+}
+.hero-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+}
+@media (max-width: 768px) { .hero-inner { grid-template-columns: 1fr; } }
+.hero-text .eyebrow { font-size: 13px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.hero-text h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.2; margin-bottom: 16px; }
+.hero-text p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
+.hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary { padding: 14px 28px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; min-height: 44px; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-secondary { padding: 14px 28px; background: var(--secondary); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; min-height: 44px; }
+.btn-secondary:hover { opacity: 0.9; }
+.hero-images { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hero-images img { border-radius: var(--radius); box-shadow: var(--shadow-md); height: 180px; object-fit: cover; width: 100%; }
+.hero-images .img-large { grid-column: 1 / -1; height: 220px; }
+
+/* Products Section */
+.products-section { max-width: 1280px; margin: 0 auto; padding: 48px 24px; }
+.section-title { font-size: clamp(22px, 3vw, 32px); text-align: center; margin-bottom: 8px; }
+.section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 32px; }
+
+/* Trust Badges */
+.trust-bar {
+  background: #fff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 20px 24px;
+}
+.trust-bar-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: center; flex-wrap: wrap; gap: 32px; }
+.trust-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+.trust-item .icon { font-size: 20px; }
+
+/* Stats Section */
+.stats-section { background: var(--primary); padding: 48px 24px; }
+.stats-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+@media (max-width: 768px) { .stats-inner { grid-template-columns: repeat(2, 1fr); } }
+.stat-card { color: #fff; }
+.stat-number { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; }
+.stat-label { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+
+/* Empty State */
+.empty-state { text-align: center; padding: 64px 20px; color: var(--text-muted); }
+.empty-state .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+
+/* Chatbot */
+.chatbot-widget {
+  position: fixed; right: 20px; bottom: 90px;
+  width: 320px; max-height: 420px;
+  background: #fff; border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); z-index: 8999;
+  display: none; flex-direction: column; overflow: hidden;
+}
+.chatbot-widget.open { display: flex; }
+.chatbot-header {
+  background: var(--primary); color: #fff;
+  padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+}
+.chatbot-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.chat-msg { padding: 10px 14px; border-radius: 18px; max-width: 85%; font-size: 13px; line-height: 1.4; }
+.chat-msg.bot { background: var(--bg-warm); align-self: flex-start; border-bottom-left-radius: 4px; }
+.chat-msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chatbot-input { display: flex; padding: 12px; border-top: 1px solid var(--border); gap: 8px; }
+.chatbot-input input { flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; }
+.chatbot-send { background: var(--primary); color: #fff; border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 16px; }
+
+/* Footer */
+.footer { background: #1A1A1A; color: #E5E5E5; padding: 48px 24px 24px; margin-top: 64px; }
+.footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+@media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+.footer-brand .logo { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; margin-bottom: 10px; }
+.footer-brand p { font-size: 13px; line-height: 1.6; opacity: 0.7; }
+.footer-col h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+.footer-col a { display: block; font-size: 13px; opacity: 0.7; margin-bottom: 8px; transition: opacity 0.2s; }
+.footer-col a:hover { opacity: 1; }
+.footer-bottom { max-width: 1280px; margin: 0 auto; padding-top: 24px; border-top: 1px solid #333; text-align: center; font-size: 12px; opacity: 0.6; }
+.newsletter-form { display: flex; gap: 8px; margin-top: 12px; }
+.newsletter-form input { flex: 1; padding: 10px 14px; border: 1px solid #444; border-radius: var(--radius-sm); background: #2A2A2A; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+.newsletter-form button { padding: 10px 16px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; }
+```
+
+### 1D â€” COMPLETE JAVASCRIPT (replace ALL old JS)
+```javascript
+// â”€â”€â”€ CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const SUPABASE_URL  = 'YOUR_SUPABASE_URL';      // â† Replace this
+const SUPABASE_ANON = 'YOUR_SUPABASE_ANON_KEY'; // â† Replace this
+const OWNER_WHATSAPP = '919892360874';
+const RAZORPAY_KEY   = 'YOUR_RAZORPAY_KEY_ID';  // â† Replace this
+const FREE_DELIVERY_MIN = 499;
+const DELIVERY_CHARGE   = 40;
+
+// â”€â”€â”€ SUPABASE INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const { createClient } = window.supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// â”€â”€â”€ STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+let PRODUCTS       = [];   // source of truth â€” all products from DB
+let products       = [];   // currently displayed (filtered)
+let cart           = JSON.parse(localStorage.getItem('spiceCart') || '[]');
+let activeCategory = 'all';
+let searchQuery    = '';
+let paymentMethod  = 'razorpay';
+
+// â”€â”€â”€ DEFAULT PRODUCTS (shown if Supabase is unreachable) â”€â”€â”€â”€â”€â”€â”€
+const DEFAULT_PRODUCTS = [
+  { id:'d1', name:'Pure Desi Ghee', name_hindi:'à¤¶à¥à¤¦à¥à¤§ à¤¦à¥‡à¤¸à¥€ à¤˜à¥€', category:'dairy', price:450, mrp:520, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg', description:'Farm-fresh A2 cow ghee.', weight:'500ml', is_bestseller:true, is_new:false, rating:4.9, review_count:2847, in_stock:true },
+  { id:'d2', name:'Fresh Paneer', name_hindi:'à¤¤à¤¾à¤œà¤¼à¤¾ à¤ªà¤¨à¥€à¤°', category:'dairy', price:180, mrp:200, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg', description:'Soft fresh paneer.', weight:'200g', is_bestseller:true, is_new:false, rating:4.8, review_count:1923, in_stock:true },
+  { id:'s1', name:'Turmeric Powder', name_hindi:'à¤¹à¤²à¥à¤¦à¥€ à¤ªà¤¾à¤‰à¤¡à¤°', category:'spices', price:120, mrp:150, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg', description:'Pure haldi powder.', weight:'200g', is_bestseller:true, is_new:false, rating:4.9, review_count:3241, in_stock:true },
+  { id:'s2', name:'Garam Masala', name_hindi:'à¤—à¤°à¤® à¤®à¤¸à¤¾à¤²à¤¾', category:'spices', price:90, mrp:110, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg', description:'Authentic 18-spice blend.', weight:'100g', is_bestseller:true, is_new:false, rating:4.8, review_count:2156, in_stock:true },
+  { id:'c1', name:'Starter Pack', name_hindi:'à¤¸à¥à¤Ÿà¤¾à¤°à¥à¤Ÿà¤° à¤ªà¥ˆà¤•', category:'combos', price:599, mrp:750, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg', description:'Ghee + Paneer + 3 spices.', weight:'5 items', is_bestseller:true, is_new:true, rating:4.9, review_count:562, in_stock:true },
+];
+
+// â”€â”€â”€ LOAD PRODUCTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function loadProducts() {
+  try {
+    const { data, error } = await sb.from('products').select('*').order('created_at', { ascending: false });
+    if (error || !data || data.length === 0) throw new Error('No data');
+    PRODUCTS = data;
+  } catch {
+    PRODUCTS = DEFAULT_PRODUCTS;
+  }
+  products = [...PRODUCTS];
+  updateTabCounts();
+  renderProducts();
+  animateStats();
+}
+
+// â”€â”€â”€ RENDER PRODUCTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function renderProducts() {
+  let filtered = [...PRODUCTS];
+  if (activeCategory !== 'all') {
+    filtered = filtered.filter(p => p.category === activeCategory);
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(p =>
+      p.name?.toLowerCase().includes(q) ||
+      p.name_hindi?.includes(searchQuery) ||
+      p.description?.toLowerCase().includes(q) ||
+      p.category?.toLowerCase().includes(q)
+    );
+  }
+  products = filtered;
+
+  const grid = document.getElementById('product-grid');
+  if (!grid) return;
+
+  if (products.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <span class="emoji">ðŸ”</span>
+        <h3>No products found</h3>
+        <p>Try a different search or category</p>
+      </div>`;
+    document.getElementById('product-count').textContent = '0 products';
+    return;
+  }
+
+  grid.innerHTML = products.map(p => {
+    const discount = Math.round((1 - p.price / p.mrp) * 100);
+    const inCart   = cart.some(c => c.id === p.id);
+    const stars    = 'â˜…'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? 'Â½' : '');
+    const imgUrl   = p.image_url || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name);
+    const cloudImg = imgUrl.includes('cloudinary') 
+      ? imgUrl.replace('/upload/', '/upload/w_400,h_300,c_fill,f_auto,q_auto/')
+      : imgUrl;
+    
+    return `
+    <div class="product-card" id="card-${p.id}">
+      <div class="badges">
+        <span>${p.is_bestseller ? '<span class="badge-bestseller">â­ Best Seller</span>' : ''}</span>
+        <span>${discount > 0 ? `<span class="badge-discount">${discount}% OFF</span>` : ''}</span>
+      </div>
+      ${p.is_new ? '<div style="position:absolute;top:10px;left:50%;transform:translateX(-50%)"><span class="badge-new">âœ¨ New</span></div>' : ''}
+      <img class="product-image" src="${cloudImg}" alt="${p.name}" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(p.name)}'">
+      <div class="product-body">
+        ${p.name_hindi ? `<div class="product-name-hindi hindi">${p.name_hindi}</div>` : ''}
+        <div class="product-name">${p.name}</div>
+        ${p.weight ? `<div class="product-weight">${p.weight}</div>` : ''}
+        <div class="product-rating">
+          <span class="stars">${stars}</span>
+          <span style="color:var(--text-muted)">${p.rating} (${(p.review_count||0).toLocaleString()})</span>
+        </div>
+        <div class="product-pricing">
+          <span class="price">â‚¹${p.price}</span>
+          ${p.mrp > p.price ? `<span class="mrp">â‚¹${p.mrp}</span>` : ''}
+          ${discount > 0 ? `<span class="discount">Save â‚¹${p.mrp - p.price}</span>` : ''}
+        </div>
+      </div>
+      <div class="product-actions">
+        <button class="btn-cart ${inCart ? 'in-cart' : ''}" onclick="toggleCart('${p.id}')">
+          ${inCart ? 'âœ“ Added' : 'ðŸ›’ Add to Cart'}
+        </button>
+        <button class="btn-wa" onclick="waOrder('${p.id}')" title="Order on WhatsApp">ðŸ’¬</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('product-count').textContent = `${products.length} products`;
+}
+
+// â”€â”€â”€ FILTER BY CATEGORY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function filterByCategory(cat) {
+  activeCategory = cat;
+  searchQuery = '';
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === cat);
+  });
+  renderProducts();
+}
+
+// â”€â”€â”€ SEARCH PRODUCTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function searchProducts() {
+  searchQuery = document.getElementById('search-input').value.trim();
+  activeCategory = 'all';
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === 'all');
+  });
+  renderProducts();
+}
+
+// â”€â”€â”€ UPDATE TAB COUNTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function updateTabCounts() {
+  const counts = { all: PRODUCTS.length };
+  PRODUCTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const cat = btn.dataset.cat;
+    const count = counts[cat] || 0;
+    const span = btn.querySelector('.tab-count');
+    if (span) span.textContent = count;
+  });
+}
+
+// â”€â”€â”€ CART FUNCTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function toggleCart(productId) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  if (!product) return;
+  const idx = cart.findIndex(c => c.id === productId);
+  if (idx === -1) {
+    cart.push({ id: product.id, name: product.name, price: product.price, image_url: product.image_url, qty: 1 });
+  } else {
+    cart.splice(idx, 1);
+  }
+  saveCart();
+  renderProducts();
+  renderCartSidebar();
+  updateCartBadge();
+}
+
+function updateQty(productId, delta) {
+  const item = cart.find(c => c.id === productId);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  saveCart();
+  renderCartSidebar();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(c => c.id !== productId);
+  saveCart();
+  renderProducts();
+  renderCartSidebar();
+  updateCartBadge();
+}
+
+function clearCart() {
+  cart = [];
+  saveCart();
+  renderProducts();
+  renderCartSidebar();
+  updateCartBadge();
+}
+
+function saveCart() {
+  localStorage.setItem('spiceCart', JSON.stringify(cart));
+  updateCartBadge();
+}
+
+function updateCartBadge() {
+  const total = cart.reduce((sum, c) => sum + c.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (badge) {
+    badge.textContent = total;
+    badge.style.display = total > 0 ? 'flex' : 'none';
+  }
+}
+
+function renderCartSidebar() {
+  const container = document.getElementById('cart-items-container');
+  if (!container) return;
+
+  if (cart.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <span class="emoji">ðŸ›’</span>
+        <p>Your cart is empty</p>
+      </div>`;
+    document.getElementById('cart-subtotal').textContent = 'â‚¹0';
+    document.getElementById('cart-delivery').textContent = 'â‚¹0';
+    document.getElementById('cart-total').textContent = 'â‚¹0';
+    return;
+  }
+
+  container.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <img src="${item.image_url || 'https://via.placeholder.com/64'}" alt="${item.name}"
+           onerror="this.src='https://via.placeholder.com/64'">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">â‚¹${item.price} Ã— ${item.qty} = â‚¹${item.price * item.qty}</div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="updateQty('${item.id}', -1)">âˆ’</button>
+          <span class="qty-display">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">ðŸ—‘ï¸</button>
+    </div>`).join('');
+
+  const subtotal = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  const delivery = subtotal >= FREE_DELIVERY_MIN ? 0 : DELIVERY_CHARGE;
+  const total    = subtotal + delivery;
+  document.getElementById('cart-subtotal').textContent = 'â‚¹' + subtotal;
+  document.getElementById('cart-delivery').textContent = delivery === 0 ? 'FREE ðŸŽ‰' : 'â‚¹' + delivery;
+  document.getElementById('cart-total').textContent    = 'â‚¹' + total;
+}
+
+function openCart()  { document.getElementById('cart-sidebar').classList.add('open'); document.getElementById('cart-overlay').classList.add('open'); renderCartSidebar(); }
+function closeCart() { document.getElementById('cart-sidebar').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('open'); }
+
+// â”€â”€â”€ WHATSAPP ORDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function waOrder(productId) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+  const msg = encodeURIComponent(`Hi! I want to order:\n\n${p.name} (${p.weight || ''}) - â‚¹${p.price}\n\nPlease confirm availability and delivery.`);
+  window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${msg}`, '_blank');
+}
+
+// â”€â”€â”€ CHECKOUT FLOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function proceedToCheckout() {
+  if (cart.length === 0) { alert('Your cart is empty!'); return; }
+  closeCart();
+  document.getElementById('address-modal').classList.add('open');
+}
+
+function selectPayment(method) {
+  paymentMethod = method;
+  document.querySelectorAll('.payment-option').forEach(el => {
+    el.classList.toggle('selected', el.dataset.method === method);
+  });
+}
+
+async function placeOrder() {
+  const name    = document.getElementById('cust-name').value.trim();
+  const phone   = document.getElementById('cust-phone').value.trim();
+  const address = document.getElementById('cust-address').value.trim();
+  const pincode = document.getElementById('cust-pincode').value.trim();
+
+  if (!name || !phone || !address) { alert('Please fill all required fields'); return; }
+  if (!/^[6-9]\d{9}$/.test(phone)) { alert('Please enter a valid 10-digit mobile number'); return; }
+
+  const subtotal = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  const delivery = subtotal >= FREE_DELIVERY_MIN ? 0 : DELIVERY_CHARGE;
+  const total    = subtotal + delivery;
+
+  const orderData = {
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: address,
+    customer_pincode: pincode,
+    items: cart,
+    subtotal,
+    delivery_charge: delivery,
+    total,
+    payment_method: paymentMethod,
+    payment_status: 'pending',
+    order_status: 'placed'
+  };
+
+  if (paymentMethod === 'cod') {
+    await saveCODOrder(orderData);
+  } else {
+    await initiateRazorpay(orderData);
+  }
+}
+
+async function saveCODOrder(orderData) {
+  const btn = document.getElementById('place-order-btn');
+  btn.textContent = 'Placing Order...'; btn.disabled = true;
+  try {
+    const { data, error } = await sb.from('orders').insert([orderData]).select();
+    if (error) throw error;
+    const orderId = data?.[0]?.id || 'N/A';
+    notifyOwnerWhatsApp(orderData, orderId, 'COD');
+    document.getElementById('address-modal').classList.remove('open');
+    showOrderSuccess(orderId, 'cod', orderData.total);
+    clearCart();
+  } catch(e) {
+    alert('Error placing order. Please try WhatsApp ordering.');
+    console.error(e);
+  } finally {
+    btn.textContent = 'Place Order'; btn.disabled = false;
+  }
+}
+
+async function initiateRazorpay(orderData) {
+  const btn = document.getElementById('place-order-btn');
+  btn.textContent = 'Opening Payment...'; btn.disabled = true;
+  try {
+    // Create Razorpay order via serverless function
+    const res = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: orderData.total, currency: 'INR' })
+    });
+    const { orderId: razorpayOrderId, error } = await res.json();
+    if (error) throw new Error(error);
+
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: orderData.total * 100,
+      currency: 'INR',
+      name: 'ðŸŒ¶ï¸ Indian Dairy & Spices',
+      description: `Order of ${orderData.items.length} item(s)`,
+      order_id: razorpayOrderId,
+      prefill: { name: orderData.customer_name, contact: orderData.customer_phone },
+      theme: { color: '#D4520A' },
+      handler: async function(response) {
+        orderData.razorpay_order_id  = response.razorpay_order_id;
+        orderData.razorpay_payment_id = response.razorpay_payment_id;
+        orderData.payment_status      = 'paid';
+        const { data } = await sb.from('orders').insert([orderData]).select();
+        const savedId  = data?.[0]?.id || 'N/A';
+        notifyOwnerWhatsApp(orderData, savedId, 'Razorpay');
+        document.getElementById('address-modal').classList.remove('open');
+        showOrderSuccess(savedId, 'razorpay', orderData.total);
+        clearCart();
+      },
+      modal: { ondismiss: function() { btn.textContent = 'Place Order'; btn.disabled = false; } }
+    };
+    new window.Razorpay(options).open();
+  } catch(e) {
+    alert('Payment initiation failed. Please try COD or WhatsApp.');
+    console.error(e);
+    btn.textContent = 'Place Order'; btn.disabled = false;
+  }
+}
+
+function notifyOwnerWhatsApp(order, orderId, method) {
+  const itemsText = order.items.map(i => `- ${i.name} Ã— ${i.qty} = â‚¹${i.price * i.qty}`).join('\n');
+  const msg = encodeURIComponent(
+    `ðŸ›’ *NEW ORDER!*\n` +
+    `Order ID: ${orderId}\n` +
+    `Payment: ${method} ${order.payment_status === 'paid' ? 'âœ… PAID' : '(COD)'}\n\n` +
+    `ðŸ‘¤ Customer: ${order.customer_name}\n` +
+    `ðŸ“ž Phone: ${order.customer_phone}\n` +
+    `ðŸ“ Address: ${order.customer_address} ${order.customer_pincode}\n\n` +
+    `ðŸ“¦ Items:\n${itemsText}\n\n` +
+    `ðŸ’° Subtotal: â‚¹${order.subtotal}\n` +
+    `ðŸšš Delivery: â‚¹${order.delivery_charge}\n` +
+    `ðŸ’µ TOTAL: â‚¹${order.total}`
+  );
+  // Open silently (owner notification)
+  const a = document.createElement('a');
+  a.href = `https://wa.me/${OWNER_WHATSAPP}?text=${msg}`;
+  a.target = '_blank'; a.rel = 'noopener';
+  a.click();
+}
+
+function showOrderSuccess(orderId, method, total) {
+  const modal = document.getElementById('success-modal');
+  modal.querySelector('.order-id').textContent = `Order ID: ${orderId.slice(0,8).toUpperCase()}`;
+  modal.querySelector('.success-total').textContent = `â‚¹${total}`;
+  modal.querySelector('.success-method').textContent = method === 'cod' ? 'Cash on Delivery' : 'Online Payment âœ…';
+  modal.classList.add('open');
+}
+
+// â”€â”€â”€ CHATBOT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const CHATBOT_RESPONSES = {
+  'ghee':    'Our Pure Desi Ghee is â‚¹450 for 500ml â€” A2 cow milk, slow-churned. Add to cart or WhatsApp us! ðŸ«š',
+  'paneer':  'Fresh Paneer made daily! 200g for â‚¹180. No preservatives. ðŸ¥›',
+  'delivery':'Free delivery above â‚¹499! Otherwise â‚¹40 flat. Usually 1-2 days. ðŸšš',
+  'return':  '7-day easy returns. Not happy? Full refund, no questions asked. ðŸ”„',
+  'payment': 'We accept UPI, cards, net banking (Razorpay) and Cash on Delivery! ðŸ’³',
+  'combo':   'Check our Combo Packs section â€” starter kit â‚¹599 (saves â‚¹151)! ðŸŽ',
+  'default': 'I can help with products, delivery, payments, and returns. Or call us at +91 98923 60874! ðŸ˜Š'
+};
+
+function toggleChatbot() {
+  const widget = document.getElementById('chatbot-widget');
+  widget.classList.toggle('open');
+}
+
+function chatSend() {
+  const input = document.getElementById('chatbot-input');
+  const msg   = input.value.trim();
+  if (!msg) return;
+  addChatMsg(msg, 'user');
+  input.value = '';
+  setTimeout(() => {
+    const key = Object.keys(CHATBOT_RESPONSES).find(k => msg.toLowerCase().includes(k));
+    addChatMsg(CHATBOT_RESPONSES[key] || CHATBOT_RESPONSES.default, 'bot');
+  }, 600);
+}
+
+function addChatMsg(text, who) {
+  const msgs = document.getElementById('chatbot-messages');
+  const div  = document.createElement('div');
+  div.className = `chat-msg ${who}`;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// â”€â”€â”€ STATS ANIMATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function animateStats() {
+  const targets = { 'stat-products': 33, 'stat-customers': 10000, 'stat-states': 15, 'stat-since': 2020 };
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      const duration = 1500;
+      const start = Date.now();
+      const startVal = 0;
+      function tick() {
+        const pct = Math.min((Date.now() - start) / duration, 1);
+        el.textContent = Math.round(startVal + (target - startVal) * pct).toLocaleString();
+        if (pct < 1) requestAnimationFrame(tick);
+      }
+      tick();
+      observer.unobserve(el
+<truncated 19415 bytes>
+
+NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.

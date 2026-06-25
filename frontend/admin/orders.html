@@ -17,6 +17,7 @@
     <a href="index.html" class="menu-item">📊 Dashboard</a>
     <a href="orders.html" class="menu-item active">📦 Orders</a>
     <a href="products.html" class="menu-item">📋 Products Inventory</a>
+    <a href="settings.html" class="menu-item">⚙️ Site Settings</a>
     
     <div class="menu-label">Settings</div>
     <a href="#" onclick="api.logout()" class="menu-item">🚪 Logout</a>
@@ -84,12 +85,12 @@ async function loadOrders() {
     let badge = 'badge-pending';
     let actionBtn = '';
     
-    if(o.status==='PENDING') {
+    if(o.status==='PENDING' || o.status==='PLACED') {
       badge = 'badge-pending';
-      actionBtn = `<button class="btn btn-sm btn-primary" onclick="updateStatus(${o.id}, 'SHIPPED')">Mark Shipped</button>`;
+      actionBtn = `<button class="btn btn-sm btn-primary" onclick="updateStatus('${o.id}', 'SHIPPED')">Mark Shipped</button>`;
     } else if (o.status==='SHIPPED') {
       badge = 'badge-shipped';
-      actionBtn = `<button class="btn btn-sm btn-success" onclick="updateStatus(${o.id}, 'DELIVERED')">Mark Delivered</button>`;
+      actionBtn = `<button class="btn btn-sm btn-success" onclick="updateStatus('${o.id}', 'DELIVERED')">Mark Delivered</button>`;
     } else {
       badge = 'badge-delivered';
       actionBtn = `<button class="btn btn-sm btn-outline" disabled>Completed</button>`;
@@ -98,7 +99,7 @@ async function loadOrders() {
     return `
       <tr>
         <td>
-          <strong>#ORD-${o.id}</strong><br>
+          <strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong><br>
           <span style="font-size:0.8rem;color:var(--text-muted)">${formatDate(o.created_at)}</span>
         </td>
         <td>

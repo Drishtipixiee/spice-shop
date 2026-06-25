@@ -1,1293 +1,1650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Indian Dairy & Spices — ताज़ा डेयरी, शुद्ध मसाले | Authentic Products Online</title>
-<meta name="description" content="Buy fresh Indian dairy products and authentic spices online. FSSAI certified, 100% natural, farm-to-table. Free delivery above ₹499. Shop paneer, ghee, lassi, turmeric, garam masala.">
-<meta name="keywords" content="Indian dairy products, buy ghee online, paneer, lassi, Indian spices online, masala India, turmeric haldi, garam masala, ताज़ा पनीर, शुद्ध घी, मसाले खरीदें">
-<meta property="og:title" content="Indian Dairy & Spices — Premium Dairy & Spices">
-<meta property="og:description" content="Fresh Indian dairy and authentic spices. FSSAI certified, 100% natural.">
-<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg">
-<meta name="theme-color" content="#4A90D9">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
-<style>
-:root{
-  --saffron:#FF6B00;--gold:#FFC200;--red:#C0392B;--cream:#f8fafc;
-  --dark:#0f172a;--brown:#8B4513;--text:#333;--gray:#666;--lgray:#f5f5f5;
-  --dairy-bg:#e8f4fd;--dairy-accent:#7c3aed;--dairy-dark:#5b21b6;
-  --shadow:0 4px 20px rgba(44,24,16,.12);--shadow-lg:0 8px 40px rgba(44,24,16,.18);
-  --radius:16px;--radius-sm:10px;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
-body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-img{display:block;max-width:100%}
-button{font-family:'Poppins',sans-serif;cursor:pointer;border:none;outline:none}
-.hindi{font-family:'Tiro Devanagari Hindi',serif}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indian Dairy & Spices — ताज़ा डेयरी, शुद्ध मसाले</title>
+  <meta name="description" content="Buy fresh Indian dairy products and authentic spices online. FSSAI certified, 100% natural, farm-to-table.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Razorpay -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-/* TICKER */
-.ticker{background:linear-gradient(90deg,var(--dairy-dark),var(--dairy-accent),var(--dairy-dark));color:#fff;
-  padding:8px 0;overflow:hidden;font-size:.8rem;font-weight:500}
-.ticker-track{display:flex;gap:40px;white-space:nowrap;animation:ticker 30s linear infinite}
-.ticker-track span{flex-shrink:0}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  <style>
+    :root {
+      --primary:     #D4520A;
+      --primary-dark:#B8440A;
+      --secondary:   #2E7D32;
+      --accent:      #F5A623;
+      --bg-warm:     #FFF8F0;
+      --bg-card:     #FFFFFF;
+      --text-dark:   #1A1A1A;
+      --text-muted:  #6B7280;
+      --border:      #E5DDD4;
+      --wa-green:    #25D366;
+      --shadow-sm:   0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md:   0 4px 16px rgba(0,0,0,0.12);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,0.16);
+      --radius:      12px;
+      --radius-sm:   8px;
+      --radius-pill: 999px;
+    }
 
-/* NAVBAR */
-nav{position:sticky;top:0;z-index:900;background:rgba(255,248,240,.96);
-  backdrop-filter:blur(12px);border-bottom:2px solid rgba(74,144,217,.15);
-  box-shadow:0 2px 20px rgba(74,144,217,.1)}
-.nav-inner{max-width:1280px;margin:0 auto;padding:0 20px;
-  display:flex;align-items:center;justify-content:space-between;height:68px}
-.logo{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:800;color:var(--dairy-dark)}
-.logo .logo-icon{font-size:1.8rem}
-.nav-links{display:flex;align-items:center;gap:32px}
-.nav-links a{font-weight:500;color:var(--dark);transition:.2s;font-size:.95rem;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;
-  background:var(--dairy-accent);transition:.3s}
-.nav-links a:hover::after{width:100%}
-.nav-links a:hover{color:var(--dairy-accent)}
-.nav-right{display:flex;align-items:center;gap:16px}
-.cart-btn{position:relative;background:var(--dairy-dark);color:#fff;border:none;
-  padding:10px 18px;border-radius:30px;font-weight:600;font-size:.9rem;
-  display:flex;align-items:center;gap:8px;transition:.2s;cursor:pointer}
-.cart-btn:hover{background:var(--dairy-accent);transform:translateY(-1px)}
-.cart-count{background:#fff;color:var(--dairy-dark);border-radius:50%;
-  width:20px;height:20px;display:grid;place-items:center;font-size:.72rem;font-weight:700}
-.burger{display:none;background:none;font-size:1.5rem;color:var(--dark);padding:6px}
-.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(0,0,0,.5);z-index:950}
-.mobile-menu-inner{background:var(--cream);width:280px;height:100%;padding:24px;
-  display:flex;flex-direction:column;gap:8px}
-.mobile-menu.open{display:block}
-.mobile-menu-inner a{padding:14px 16px;font-weight:600;border-bottom:1px solid rgba(74,144,217,.1);
-  color:var(--dark);display:block}
-.close-menu{align-self:flex-end;background:none;font-size:1.4rem;color:var(--dark);margin-bottom:12px}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg-warm); color: var(--text-dark); overflow-x: hidden; }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; }
+    .hindi { font-family: 'Noto Sans Devanagari', sans-serif; }
+    img { max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
 
-/* HERO */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;
-  background:linear-gradient(135deg,#0f172a 0%,#5b21b6 40%,#7c3aed 100%);
-  overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/1200px-Ghee_in_a_bowl.jpg') center/cover;
-  opacity:.15;z-index:0;filter:blur(4px)}
-.hero-particles{position:absolute;inset:0;z-index:1;overflow:hidden}
-.particle{position:absolute;font-size:1.5rem;opacity:.35;animation:float-particle 8s ease-in-out infinite}
-.particle:nth-child(1){left:8%;top:15%;animation-delay:0s;font-size:2rem}
-.particle:nth-child(2){left:85%;top:20%;animation-delay:1.5s}
-.particle:nth-child(3){left:15%;top:70%;animation-delay:3s;font-size:2.2rem}
-.particle:nth-child(4){left:75%;top:65%;animation-delay:4.5s;font-size:1.8rem}
-.particle:nth-child(5){left:45%;top:10%;animation-delay:2s}
-.particle:nth-child(6){left:90%;top:80%;animation-delay:0.8s;font-size:1.3rem}
-.particle:nth-child(7){left:5%;top:45%;animation-delay:3.5s;font-size:2.5rem}
-.particle:nth-child(8){left:60%;top:85%;animation-delay:1.2s}
-@keyframes float-particle{0%,100%{transform:translateY(0) rotate(0deg);opacity:.35}
-  50%{transform:translateY(-30px) rotate(20deg);opacity:.6}}
-.hero-content{position:relative;z-index:2;max-width:1280px;margin:0 auto;
-  padding:80px 20px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.hero-text{color:#fff}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.2);
-  border:1px solid rgba(255,255,255,.4);color:#fff;padding:6px 16px;
-  border-radius:30px;font-size:.8rem;font-weight:600;margin-bottom:20px;backdrop-filter:blur(4px)}
-.hero-title-hindi{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;line-height:1.1;
-  background:linear-gradient(135deg,#fff 0%,#e0f2fe 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:8px}
-.hero-title-en{font-size:clamp(.9rem,2vw,1.1rem);color:rgba(255,255,255,.9);
-  font-weight:400;margin-bottom:24px;letter-spacing:.5px}
-.hero-desc{font-size:clamp(.9rem,2vw,1.1rem);color:rgba(255,255,255,.85);
-  line-height:1.7;margin-bottom:36px;max-width:480px}
-.hero-cta{display:flex;gap:16px;flex-wrap:wrap}
-.btn-primary{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;
-  padding:14px 32px;border-radius:30px;font-weight:700;font-size:1rem;
-  box-shadow:0 4px 20px rgba(29,78,216,.4);transition:.3s;border:none;cursor:pointer}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(29,78,216,.5)}
-.btn-outline{background:transparent;color:#fff;padding:14px 32px;border-radius:30px;
-  font-weight:600;font-size:1rem;border:2px solid rgba(255,255,255,.6);transition:.3s;cursor:pointer}
-.btn-outline:hover{background:rgba(255,255,255,.15);border-color:#fff}
-.hero-visual{display:flex;justify-content:center;align-items:center}
-.hero-img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:420px}
-.hero-img-item{border-radius:var(--radius);overflow:hidden;position:relative;
-  box-shadow:var(--shadow-lg);transition:.3s;background:#fff}
-.hero-img-item:hover{transform:scale(1.03)}
-.hero-img-item img{width:100%;height:160px;object-fit:cover}
-.hero-img-item:first-child{grid-column:span 2;height:200px}
-.hero-img-item:first-child img{height:200px}
-.img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));
-  color:#fff;padding:12px;font-size:.8rem;font-weight:600}
+    /* Product Grid */
+    #product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 20px 0;
+    }
+    @media (max-width: 1024px) { #product-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px)  { #product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
 
-/* TRUST BADGES */
-.trust-strip{background:#fff;border-top:3px solid var(--dairy-accent);padding:20px}
-.trust-inner{max-width:1280px;margin:0 auto;
-  display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:16px}
-.trust-item{display:flex;align-items:center;gap:10px;font-size:.85rem;font-weight:600;color:var(--dark)}
-.trust-icon{font-size:1.4rem}
+    .product-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .product-card .badges {
+      position: absolute; top: 10px; left: 10px; right: 10px;
+      display: flex; justify-content: space-between;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .badge-bestseller {
+      background: #E53935; color: #fff;
+      font-size: 10px; font-weight: 600;
+      padding: 3px 8px; border-radius: var(--radius-pill);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-new {
+      background: var(--secondary); color: #fff;
+      font-size: 10px; font-weight: 600;
+      padding: 3px 8px; border-radius: var(--radius-pill);
+    }
+    .badge-discount {
+      background: var(--primary); color: #fff;
+      font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: var(--radius-pill);
+    }
+    .product-image {
+      width: 100%; height: 180px;
+      object-fit: cover; display: block;
+      cursor: pointer;
+    }
+    .product-body {
+      padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 6px;
+    }
+    .product-name-hindi {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .product-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600; line-height: 1.3;
+      cursor: pointer;
+    }
+    .product-name:hover { color: var(--primary); }
+    .product-weight { font-size: 12px; color: var(--text-muted); }
+    .product-rating { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+    .stars { color: #F5A623; }
+    .product-pricing { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .price { font-size: 18px; font-weight: 700; color: var(--primary); }
+    .mrp { font-size: 13px; color: var(--text-muted); text-decoration: line-through; }
+    .discount { font-size: 12px; color: var(--secondary); font-weight: 600; }
+    .product-actions { padding: 0 14px 14px; display: flex; gap: 8px; }
+    .btn-cart {
+      flex: 1; padding: 10px; border: none;
+      background: var(--primary); color: #fff;
+      border-radius: var(--radius-sm); font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+      min-height: 44px;
+    }
+    .btn-cart:hover { background: var(--primary-dark); }
+    .btn-cart.in-cart {
+      background: var(--secondary);
+    }
+    .btn-wa {
+      padding: 10px 12px; border: none;
+      background: var(--wa-green); color: #fff;
+      border-radius: var(--radius-sm); font-size: 18px;
+      cursor: pointer; transition: opacity 0.2s;
+      min-height: 44px;
+    }
+    .btn-wa:hover { opacity: 0.9; }
 
-/* SECTION COMMONS */
-.section{padding:60px 20px}
-.section-inner{max-width:1280px;margin:0 auto}
-.section-head{text-align:center;margin-bottom:48px}
-.section-head h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:var(--dark);
-  margin-bottom:8px}
-.section-head .sub{font-size:1rem;color:var(--gray);font-weight:400}
-.section-head .hindi-sub{font-size:1.2rem;color:var(--dairy-accent);margin-bottom:4px}
+    /* Category Tabs */
+    .category-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; padding: 16px 0;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 8px 18px; border: 2px solid var(--border);
+      background: #fff; border-radius: var(--radius-pill);
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+      white-space: nowrap; min-height: 44px;
+    }
+    .tab-btn.active {
+      background: var(--primary); color: #fff; border-color: var(--primary);
+    }
 
-/* CATEGORY TABS */
-.category-section{background:#fff;padding:32px 20px 0;position:sticky;top:68px;z-index:800;
-  box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.cat-tabs{max-width:1280px;margin:0 auto;
-  display:flex;gap:8px;overflow-x:auto;padding-bottom:0;scrollbar-width:none}
-.cat-tabs::-webkit-scrollbar{display:none}
-.cat-tab{flex-shrink:0;padding:10px 20px;border-radius:30px 30px 0 0;font-weight:600;
-  font-size:.88rem;cursor:pointer;transition:.2s;background:transparent;
-  color:var(--gray);border:2px solid transparent;border-bottom:none;position:relative;bottom:-2px}
-.cat-tab.active{background:var(--cream);color:var(--dairy-dark);border-color:rgba(74,144,217,.3)}
-.cat-tab:hover{color:var(--dairy-accent)}
-.cat-count{display:inline-block;background:var(--dairy-accent);color:#fff;
-  border-radius:30px;padding:1px 7px;font-size:.7rem;margin-left:6px}
+    /* Search */
+    .search-wrap { position: relative; max-width: 480px; margin: 0 auto 16px auto; }
+    .search-wrap input {
+      width: 100%; padding: 12px 16px 12px 44px;
+      border: 2px solid var(--border); border-radius: var(--radius-pill);
+      font-size: 15px; font-family: 'DM Sans', sans-serif;
+      background: #fff; outline: none; transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { border-color: var(--primary); }
+    .search-icon {
+      position: absolute; left: 18px; top: 50%;
+      transform: translateY(-50%); color: var(--text-muted); font-size: 18px;
+    }
 
-/* SEARCH BAR */
-.search-bar{max-width:1280px;margin:24px auto 0;padding:0 20px}
-.search-wrap{position:relative;max-width:480px}
-.search-wrap input{width:100%;padding:12px 16px 12px 48px;border:2px solid rgba(74,144,217,.25);
-  border-radius:30px;font-family:'Poppins',sans-serif;font-size:.95rem;
-  background:#fff;outline:none;transition:.2s}
-.search-wrap input:focus{border-color:var(--dairy-accent);box-shadow:0 0 0 3px rgba(74,144,217,.1)}
-.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.1rem}
+    /* Floating Buttons */
+    .float-wa {
+      position: fixed; left: 20px; bottom: 20px; z-index: 9000;
+      background: var(--wa-green); color: #fff;
+      border-radius: var(--radius-pill); padding: 12px 18px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: var(--shadow-lg); cursor: pointer;
+      text-decoration: none; font-family: 'DM Sans', sans-serif;
+      transition: transform 0.2s;
+    }
+    .float-wa:hover { transform: scale(1.05); }
+    .float-chat {
+      position: fixed; right: 20px; bottom: 20px; z-index: 9000;
+      background: var(--primary); color: #fff;
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; box-shadow: var(--shadow-lg); cursor: pointer;
+      border: none; transition: transform 0.2s;
+    }
+    .float-chat:hover { transform: scale(1.1); }
 
-/* PRODUCT GRID */
-.products-section{background:var(--cream);padding:32px 20px 60px}
-.products-inner{max-width:1280px;margin:0 auto}
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
-.product-card{background:#fff;border-radius:var(--radius);overflow:hidden;
-  box-shadow:var(--shadow);transition:.3s;position:relative;
-  border:1px solid rgba(74,144,217,.08)}
-.product-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
-.product-card.dairy{border-top:3px solid var(--dairy-accent)}
-.product-card.spice{border-top:3px solid var(--saffron)}
-.product-card.combo{border:2px solid var(--gold)}
-.card-img{position:relative;overflow:hidden;height:200px;background:#fff;display:flex;align-items:center;justify-content:center}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:.4s}
-.product-card:hover .card-img img{transform:scale(1.08)}
-.card-badges{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:6px}
-.badge{padding:3px 10px;border-radius:30px;font-size:.7rem;font-weight:700;color:#fff}
-.badge-bestseller{background:var(--saffron)}
-.badge-new{background:var(--dairy-dark)}
-.badge-organic{background:#27ae60}
-.badge-sale{background:var(--gold);color:var(--dark)}
-.badge-combo{background:linear-gradient(135deg,var(--gold),var(--saffron));color:#fff}
-.wa-quick{position:absolute;bottom:10px;right:10px;background:#25D366;color:#fff;
-  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;opacity:0;transition:.3s;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2)}
-.product-card:hover .wa-quick{opacity:1}
-.card-body{padding:16px}
-.card-category{font-size:.72rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.product-card.dairy .card-category{color:var(--dairy-accent)}
-.product-card.spice .card-category{color:var(--saffron)}
-.card-name{font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:2px}
-.card-name-hindi{font-size:.82rem;color:var(--gray);margin-bottom:8px;
-  font-family:'Tiro Devanagari Hindi',serif}
-.card-rating{display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.stars{color:var(--gold);font-size:.85rem}
-.review-count{font-size:.75rem;color:var(--gray)}
-.card-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.card-price{font-size:1.3rem;font-weight:800;color:var(--dark)}
-.card-mrp{font-size:.82rem;color:var(--gray);text-decoration:line-through}
-.card-save{font-size:.72rem;font-weight:700;color:#27ae60;background:#e8f5e9;
-  padding:2px 8px;border-radius:30px}
-.card-weight{font-size:.78rem;color:var(--gray);margin-bottom:12px}
-.card-actions{display:flex;gap:8px}
-.btn-cart{flex:1;background:linear-gradient(135deg,var(--dairy-accent),var(--dairy-dark));color:#fff;
-  padding:10px;border-radius:var(--radius-sm);font-weight:600;font-size:.85rem;
-  transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-cart:hover{opacity:.9;transform:scale(1.02)}
-.btn-wa{background:#25D366;color:#fff;padding:10px 14px;border-radius:var(--radius-sm);
-  font-size:1rem;transition:.2s;display:flex;align-items:center;justify-content:center}
-.btn-wa:hover{background:#1ebe5d}
+    /* Cart Sidebar */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 9990; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-sidebar {
+      position: fixed; right: 0; top: 0; bottom: 0;
+      width: 360px; max-width: 100vw;
+      background: #fff; z-index: 9999;
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.3s;
+      box-shadow: var(--shadow-lg);
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+    .cart-header {
+      padding: 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cart-header h3 { font-size: 18px; font-weight: 700; }
+    .cart-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .cart-item {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px; background: var(--bg-warm); border-radius: var(--radius-sm);
+    }
+    .cart-item img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-sm); }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 13px; font-weight: 600; }
+    .cart-item-price { font-size: 13px; color: var(--primary); font-weight: 700; margin-top: 2px; }
+    .qty-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .qty-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid var(--primary); background: #fff;
+      color: var(--primary); font-size: 16px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .qty-display { font-size: 14px; font-weight: 600; min-width: 24px; text-align: center; }
+    .cart-item-remove { background: none; border: none; color: #E53935; cursor: pointer; font-size: 18px; }
+    .cart-footer {
+      padding: 20px; border-top: 1px solid var(--border);
+    }
+    .cart-summary { margin-bottom: 16px; }
+    .cart-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+    .cart-row.total { font-size: 16px; font-weight: 700; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+    .btn-checkout {
+      width: 100%; padding: 14px; background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius); font-size: 16px;
+      font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .btn-checkout:hover { background: var(--primary-dark); }
+    .btn-clear-cart {
+      width: 100%; padding: 8px; margin-top: 8px;
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif;
+    }
 
-/* COMBO SECTION */
-.combo-section{background:linear-gradient(135deg,#e0f2fe,#fff8f0);padding:60px 20px}
-.combo-grid{max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
-.combo-card{background:#fff;border-radius:var(--radius);overflow:hidden;
-  box-shadow:var(--shadow-lg);border:2px solid rgba(74,144,217,.4);position:relative}
-.combo-card::before{content:'🎁';position:absolute;top:-12px;right:16px;font-size:2rem;z-index:1}
-.combo-img{height:220px;overflow:hidden;position:relative;background:#fff}
-.combo-img img{width:100%;height:100%;object-fit:cover;transition:.4s}
-.combo-card:hover .combo-img img{transform:scale(1.05)}
-.most-popular{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--dairy-accent),var(--dairy-dark));
-  color:#fff;padding:4px 14px;border-radius:30px;font-size:.75rem;font-weight:700;z-index:1}
-.combo-body{padding:20px}
-.combo-name{font-size:1.15rem;font-weight:800;color:var(--dark);margin-bottom:4px}
-.combo-desc{font-size:.85rem;color:var(--gray);margin-bottom:12px;line-height:1.5}
-.combo-price-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.combo-price{font-size:1.5rem;font-weight:800;color:var(--dairy-dark)}
-.combo-original{font-size:1rem;color:var(--gray);text-decoration:line-through}
-.combo-save{background:#e0f2fe;color:var(--dairy-dark);font-size:.78rem;font-weight:700;
-  padding:3px 10px;border-radius:30px;border:1px solid var(--dairy-accent)}
-.combo-timer{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--red);
-  font-weight:600;margin-bottom:16px}
-.combo-actions{display:flex;gap:10px}
-.btn-combo{flex:1;background:linear-gradient(135deg,var(--dairy-accent),var(--dairy-dark));color:#fff;
-  padding:12px;border-radius:var(--radius-sm);font-weight:700;font-size:.9rem;
-  transition:.2s;border:none;cursor:pointer;text-align:center}
-.btn-combo:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(29,78,216,.3)}
+    /* Address Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 10000; display: none;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: var(--radius);
+      width: 100%; max-width: 480px;
+      padding: 32px; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 12px 14px;
+      border: 2px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 15px; font-family: 'DM Sans', sans-serif;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
+    .payment-options { display: flex; gap: 12px; margin-bottom: 20px; }
+    .payment-option {
+      flex: 1; padding: 12px; border: 2px solid var(--border);
+      border-radius: var(--radius-sm); cursor: pointer;
+      text-align: center; transition: all 0.2s;
+    }
+    .payment-option.selected { border-color: var(--primary); background: #FFF0E8; }
+    .payment-option .icon { font-size: 24px; display: block; margin-bottom: 4px; }
+    .payment-option .label { font-size: 13px; font-weight: 600; }
+    .btn-place-order {
+      width: 100%; padding: 14px; background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius); font-size: 16px;
+      font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    }
+    .btn-back { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; margin-bottom: 16px; font-family: 'DM Sans', sans-serif; }
 
-/* WHY US */
-.why-section{background:linear-gradient(135deg,var(--dark) 0%,#1e3a8a 100%);
-  padding:60px 20px;color:#fff}
-.why-grid{max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-.why-card{text-align:center;padding:32px 20px;background:rgba(255,255,255,.06);
-  border-radius:var(--radius);border:1px solid rgba(255,255,255,.2);transition:.3s}
-.why-card:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}
-.why-icon{font-size:2.5rem;margin-bottom:16px}
-.why-num{font-size:2.5rem;font-weight:900;color:var(--gold);margin-bottom:4px}
-.why-label{font-size:.9rem;color:rgba(255,255,255,.8);font-weight:500}
+    /* Order Success */
+    .success-modal .modal-box { text-align: center; }
+    .success-icon { font-size: 64px; display: block; margin-bottom: 16px; }
+    .success-modal h2 { font-size: 24px; margin-bottom: 8px; }
+    .success-modal p { color: var(--text-muted); margin-bottom: 24px; }
+    .order-id { font-size: 14px; font-weight: bold; color: var(--primary); margin-top: 8px; }
 
-/* REVIEWS */
-.reviews-section{background:var(--cream);padding:60px 20px;overflow:hidden}
-.reviews-track-wrap{max-width:1280px;margin:0 auto;overflow:hidden}
-.reviews-track{display:flex;gap:20px;animation:scroll-reviews 40s linear infinite}
-.reviews-track:hover{animation-play-state:paused}
-.review-card{flex-shrink:0;width:320px;background:#fff;border-radius:var(--radius);
-  padding:24px;box-shadow:var(--shadow);border-left:4px solid var(--dairy-accent)}
-.reviewer{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-size:1.2rem;font-weight:700;color:#fff;flex-shrink:0}
-.reviewer-info h4{font-size:.9rem;font-weight:700;color:var(--dark)}
-.reviewer-info p{font-size:.78rem;color:var(--gray)}
-.review-stars{color:var(--gold);font-size:.9rem;margin-bottom:8px}
-.review-text{font-size:.88rem;color:var(--text);line-height:1.6}
-@keyframes scroll-reviews{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* Navbar */
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: #fff; box-shadow: var(--shadow-sm);
+      padding: 0 24px;
+    }
+    .navbar-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center;
+      height: 64px; gap: 32px;
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--primary); }
+    .nav-links { display: flex; gap: 24px; flex: 1; }
+    .nav-links a { font-size: 15px; font-weight: 500; color: var(--text-muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-cart-btn {
+      position: relative; background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius-pill);
+      padding: 10px 18px; font-size: 14px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 8px;
+      font-family: 'DM Sans', sans-serif; min-height: 44px;
+    }
+    .cart-badge {
+      background: #E53935; color: #fff;
+      width: 20px; height: 20px; border-radius: 50%;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hamburger {
+      display: none; background: none; border: none;
+      font-size: 24px; cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; margin-left: auto; }
+    }
 
-/* HOW TO ORDER */
-.how-section{background:#fff;padding:60px 20px}
-.how-steps{max-width:900px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:40px;position:relative}
-.how-steps::before{content:'';position:absolute;top:48px;left:16%;right:16%;
-  height:2px;background:linear-gradient(90deg,var(--dairy-accent),var(--saffron));z-index:0}
-.how-step{text-align:center;position:relative;z-index:1}
-.step-num{width:72px;height:72px;background:linear-gradient(135deg,var(--dairy-accent),var(--saffron));
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;margin:0 auto 16px;box-shadow:0 4px 20px rgba(74,144,217,.3)}
-.step-title{font-size:1.05rem;font-weight:700;color:var(--dark);margin-bottom:6px}
-.step-desc{font-size:.85rem;color:var(--gray);line-height:1.5}
-.cod-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);
-  border:1px solid #27ae60;color:#2e7d32;padding:10px 20px;border-radius:30px;
-  font-weight:600;font-size:.9rem;margin-top:32px}
+    /* Mobile Menu Drawer */
+    .mobile-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 280px;
+      background: #fff; z-index: 10000;
+      transform: translateX(100%); transition: transform 0.3s;
+      padding: 24px; display: flex; flex-direction: column; gap: 16px;
+      box-shadow: var(--shadow-lg);
+    }
+    .mobile-drawer.open { transform: translateX(0); }
+    .drawer-close { background: none; border: none; font-size: 24px; cursor: pointer; align-self: flex-end; }
+    .mobile-drawer a { font-size: 16px; font-weight: 500; padding: 12px 0; border-bottom: 1px solid var(--border); display: block; }
 
-/* PINCODE */
-.pincode-section{background:linear-gradient(135deg,var(--dairy-dark),var(--dairy-accent));
-  padding:40px 20px;color:#fff;text-align:center}
-.pincode-form{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.pincode-input{padding:12px 20px;border-radius:30px;border:none;
-  font-family:'Poppins',sans-serif;font-size:1rem;width:220px;outline:none}
-.pin-btn{background:var(--dark);color:#fff;padding:12px 28px;
-  border-radius:30px;font-weight:700;font-size:1rem;border:none;cursor:pointer;transition:.2s}
-.pin-btn:hover{background:#fff;color:var(--dark)}
-.pin-result{margin-top:12px;font-weight:600;font-size:1rem}
-.pin-result.ok{color:var(--gold)}
-.pin-result.no{color:#ffcdd2}
+    /* Announcement Bar */
+    .announcement-bar {
+      background: var(--primary); color: #fff;
+      padding: 10px 0; overflow: hidden; white-space: nowrap;
+    }
+    .marquee { display: inline-block; animation: marquee 30s linear infinite; }
+    .marquee span { padding: 0 40px; font-size: 13px; font-weight: 500; }
+    @keyframes marquee { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
 
-/* TRUST */
-.trust-section{background:var(--dark);padding:50px 20px;color:#fff}
-.trust-grid{max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
-.trust-card{text-align:center;padding:28px 16px;background:rgba(255,255,255,.05);
-  border-radius:var(--radius);border:1px solid rgba(255,255,255,.15)}
-.trust-card-icon{font-size:2.2rem;margin-bottom:12px}
-.trust-card h4{font-size:.95rem;font-weight:700;color:var(--dairy-accent);margin-bottom:8px}
-.trust-card p{font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.5}
-.payment-logos{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-.pay-logo{background:rgba(255,255,255,.12);padding:6px 16px;border-radius:var(--radius-sm);
-  font-size:.78rem;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.2)}
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E0 100%);
+      padding: 64px 24px;
+    }
+    .hero-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    }
+    @media (max-width: 768px) { .hero-inner { grid-template-columns: 1fr; } }
+    .hero-text .eyebrow { font-size: 13px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .hero-text h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.2; margin-bottom: 16px; color: #5D2505; }
+    .hero-text p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
+    .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary { padding: 14px 28px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; min-height: 44px; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { padding: 14px 28px; background: var(--secondary); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; min-height: 44px; }
+    .btn-secondary:hover { opacity: 0.9; }
+    .hero-images { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .hero-images img { border-radius: var(--radius); box-shadow: var(--shadow-md); height: 180px; object-fit: cover; width: 100%; }
+    .hero-images .img-large { grid-column: 1 / -1; height: 220px; }
 
-/* FOOTER */
-footer{background:#0a1a30;color:rgba(255,255,255,.85);padding:60px 20px 24px}
-.footer-grid{max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px;margin-bottom:40px}
-.footer-brand p{font-size:.88rem;color:rgba(255,255,255,.6);margin-top:12px;line-height:1.6;max-width:280px}
-.footer-logo{font-size:1.2rem;font-weight:800;color:var(--dairy-accent);display:flex;align-items:center;gap:8px}
-.footer-col h5{font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--dairy-accent);margin-bottom:16px}
-.footer-col a{display:block;font-size:.88rem;color:rgba(255,255,255,.65);padding:4px 0;
-  transition:.2s}
-.footer-col a:hover{color:var(--gold)}
-.newsletter h5{font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--dairy-accent);margin-bottom:8px}
-.newsletter p{font-size:.82rem;color:rgba(255,255,255,.6);margin-bottom:12px}
-.newsletter-form{display:flex;gap:8px}
-.newsletter-form input{flex:1;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.08);color:#fff;font-family:'Poppins',sans-serif;font-size:.85rem;outline:none}
-.newsletter-form input::placeholder{color:rgba(255,255,255,.4)}
-.newsletter-form button{background:var(--dairy-accent);color:#fff;padding:10px 16px;
-  border-radius:var(--radius-sm);font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
-.social-links{display:flex;gap:12px;margin-top:16px}
-.social-link{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);
-  display:flex;align-items:center;justify-content:center;font-size:1rem;
-  transition:.2s;color:#fff}
-.social-link:hover{background:var(--dairy-accent);color:#fff}
-.footer-bottom{max-width:1280px;margin:0 auto;padding-top:24px;
-  border-top:1px solid rgba(255,255,255,.1);
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.footer-bottom p{font-size:.8rem;color:rgba(255,255,255,.5)}
+    /* Products Section */
+    .products-section { max-width: 1280px; margin: 0 auto; padding: 48px 24px; }
+    .section-title { font-size: clamp(22px, 3vw, 32px); text-align: center; margin-bottom: 8px; color: #5d2505; }
+    .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 32px; }
 
-/* CART SIDEBAR */
-.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000}
-.cart-overlay.open{display:block}
-.cart-sidebar{position:fixed;right:0;top:0;bottom:0;width:380px;max-width:100vw;
-  background:#fff;z-index:1001;display:flex;flex-direction:column;
-  box-shadow:-4px 0 30px rgba(0,0,0,.15);transform:translateX(100%);transition:.3s}
-.cart-sidebar.open{transform:translateX(0)}
-.cart-header{display:flex;justify-content:space-between;align-items:center;
-  padding:20px 24px;border-bottom:2px solid var(--cream)}
-.cart-header h3{font-size:1.1rem;font-weight:800;color:var(--dark)}
-.close-cart{background:none;font-size:1.4rem;color:var(--gray);padding:4px}
-.cart-items{flex:1;overflow-y:auto;padding:16px 24px}
-.cart-empty{text-align:center;padding:60px 20px;color:var(--gray)}
-.cart-empty-icon{font-size:3rem;margin-bottom:12px}
-.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--cream)}
-.cart-item-img{width:64px;height:64px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0}
-.cart-item-img img{width:100%;height:100%;object-fit:cover}
-.cart-item-info{flex:1}
-.cart-item-name{font-weight:600;font-size:.9rem;color:var(--dark)}
-.cart-item-price{font-size:.85rem;color:var(--dairy-dark);font-weight:700}
-.cart-item-controls{display:flex;align-items:center;gap:8px;margin-top:6px}
-.qty-btn{width:26px;height:26px;border-radius:50%;background:var(--cream);
-  border:1px solid rgba(74,144,217,.3);font-size:.9rem;display:flex;align-items:center;
-  justify-content:center;cursor:pointer;font-weight:700}
-.qty-num{font-size:.88rem;font-weight:600;min-width:20px;text-align:center}
-.remove-item{color:var(--red);font-size:.75rem;font-weight:600;cursor:pointer;margin-left:auto}
-.cart-footer{padding:20px 24px;border-top:2px solid var(--cream)}
-.cart-totals{margin-bottom:16px}
-.cart-row{display:flex;justify-content:space-between;font-size:.9rem;padding:4px 0}
-.cart-row.total{font-weight:800;font-size:1.05rem;border-top:1px solid var(--cream);padding-top:10px;margin-top:6px}
-.cart-free-ship{background:#e8f5e9;border-radius:var(--radius-sm);padding:8px 12px;
-  font-size:.8rem;color:#2e7d32;font-weight:600;margin-bottom:16px;text-align:center}
-.btn-checkout-wa{width:100%;background:#25D366;color:#fff;padding:16px;border-radius:var(--radius-sm);
-  font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-bottom:10px;transition:.2s}
-.btn-checkout-wa:hover{background:#1ebe5d}
-.btn-clear-cart{width:100%;background:transparent;color:var(--gray);padding:10px;
-  border-radius:var(--radius-sm);font-size:.85rem;border:1px solid var(--lgray);cursor:pointer}
+    /* Trust Badges */
+    .trust-bar {
+      background: #fff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+    }
+    .trust-bar-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: center; flex-wrap: wrap; gap: 32px; }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+    .trust-item .icon { font-size: 20px; }
 
-/* WA FLOAT */
-.wa-float{position:fixed;bottom:24px;right:24px;z-index:990;
-  width:58px;height:58px;background:#25D366;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:1.6rem;
-  box-shadow:0 4px 20px rgba(37,211,102,.4);cursor:pointer;
-  animation:wa-pulse 2.5s ease-in-out infinite;transition:.2s}
-.wa-float:hover{transform:scale(1.1)}
-@keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}
-  50%{box-shadow:0 4px 40px rgba(37,211,102,.7),0 0 0 12px rgba(37,211,102,.1)}}
+    /* Stats Section */
+    .stats-section { background: var(--primary); padding: 48px 24px; }
+    .stats-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+    @media (max-width: 768px) { .stats-inner { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { color: #fff; }
+    .stat-number { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; }
+    .stat-label { font-size: 13px; opacity: 0.85; margin-top: 4px; }
 
-/* SCROLL ANIMATION */
-.reveal{opacity:0;transform:translateY(30px);transition:.6s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-left{opacity:0;transform:translateX(-40px);transition:.6s ease}
-.reveal-left.visible{opacity:1;transform:translateX(0)}
-.reveal-right{opacity:0;transform:translateX(40px);transition:.6s ease}
-.reveal-right.visible{opacity:1;transform:translateX(0)}
+    /* Pincode Section */
+    .pincode-section {
+      max-width: 600px; margin: 48px auto; padding: 32px 24px;
+      background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-sm);
+      text-align: center;
+    }
+    .pincode-form { display: flex; gap: 8px; margin-top: 16px; justify-content: center; }
+    .pincode-input {
+      padding: 12px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 15px; outline: none; width: 200px; text-align: center;
+    }
+    .pincode-input:focus { border-color: var(--primary); }
+    .pin-btn {
+      padding: 12px 24px; background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius-sm); font-size: 15px;
+      font-weight: 600; cursor: pointer;
+    }
+    .pin-btn:hover { background: var(--primary-dark); }
+    .pin-result { margin-top: 16px; font-size: 14px; font-weight: 600; }
+    .pin-result.ok { color: var(--secondary); }
+    .pin-result.no { color: #E53935; }
 
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:60px 20px;color:var(--gray);grid-column:1/-1}
-.empty-state-icon{font-size:3rem;margin-bottom:12px}
+    /* Empty State */
+    .empty-state { text-align: center; padding: 64px 20px; color: var(--text-muted); }
+    .empty-state .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
 
-/* RESULTS COUNT */
-.results-info{display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:20px;flex-wrap:wrap;gap:8px}
-.results-count{font-size:.9rem;color:var(--gray);font-weight:500}
+    /* Chatbot */
+    .chatbot-widget {
+      position: fixed; right: 20px; bottom: 90px;
+      width: 320px; max-height: 420px;
+      background: #fff; border-radius: var(--radius);
+      box-shadow: var(--shadow-lg); z-index: 8999;
+      display: none; flex-direction: column; overflow: hidden;
+    }
+    .chatbot-widget.open { display: flex; }
+    .chatbot-header {
+      background: var(--primary); color: #fff;
+      padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .chatbot-messages { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .chat-msg { padding: 10px 14px; border-radius: 18px; max-width: 85%; font-size: 13px; line-height: 1.4; }
+    .chat-msg.bot { background: var(--bg-warm); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .chat-msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .chatbot-input { display: flex; padding: 12px; border-top: 1px solid var(--border); gap: 8px; }
+    .chatbot-input input { flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; }
+    .chatbot-send { background: var(--primary); color: #fff; border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
-/* DIWALI MODE */
-.sparkle-overlay{display:none;position:fixed;inset:0;pointer-events:none;z-index:2000}
-.sparkle-overlay.active{display:block}
-.sparkle{position:absolute;font-size:1.2rem;animation:sparkle-fall 3s ease-in-out infinite}
-@keyframes sparkle-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}
-  100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* RESPONSIVE */
-@media(max-width:1024px){
-  .why-grid,.trust-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:768px){
-  .nav-links{display:none}
-  .burger{display:block}
-  .hero-content{grid-template-columns:1fr;gap:30px;padding:40px 20px}
-  .hero-visual{display:none}
-  .hero-title-hindi{font-size:2.5rem}
-  .how-steps{grid-template-columns:1fr;gap:24px}
-  .how-steps::before{display:none}
-  .why-grid{grid-template-columns:1fr 1fr}
-  .trust-grid{grid-template-columns:1fr 1fr}
-  .footer-grid{grid-template-columns:1fr}
-  .footer-bottom{flex-direction:column;text-align:center}
-  .cart-sidebar{width:100vw}
-  .reviews-track{animation-duration:20s}
-}
-@media(max-width:480px){
-  .trust-inner{flex-direction:column;text-align:center}
-  .why-grid{grid-template-columns:1fr}
-  .trust-grid{grid-template-columns:1fr}
-  .hero-cta{flex-direction:column}
-  .product-grid{grid-template-columns:1fr 1fr}
-  .combo-grid{grid-template-columns:1fr}
-  .cat-tab{padding:8px 14px;font-size:.8rem}
-}
-
-/* ADDITIONAL FEATURES CSS */
-.chatbot-widget { position: fixed; bottom: 80px; right: 20px; width: 320px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 10000; transform: translateY(20px); transition: all 0.3s; }
-.chatbot-widget.open { display: flex; transform: translateY(0); }
-.chat-header { background: var(--saffron); color: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
-.chat-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
-.chat-body { padding: 15px; height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; }
-.chat-msg { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 0.9rem; }
-.chat-msg.bot { background: #e0e0e0; align-self: flex-start; border-bottom-left-radius: 2px; }
-.chat-msg.user { background: var(--saffron); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
-.chat-input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; background: #fff; }
-.chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
-.chat-input-area button { background: var(--saffron); color: #fff; border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; }
-.chat-trigger { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--saffron); color: #fff; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 15px rgba(255,107,53,0.4); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-
-.flash-sale-banner { background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%); color: #fff; padding: 15px; text-align: center; border-radius: 15px; margin: 2rem auto; max-width: 1200px; display: flex; align-items: center; justify-content: center; gap: 20px; box-shadow: 0 5px 15px rgba(255,78,80,0.3); }
-.flash-sale-banner h3 { margin: 0; font-size: 1.2rem; }
-.timer { font-size: 1.5rem; font-weight: 700; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 10px; font-family: monospace; }
-
-  @keyframes pulseDot { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-  #mapSection { background: #fff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin: 3rem auto; max-width: 1200px; border: 1px solid var(--border); }
+    /* Footer */
+    .footer { background: #1A1A1A; color: #E5E5E5; padding: 48px 24px 24px; margin-top: 64px; }
+    .footer-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    .footer-brand .logo { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; margin-bottom: 10px; }
+    .footer-brand p { font-size: 13px; line-height: 1.6; opacity: 0.7; }
+    .footer-col h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+    .footer-col a { display: block; font-size: 13px; opacity: 0.7; margin-bottom: 8px; transition: opacity 0.2s; }
+    .footer-col a:hover { opacity: 1; }
+    .footer-bottom { max-width: 1280px; margin: 0 auto; padding-top: 24px; border-top: 1px solid #333; text-align: center; font-size: 12px; opacity: 0.6; }
+    .newsletter-form { display: flex; gap: 8px; margin-top: 12px; }
+    .newsletter-form input { flex: 1; padding: 10px 14px; border: 1px solid #444; border-radius: var(--radius-sm); background: #2A2A2A; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+    .newsletter-form button { padding: 10px 16px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; }
   </style>
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
-<!-- SPARKLE OVERLAY -->
-<div class="sparkle-overlay" id="sparkleOverlay"></div>
-
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track" id="tickerTrack">
-    <span>🚚 Free delivery above ₹499</span>
-    <span>🏛️ FSSAI Certified</span>
-    <span>🌿 100% Natural, No Preservatives</span>
-    <span>⭐ 4.9/5 from 10,000+ customers</span>
-    <span>💬 Order via WhatsApp in 2 mins</span>
-    <span>🎁 Festival Hamper Available Now!</span>
-    <span>🚚 Free delivery above ₹499</span>
-    <span>🏛️ FSSAI Certified</span>
-    <span>🌿 100% Natural, No Preservatives</span>
-    <span>⭐ 4.9/5 from 10,000+ customers</span>
-    <span>💬 Order via WhatsApp in 2 mins</span>
-    <span>🎁 Festival Hamper Available Now!</span>
-  </div>
-</div>
-
-<!-- NAVBAR -->
-<nav>
-  <div class="nav-inner">
-    <a href="/" class="logo">
-      <span class="logo-icon">🥛</span>
-      <span>Indian Dairy &amp; Spices</span>
-    </a>
-    <div class="nav-links">
-      <a href="#products">Shop All</a>
-      <a href="#combos">Combo Packs</a>
-      <a href="#about">About Us</a>
-      <a href="#contact">Contact</a>
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="marquee" id="announcement-marquee">
+      <span>🚚 Free delivery above ₹499 🏛️ FSSAI Certified 🌿 100% Natural ⭐ 4.9/5 from 10,000+ customers</span>
     </div>
-    <div class="nav-right">
-      <button class="cart-btn" onclick="openCart()">
-        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="#" class="nav-logo">🌶️ Indian Dairy & Spices</a>
+      <div class="nav-links">
+        <a href="#" onclick="filterByCategory('all'); return false;">Home</a>
+        <a href="#" onclick="filterByCategory('dairy'); return false;">Dairy</a>
+        <a href="#" onclick="filterByCategory('spices'); return false;">Spices</a>
+        <a href="#" onclick="filterByCategory('combos'); return false;">Combos</a>
+        <a href="#" onclick="filterByCategory('cakes'); return false;">Sweets &amp; Cakes</a>
+      </div>
+      <button class="nav-cart-btn" onclick="openCart()">
+        🛒 Cart
+        <span class="cart-badge" id="cart-badge" style="display: none;">0</span>
       </button>
-      <button class="burger" onclick="openMobileMenu()">☰</button>
+      <button class="hamburger" onclick="toggleMobileDrawer()">☰</button>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenuOnOverlay(event)">
-  <div class="mobile-menu-inner">
-    <button class="close-menu" onclick="closeMobileMenu()">✕</button>
-    <a href="#products" onclick="closeMobileMenu()">🥛 Shop Dairy</a>
-    <a href="#products" onclick="closeMobileMenu()">🌶️ Shop Spices</a>
-    <a href="#combos" onclick="closeMobileMenu()">🎁 Combo Packs</a>
-    <a href="#about" onclick="closeMobileMenu()">ℹ️ About Us</a>
-    <a href="#contact" onclick="closeMobileMenu()">📞 Contact</a>
-    <div style="margin-top:16px">
-      <button class="btn-primary" onclick="openCart();closeMobileMenu()" style="width:100%;justify-content:center">🛒 View Cart (<span id="cartCountMobile">0</span>)</button>
-    </div>
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <button class="drawer-close" onclick="toggleMobileDrawer()">✕</button>
+    <a href="#" onclick="filterByCategory('all'); toggleMobileDrawer(); return false;">Home</a>
+    <a href="#" onclick="filterByCategory('dairy'); toggleMobileDrawer(); return false;">Dairy</a>
+    <a href="#" onclick="filterByCategory('spices'); toggleMobileDrawer(); return false;">Spices</a>
+    <a href="#" onclick="filterByCategory('combos'); toggleMobileDrawer(); return false;">Combos</a>
+    <a href="#" onclick="filterByCategory('cakes'); toggleMobileDrawer(); return false;">Sweets &amp; Cakes</a>
   </div>
-</div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-particles">
-    <span class="particle">🥛</span>
-    <span class="particle">⭐</span>
-    <span class="particle">🌶️</span>
-    <span class="particle">🌿</span>
-    <span class="particle">✨</span>
-    <span class="particle">🧄</span>
-    <span class="particle">🧀</span>
-    <span class="particle">🫙</span>
-  </div>
-  <div class="hero-content">
-    <div class="hero-text">
-      <div class="hero-badge">✨ India's Premium Dairy &amp; Spice Brand</div>
-      <h1 class="hero-title-hindi" style="font-family:'Poppins',sans-serif">Fresh Dairy, Authentic Spices</h1>
-      <p class="hero-title-en">Fresh Dairy, Pure Spices — Straight From the Farm</p>
-      <p class="hero-desc">
-        Farm-fresh dairy delivered to your doorstep. Handpicked spices from the finest farms of India.
-        FSSAI certified, 100% natural — taste the difference of purity.
-      </p>
-      <div class="hero-cta">
-        <button class="btn-primary" onclick="filterByCategory('dairy');document.getElementById('products').scrollIntoView({behavior:'smooth'})">🥛 Shop Dairy</button>
-        <button class="btn-outline" onclick="filterByCategory('spice');document.getElementById('products').scrollIntoView({behavior:'smooth'})">🌶️ Shop Spices</button>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="hero-img-grid">
-        <div class="hero-img-item">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg" alt="Pure Ghee" loading="lazy">
-          <div class="img-label">🫚 Pure Desi Ghee</div>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="eyebrow">Pure &amp; Authentic</span>
+        <h1 id="hero-headline">Fresh Dairy, Authentic Spices</h1>
+        <p id="hero-subheadline">Farm-fresh dairy delivered to your doorstep. Handpicked spices from the finest farms of India.</p>
+        
+        <!-- Live Countdown Timer -->
+        <div class="timer-box" style="margin-top: 16px; background: rgba(212, 82, 10, 0.1); border: 1px solid var(--primary); padding: 12px; border-radius: var(--radius-sm); max-width: 320px; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">⚡</span>
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Flash Offer: 10% OFF code FRESH10</div>
+            <div id="countdown-timer" style="font-family: monospace; font-size: 16px; font-weight: 700; color: #1A1A1A;">00h 00m 00s</div>
+          </div>
         </div>
-        <div class="hero-img-item">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg" alt="Fresh Paneer" loading="lazy">
-          <div class="img-label">🥛 Fresh Paneer</div>
-        </div>
-        <div class="hero-img-item">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg" alt="Indian Spices" loading="lazy">
-          <div class="img-label">🌶️ Premium Spices</div>
+
+        <div class="hero-buttons" style="margin-top: 24px;">
+          <button class="btn-primary" onclick="filterByCategory('dairy')">Shop Dairy</button>
+          <button class="btn-secondary" onclick="filterByCategory('spices')">Shop Spices</button>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- TRUST STRIP -->
-<div class="trust-strip">
-  <div class="trust-inner">
-    <div class="trust-item"><span class="trust-icon">🏛️</span><span>FSSAI Certified</span></div>
-    <div class="trust-item"><span class="trust-icon">🌿</span><span>100% Natural</span></div>
-    <div class="trust-item"><span class="trust-icon">🚜</span><span>Farm to Table</span></div>
-    <div class="trust-item"><span class="trust-icon">🔒</span><span>Secure Payments</span></div>
-    <div class="trust-item"><span class="trust-icon">⭐</span><span>4.9/5 Rating</span></div>
-    <div class="trust-item"><span class="trust-icon">🚚</span><span>Free Delivery ₹499+</span></div>
-  </div>
-</div>
-
-<!-- CATEGORY TABS -->
-<div class="category-section" id="products">
-  <div class="cat-tabs" id="catTabs">
-    <button class="cat-tab active" data-cat="all" onclick="filterByCategory('all')">All <span class="cat-count" id="count-all">33</span></button>
-    <button class="cat-tab" data-cat="dairy" onclick="filterByCategory('dairy')">🥛 Dairy <span class="cat-count" id="count-dairy">10</span></button>
-    <button class="cat-tab" data-cat="spice" onclick="filterByCategory('spice')">🌶️ Spices <span class="cat-count" id="count-spice">18</span></button>
-    <button class="cat-tab" data-cat="combo" onclick="filterByCategory('combo')">🎁 Combos <span class="cat-count" id="count-combo">5</span></button>
-    <button class="cat-tab" data-cat="cake" onclick="filterByCategory('cake')">🎂 Cakes <span class="cat-count" id="count-cake">0</span></button>
-    <button class="cat-tab" data-cat="bestseller" onclick="filterByCategory('bestseller')">🔥 Best Sellers</button>
-    <button class="cat-tab" data-cat="new" onclick="filterByCategory('new')">✨ New Arrivals</button>
-  </div>
-</div>
-
-<!-- SEARCH -->
-<div class="search-bar">
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Search dairy products, spices..." oninput="searchProducts(this.value)">
-  </div>
-</div>
-
-<!-- PRODUCTS -->
-<div class="products-section">
-  <div class="products-inner">
-    <div class="results-info">
-      <span class="results-count" id="resultsCount">Showing all 33 products</span>
-      <span style="font-size:.8rem;color:var(--gray)">🌟 All products are FSSAI certified</span>
-    </div>
-    <div class="product-grid" id="productGrid"></div>
-  </div>
-</div>
-
-<!-- COMBOS SECTION -->
-<div class="combo-section" id="combos">
-  <div class="section-head reveal">
-    <p class="hindi-sub hindi">✨ विशेष ऑफर</p>
-    <h2>🎁 Festival Combo Packs</h2>
-    <p class="sub">Hand-curated bundles — best value for everyday cooking &amp; gifting</p>
-  </div>
-  <div class="combo-grid" id="comboGrid"></div>
-</div>
-
-<!-- WHY US -->
-<div class="why-section">
-  <div class="section-head reveal" style="color:#fff">
-    <p class="hindi-sub hindi" style="color:var(--gold)">✨ हम क्यों?</p>
-    <h2 style="color:#fff">Why 10,000+ Families Choose Us</h2>
-    <p class="sub" style="color:rgba(255,255,255,.7)">Quality, trust, and freshness — delivered every time</p>
-  </div>
-  <div class="why-grid">
-    <div class="why-card reveal">
-      <div class="why-icon">📦</div>
-      <div class="why-num" data-target="500">0</div>
-      <div class="why-label">Premium Products</div>
-    </div>
-    <div class="why-card reveal">
-      <div class="why-icon">😊</div>
-      <div class="why-num" data-target="10000">0</div>
-      <div class="why-label">Happy Customers</div>
-    </div>
-    <div class="why-card reveal">
-      <div class="why-icon">🗺️</div>
-      <div class="why-num" data-target="15">0</div>
-      <div class="why-label">States Delivered</div>
-    </div>
-    <div class="why-card reveal">
-      <div class="why-icon">🏆</div>
-      <div class="why-num" data-target="2010">0</div>
-      <div class="why-label">Trusted Since</div>
-    </div>
-  </div>
-</div>
-
-<!-- REVIEWS -->
-<div class="reviews-section">
-  <div class="section-head reveal">
-    <p class="hindi-sub hindi">💬 ग्राहक क्या कहते हैं</p>
-    <h2>Customer Love ❤️</h2>
-  </div>
-  <div class="reviews-track-wrap">
-    <div class="reviews-track" id="reviewsTrack"></div>
-  </div>
-</div>
-
-<!-- HOW TO ORDER -->
-<div class="how-section" id="about">
-  <div class="section-head reveal">
-    <p class="hindi-sub hindi">📦 कैसे ऑर्डर करें</p>
-    <h2>Order in 3 Simple Steps</h2>
-    <p class="sub">Easy ordering — WhatsApp, UPI, or Cash on Delivery</p>
-  </div>
-  <div class="how-steps">
-    <div class="how-step reveal">
-      <div class="step-num">🛍️</div>
-      <h3 class="step-title">Browse &amp; Select</h3>
-      <p class="step-desc">Browse our wide collection of fresh dairy products and authentic spices. Filter by category or search.</p>
-    </div>
-    <div class="how-step reveal">
-      <div class="step-num">💬</div>
-      <h3 class="step-title">Add to Cart / WhatsApp</h3>
-      <p class="step-desc">Add items to cart and checkout, or tap "WhatsApp Order" for instant personalized service from our team.</p>
-    </div>
-    <div class="how-step reveal">
-      <div class="step-num">🏠</div>
-      <h3 class="step-title">Doorstep Delivery</h3>
-      <p class="step-desc">Fresh products packed and delivered to your home. Free delivery above ₹499!</p>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:32px">
-    <div class="cod-badge reveal">💵 Cash on Delivery Available | 🔄 7-Day Returns | 📞 24/7 WhatsApp Support</div>
-  </div>
-</div>
-
-<!-- PINCODE -->
-<div class="pincode-section">
-  <h2 class="hindi reveal" style="font-size:1.8rem">📍 Check Delivery Availability</h2>
-  <p class="reveal" style="margin-top:8px;opacity:.85">Enter your pincode to check if we deliver to your area</p>
-  <div class="pincode-form reveal">
-    <input class="pincode-input" id="pincodeInput" type="text" maxlength="6" placeholder="Enter 6-digit pincode" oninput="this.value=this.value.replace(/\D/g,'')">
-    <button class="pin-btn" onclick="checkPincode()">Check Delivery</button>
-  </div>
-  <div class="pin-result" id="pinResult"></div>
-  <div id="mapSection" style="margin-top: 2rem; display: none;">
-    <h3 style="margin-bottom: 1rem; color: var(--dark); font-weight: 800; font-family: Outfit, sans-serif; display: flex; align-items: center; gap: 10px;"><span class="live-dot" style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%; animation: pulseDot 1.5s infinite;"></span> Live Delivery Map Tracking</h3>
-    <iframe id="deliveryMap" width="100%" height="300" style="border:0; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </div>
-</div>
-
-<!-- TRUST -->
-<div class="trust-section">
-  <div class="section-head reveal" style="color:#fff">
-    <h2 style="color:var(--gold)">🔒 Trust &amp; Quality Assurance</h2>
-    <p class="sub" style="color:rgba(255,255,255,.65)">Your health and safety is our top priority</p>
-  </div>
-  <div class="trust-grid">
-    <div class="trust-card reveal-left">
-      <div class="trust-card-icon">🏛️</div>
-      <h4>FSSAI Licensed</h4>
-      <p>All products manufactured under FSSAI food safety standards. License No: 10025999000000</p>
-    </div>
-    <div class="trust-card reveal">
-      <div class="trust-card-icon">🔬</div>
-      <h4>Lab Tested</h4>
-      <p>Every batch lab-tested for purity. No artificial colors, flavors, or preservatives added.</p>
-    </div>
-    <div class="trust-card reveal">
-      <div class="trust-card-icon">🚜</div>
-      <h4>Farm to Table</h4>
-      <p>Sourced directly from verified farms across India. Freshness guaranteed at every step.</p>
-    </div>
-    <div class="trust-card reveal-right">
-      <div class="trust-card-icon">🔄</div>
-      <h4>Easy Returns</h4>
-      <p>7-day hassle-free returns. Not happy? Full refund, no questions asked.</p>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:32px">
-    <div class="payment-logos">
-      <span class="pay-logo">🟢 UPI</span>
-      <span class="pay-logo">💳 Razorpay</span>
-      <span class="pay-logo">📱 PhonePe</span>
-      <span class="pay-logo">🏦 GPay</span>
-      <span class="pay-logo">💵 Cash on Delivery</span>
-      <span class="pay-logo">🔒 SSL Secure</span>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-
-<!-- Chatbot Widget -->
-<div id="chatbotWidget" class="chatbot-widget">
-  <div class="chat-header" style="background: var(--saffron);">
-    <div class="chat-title">💬 SpiceShop Support</div>
-    <button class="chat-close" onclick="toggleChat()">✕</button>
-  </div>
-  <div class="chat-body" id="chatBody">
-    <div class="chat-msg bot">Hi there! I am your AI assistant. Are you looking for Fresh Dairy or Spices today?</div>
-  </div>
-  <div class="chat-input-area">
-    <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendChat()">
-    <button onclick="sendChat()">Send</button>
-  </div>
-</div>
-<button class="chat-trigger" onclick="toggleChat()" style="background: var(--saffron);">💬</button>
-
-<footer
- id="contact">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="footer-logo">🥛 Indian Dairy &amp; Spices</div>
-      <p>Bringing farm-fresh dairy and authentic Indian flavors directly from the source to your kitchen. Quality you can taste, purity you can trust.</p>
-      <div class="social-links">
-        <a class="social-link" href="#" title="Instagram">📸</a>
-        <a class="social-link" href="#" title="Facebook">📘</a>
-        <a class="social-link" href="#" title="YouTube">▶️</a>
-        <a class="social-link" href="https://wa.me/919892360874" title="WhatsApp">💬</a>
+      <div class="hero-images">
+        <img class="img-large" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg" alt="A2 Ghee">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg" alt="Fresh Paneer">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg" alt="Pure Spices">
       </div>
     </div>
-    <div class="footer-col">
-      <h5>Shop</h5>
-      <a href="#" onclick="filterByCategory('dairy');return false">Dairy Products</a>
-      <a href="#" onclick="filterByCategory('spice');return false">Spices</a>
-      <a href="#combos">Combo Packs</a>
-      <a href="#" onclick="filterByCategory('bestseller');return false">Best Sellers</a>
-      <a href="#" onclick="filterByCategory('new');return false">New Arrivals</a>
+  </header>
+
+  <!-- Trust Bar -->
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><span class="icon">🏛️</span> FSSAI Certified</div>
+      <div class="trust-item"><span class="icon">🌿</span> 100% Natural</div>
+      <div class="trust-item"><span class="icon">⭐</span> 4.9/5 Average Rating</div>
+      <div class="trust-item"><span class="icon">🚚</span> Free Shipping above ₹499</div>
     </div>
-    <div class="footer-col">
-      <h5>Company</h5>
-      <a href="#about">About Us</a>
-      <a href="#contact">Contact</a>
-      <a href="#">Blog</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Refund Policy</a>
-      <a href="#">Terms of Service</a>
+  </div>
+
+  <!-- Products Section -->
+  <section class="products-section">
+    <h2 class="section-title">Explore Our Shop</h2>
+    <p class="section-subtitle">Premium dairy products &amp; hand-ground spice blends</p>
+
+    <!-- Search bar -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search ghee, paneer, turmeric, kalakand..." oninput="searchProducts()">
     </div>
-    <div class="newsletter">
-      <h5>Contact &amp; Newsletter</h5>
-      <p>Subscribe and get ₹50 off your first order! 🎉</p>
-      <div class="newsletter-form">
-        <input type="email" placeholder="your@email.com">
-        <button onclick="subscribeNewsletter()">Subscribe</button>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      <button class="tab-btn active" data-cat="all" onclick="filterByCategory('all')">All (<span class="tab-count" id="count-all">0</span>)</button>
+      <button class="tab-btn" data-cat="dairy" onclick="filterByCategory('dairy')">Dairy (<span class="tab-count" id="count-dairy">0</span>)</button>
+      <button class="tab-btn" data-cat="spices" onclick="filterByCategory('spices')">Spices (<span class="tab-count" id="count-spices">0</span>)</button>
+      <button class="tab-btn" data-cat="combos" onclick="filterByCategory('combos')">Combos (<span class="tab-count" id="count-combos">0</span>)</button>
+      <button class="tab-btn" data-cat="cakes" onclick="filterByCategory('cakes')">Sweets &amp; Cakes (<span class="tab-count" id="count-cakes">0</span>)</button>
+    </div>
+
+    <div id="product-count" style="margin-bottom: 12px; font-weight: 600; color: var(--text-muted)">0 products</div>
+    <div id="product-grid"></div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-inner">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-products" data-target="33">0</div>
+        <div class="stat-label">Products in Catalog</div>
       </div>
-      <div style="margin-top:16px;font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.8">
-        <p>📞 +91 98923 60874 (Primary)</p>
-        <p>📞 +91 88793 14335 (Alt)</p>
-        <p>📧 pandeyanurag15@gmail.com</p>
-        <p>📧 darshanbhalerao07@gmail.com</p>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-customers" data-target="10000">0</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-states" data-target="15">0</div>
+        <div class="stat-label">States Delivered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-since" data-target="2020">0</div>
+        <div class="stat-label">Trusted Since</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="products-section" style="background: #FFF8F0; padding: 48px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <h2 class="section-title">Happy Families Speak ❤️</h2>
+    <p class="section-subtitle">What clients in Mumbai, Thane, and Navi Mumbai say about our purity</p>
+    <div id="reviews-carousel" style="max-width: 600px; margin: 0 auto; text-align: center; background: #fff; padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow-sm); min-height: 150px; display: flex; flex-direction: column; justify-content: center; position: relative;">
+      <p id="review-text" style="font-style: italic; font-size: 15px; color: #4A4A4A;">"The Pure A2 Cow Ghee has a rich aroma that takes me back to my childhood. Unbelievable taste and purity!"</p>
+      <h5 id="review-author" style="margin-top: 12px; font-size: 14px; font-weight: 700; color: var(--primary);">— Meera Joshi, Thane</h5>
+      <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: center;">
+        <button onclick="prevReview()" style="background: none; border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 12px;">◀</button>
+        <button onclick="nextReview()" style="background: none; border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 12px;">▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pincode Section -->
+  <div class="pincode-section">
+    <h2>📍 Check Delivery Availability</h2>
+    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we service your area in Mumbai &amp; Thane</p>
+    <div class="pincode-form">
+      <input class="pincode-input" id="pincode-input" type="text" maxlength="6" placeholder="Enter 6-digit Pincode">
+      <button class="pin-btn" onclick="checkPincode()">Check</button>
+    </div>
+    <div class="pin-result" id="pincode-result"></div>
+    
+    <!-- Map Container -->
+    <div id="map-section" style="display: none; margin-top: 24px; text-align: center;">
+      <h4 style="margin-bottom: 12px; color: var(--primary)">🗺️ Thane &amp; Mumbai Delivery Center Map</h4>
+      <div style="border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); max-width: 500px; margin: 0 auto;">
+        <iframe id="google-map" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2026 Indian Dairy &amp; Spices. All Rights Reserved.</p>
-    <p>Made with ❤️ in India | FSSAI Licensed | 🌿 100% Natural</p>
-    <p>
-      <span style="cursor:pointer;margin-right:8px" onclick="toggleDiwaliMode()" title="Festive Mode">🪔 Festive Mode</span>
-    </p>
-  </div>
-</footer>
 
-<!-- CART SIDEBAR -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-<div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <h3>🛒 Your Cart</h3>
-    <button class="close-cart" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cartItemsList"></div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-free-ship" id="freeShipNote"></div>
-    <div class="cart-totals">
-      <div class="cart-row"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
-      <div class="cart-row"><span>Delivery</span><span id="cartDelivery">₹40</span></div>
-      <div class="cart-row total"><span>Total</span><span id="cartTotal">₹0</span></div>
+  <!-- Order Tracker Section -->
+  <section class="products-section" style="background: #ffffff; padding: 48px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+      <h2 class="section-title">📦 Track Your Order</h2>
+      <p class="section-subtitle" style="margin-bottom: 20px;">Enter your 8-character or full Order ID to check its live delivery status</p>
+      <div style="display: flex; gap: 8px; margin-top: 16px; justify-content: center;">
+        <input type="text" id="track-order-id" placeholder="e.g. e92994d5 or full UUID" style="padding: 12px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; outline: none; width: 320px; text-align: center; font-family: monospace;">
+        <button class="pin-btn" onclick="trackOrder()">Track Status</button>
+      </div>
+      <div id="track-result" style="margin-top: 20px; font-weight: 600; display: none;"></div>
     </div>
-    <button class="btn-checkout-wa" style="background:var(--dairy-accent)" onclick="openAddressModal()">Proceed to Address ➔</button>
-    <button class="btn-clear-cart" onclick="clearCart()">🗑️ Clear Cart</button>
-  </div>
-</div>
+  </section>
 
-
-<!-- ADDRESS MODAL -->
-<div class="cart-overlay" id="addressOverlay" onclick="closeAddressModal()"></div>
-<div class="cart-sidebar" id="addressSidebar" style="z-index:1005;">
-  <div class="cart-header">
-    <h3>Delivery Details</h3>
-    <button class="close-cart" onclick="closeAddressModal()">← Back</button>
-  </div>
-  <div style="padding:20px; overflow-y:auto; flex:1">
-    <div style="margin-bottom:12px">
-      <label style="font-size:0.8rem;font-weight:700">Full Name</label>
-      <input type="text" id="custName" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc" placeholder="Enter your name">
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:0.8rem;font-weight:700">Phone Number</label>
-      <input type="text" id="custPhone" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc" placeholder="10-digit number">
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-size:0.8rem;font-weight:700">Delivery Address</label>
-      <textarea id="custAddr" rows="3" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc" placeholder="House/Flat No, Area"></textarea>
-    </div>
-    <div style="margin-top:20px">
-      <label style="font-size:0.8rem;font-weight:700;color:var(--gray)">Payment Method</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
-        <div id="payRazor" onclick="setPay('razorpay')" style="border:2px solid var(--dairy-accent);padding:12px;text-align:center;border-radius:8px;cursor:pointer;background:#f3e8ff;color:var(--dairy-dark);font-weight:700">Pay Online<br><span style="font-size:0.7rem">(Razorpay/Card)</span></div>
-        <div id="payCOD" onclick="setPay('cod')" style="border:2px solid #ccc;padding:12px;text-align:center;border-radius:8px;cursor:pointer;font-weight:700"><span style="color:#0f9d58">G</span>Pay / UPI<br><span style="font-size:0.7rem">0% Fees</span></div>
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">🥛 Indian Dairy &amp; Spices</div>
+        <p style="margin-top: 10px;">Bringing premium farm-fresh dairy and handpicked natural Indian spices directly to your kitchen. Purity and quality guaranteed.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop Categories</h4>
+        <a href="#" onclick="filterByCategory('dairy'); return false;">Dairy Products</a>
+        <a href="#" onclick="filterByCategory('spices'); return false;">Pure Spices</a>
+        <a href="#" onclick="filterByCategory('combos'); return false;">Combo Packs</a>
+        <a href="#" onclick="filterByCategory('cakes'); return false;">Sweets &amp; Cakes</a>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <a href="https://wa.me/919892360874" target="_blank">Contact on WhatsApp</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Refund Policy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="font-size: 12px; margin-bottom: 8px;">Subscribe to get updates on discounts and new arrivals!</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="your@email.com">
+          <button onclick="alert('Thank you for subscribing!')">Join</button>
+        </div>
       </div>
     </div>
+    <div class="footer-bottom">
+      <p>© 2026 Indian Dairy &amp; Spices. All Rights Reserved. FSSAI Licensed. License No: 10025999000000</p>
+      <p style="margin-top: 8px; opacity: 0.5;">Made with ❤️ in India</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Float Bubble -->
+  <a href="https://wa.me/919892360874?text=Hi!%20I'm%20interested%20in%20ordering%20fresh%20spices%20and%20dairy." class="float-wa" target="_blank">
+    <span>💬 Order on WhatsApp</span>
+  </a>
+
+  <!-- Chatbot Widget -->
+  <button class="float-chat" onclick="toggleChatbot()">💬</button>
+  <div class="chatbot-widget" id="chatbot-widget">
+    <div class="chatbot-header">
+      <span>Spice Shop Assistant</span>
+      <button onclick="toggleChatbot()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="chat-msg bot">Namaste! How can I help you today? Ask me about ghee, paneer, sweets, delivery, or payments!</div>
+    </div>
+    <!-- Chatbot Quick Replies -->
+    <div id="chatbot-quick-replies" style="display: flex; gap: 6px; padding: 8px 12px; border-top: 1px solid var(--border); overflow-x: auto; background: #fafafa; white-space: nowrap; scrollbar-width: none;">
+      <button onclick="quickReply('ghee')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Desi Ghee 🫙</button>
+      <button onclick="quickReply('paneer')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Paneer 🥛</button>
+      <button onclick="quickReply('cake')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Cakes & Sweets 🍰</button>
+      <button onclick="quickReply('delivery')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Free Delivery 🚚</button>
+      <button onclick="quickReply('payment')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Payments 💳</button>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbot-user-msg" placeholder="Type a message..." onkeypress="if(event.key==='Enter')chatSend()">
+      <button class="chatbot-send" onclick="chatSend()">➔</button>
+    </div>
   </div>
-  <div class="cart-footer">
-    <button class="btn-checkout-wa" id="finalPayBtn" style="background:var(--dairy-dark)" onclick="processOrder()">Pay Now</button>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h3>🛒 Shopping Cart</h3>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items-container"></div>
+
+    <!-- Free Delivery Progress Bar -->
+    <div id="free-delivery-progress-container" style="padding: 12px 20px; background: #FFF8F0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+      <div id="free-delivery-progress-text" style="font-size: 11px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px;">Add ₹499 more for Free Delivery!</div>
+      <div style="background: #E5DDD4; height: 8px; border-radius: 4px; overflow: hidden; width: 100%;">
+        <div id="free-delivery-progress-bar" style="background: var(--secondary); height: 100%; width: 0%; transition: width 0.3s;"></div>
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      
+      <!-- Promo Code Section -->
+      <div style="margin-bottom: 12px; display: flex; gap: 8px;">
+        <input type="text" id="coupon-input" placeholder="Promo Code (FRESH10)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; text-transform: uppercase;">
+        <button onclick="applyCoupon()" style="padding: 8px 16px; background: var(--secondary); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer;">Apply</button>
+      </div>
+      <div id="coupon-message" style="font-size: 11px; margin-bottom: 12px; display: none;"></div>
+
+      <div class="cart-summary">
+        <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+        <div class="cart-row" id="discount-row" style="display: none; color: var(--secondary);"><span>Discount (10%)</span><span id="cart-discount">-₹0</span></div>
+        <div class="cart-row"><span>Delivery</span><span id="cart-delivery">₹40</span></div>
+        <div class="cart-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+      </div>
+      <button class="btn-checkout" onclick="proceedToCheckout()">Proceed to Checkout</button>
+      <button class="btn-clear-cart" onclick="clearCart()">Clear Cart</button>
+    </div>
   </div>
-</div>
 
-<!-- SUCCESS MODAL -->
-<div class="cart-overlay" id="successOverlay" onclick="location.reload()"></div>
-<div class="cart-sidebar" id="successSidebar" style="z-index:1010;justify-content:center;align-items:center;padding:40px;text-align:center">
-  <div style="font-size:4rem;color:#10b981;margin-bottom:20px">✅</div>
-  <h2 style="margin-bottom:12px">Order Successful!</h2>
-  <p style="color:var(--gray);margin-bottom:24px">Your order <strong id="succId"></strong> has been received. Our team will pack it shortly.</p>
-  <button class="btn-checkout-wa" style="background:var(--dairy-accent)" onclick="location.reload()">Continue Shopping</button>
-</div>
+  <!-- Address Modal -->
+  <div class="modal-overlay" id="address-modal">
+    <div class="modal-box">
+      <button class="btn-back" onclick="document.getElementById('address-modal').classList.remove('open')">← Back to Cart</button>
+      <h3 class="modal-title">Delivery Details</h3>
+      <div class="form-group">
+        <label for="cust-name">Full Name *</label>
+        <input type="text" id="cust-name" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="cust-phone">Mobile Number *</label>
+        <input type="tel" id="cust-phone" placeholder="10-digit mobile number" required>
+      </div>
+      <div class="form-group">
+        <label for="cust-address">Delivery Address *</label>
+        <textarea id="cust-address" rows="3" placeholder="Flat/House No, Building, Street, Area" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="cust-pincode">Pincode (6-digit) *</label>
+        <input type="text" id="cust-pincode" placeholder="6-digit pincode" maxlength="6" required>
+      </div>
+      <div class="form-group">
+        <label>Payment Method</label>
+        <div class="payment-options">
+          <div class="payment-option selected" data-method="razorpay" onclick="selectPayment('razorpay')">
+            <span class="icon">💳</span>
+            <span class="label">Online (Razorpay)</span>
+          </div>
+          <div class="payment-option" data-method="cod" onclick="selectPayment('cod')">
+            <span class="icon">💵</span>
+            <span class="label">Cash on Delivery (COD)</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-place-order" id="place-order-btn" onclick="placeOrder()">Place Order</button>
+    </div>
+  </div>
 
-<!-- WHATSAPP FLOAT -->
-<div class="wa-float" onclick="window.open('https://wa.me/919892360874?text=Hi! I want to order from Indian Dairy %26 Spices. Please help me!','_blank')" title="Chat on WhatsApp">💬</div>
+  <!-- Product Detail Modal Overlay -->
+  <div class="modal-overlay" id="product-detail-modal">
+    <div class="modal-box" style="max-width: 500px; padding: 24px;">
+      <button class="btn-back" onclick="document.getElementById('product-detail-modal').classList.remove('open')" style="float: right; margin: 0; font-weight: bold; font-size: 16px;">✕</button>
+      <h3 class="modal-title" id="detail-title">Product Details</h3>
+      <div id="product-detail-content" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+    </div>
+  </div>
 
-<script>
-// ===== PRODUCT DATA =====
+  <!-- Success Modal -->
+  <div class="modal-overlay success-modal" id="success-modal">
+    <div class="modal-box">
+      <span class="success-icon">🎉</span>
+      <h2>Order Placed!</h2>
+      <p style="margin-top: 8px; color: var(--text-muted)">Thank you for shopping with us. Your order details have been received.</p>
+      <div class="success-total" style="font-weight:700;font-size:22px;margin: 16px 0 8px 0; color: var(--primary)">₹0</div>
+      <div class="success-method" style="margin-bottom:16px;color:var(--secondary);font-weight: 600;">COD</div>
+      <div class="order-id" id="success-order-id">Order ID: N/A</div>
+      <button class="btn-place-order" onclick="document.getElementById('success-modal').classList.remove('open'); location.reload();" style="margin-top:20px">Continue Shopping</button>
+    </div>
+  </div>
 
-const DEFAULT_PRODUCTS = [
-  {id:1,name:'A2 Cow Ghee (Bilona)',cat:'dairy',price:650,mrp:750,weight:'500ml',stock:12,desc:'100% pure A2 Gir cow ghee.',img:'https://images.unsplash.com/photo-1628102479435-93863412338b?w=640&h=480&fit=crop',badges:['bestseller'],rating:4.9,reviews:128,tags:[]},
-  {id:2,name:'Fresh Malai Paneer',cat:'dairy',price:90,mrp:110,weight:'200g',stock:45,desc:'Soft paneer made fresh.',img:'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=640&h=480&fit=crop',badges:['new'],rating:4.8,reviews:86,tags:[]},
-  {id:3,name:'Kashmiri Red Chilli',cat:'spice',price:120,mrp:150,weight:'250g',stock:100,desc:'Authentic Kashmiri chilli.',img:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=640&h=480&fit=crop',badges:[],rating:4.7,reviews:214,tags:[]},
-  {id:4,name:'Turmeric (Haldi) Powder',cat:'spice',price:80,mrp:95,weight:'250g',stock:150,desc:'High curcumin turmeric.',img:'https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=640&h=480&fit=crop',badges:['organic'],rating:4.9,reviews:342,tags:[]},
-  {id:32,name:'Milk Cake (Kalakand)',cat:'cake',price:149,mrp:180,weight:'200g',stock:15,desc:'Soft and moist Kalakand.',img:'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=640&h=480&fit=crop',badges:['new'],rating:4.7,reviews:67,tags:[]},
-  {id:6,name:'Garam Masala Special',cat:'spice',price:180,mrp:220,weight:'100g',stock:50,desc:'Blend of 15 spices.',img:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=640&h=480&fit=crop',badges:['bestseller'],rating:4.9,reviews:543,tags:[]}
-];
-let PRODUCTS = [...DEFAULT_PRODUCTS];
-async function loadProducts() {
-  try {
-    const loader = document.getElementById('loader');
-    if(loader) loader.style.display = 'block';
 
-    // IMPORTANT SYNC: Read from localStorage first so Admin changes show instantly
-    const localAdminData = localStorage.getItem('ids_products');
-    if (localAdminData) {
-      products = JSON.parse(localAdminData);
-      console.log('Loaded products from Admin Sync (localStorage)');
-    } else {
-      // Fallback to fetch if no admin data exists
+  <!-- ─── JAVASCRIPT LOGIC ─── -->
+  <script>
+    // ─── CONFIG & CLIENT INITIALIZATION ────────────────────────────
+    let OWNER_WHATSAPP = '919892360874';
+    let RAZORPAY_KEY   = 'rzp_test_51I0O96U8Z397p';
+    const FREE_DELIVERY_MIN = 499;
+    const DELIVERY_CHARGE   = 40;
+
+    // Supported delivery pincodes
+    const PINCODES_OK = [
+      "400601", "400602", "400603", "400604", "400605", "400606", "400607", "400608", "400609", "400610",
+      "400615", "400708", "401105", "401107"
+    ];
+
+    // Testimonials List
+    const TESTIMONIALS = [
+      { text: '"The Pure A2 Cow Ghee has a rich aroma that takes me back to my childhood. Unbelievable taste and purity!"', author: '— Meera Joshi, Thane' },
+      { text: '"Soft, fresh paneer. Makes our weekend paneer butter masala absolutely restaurant-style. Sourced local, tasted best!"', author: '— Rahul Sawant, Mulund' },
+      { text: '"Genuine Erode Haldi and organic Spices. The packaging is premium and the flavors are highly authentic. Strongly recommended!"', author: '— Sunita Deshmukh, Dadar' },
+      { text: '"The festival gift packs were loved by our relatives. Clean packaging, FSSAI certified, and quick home delivery!"', author: '— Darshan Bhalerao, Navi Mumbai' }
+    ];
+    let currentTestimonialIndex = 0;
+
+    // ─── STATE ─────────────────────────────────────────────────────
+    let PRODUCTS       = [];   // source of truth — all products from DB
+    let products       = [];   // currently displayed (filtered)
+    let cart           = JSON.parse(localStorage.getItem('spiceCart') || '[]');
+    let activeCategory = 'all';
+    let searchQuery    = '';
+    let paymentMethod  = 'razorpay';
+    let couponCode     = '';
+    let discountPercent = 0;
+
+    // Default seed products (fallback)
+    const DEFAULT_PRODUCTS = [
+      { id:'d1', name:'Pure Desi Ghee', name_hindi:'शुद्ध देसी घी', category:'dairy', price:450, mrp:520, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Ghee_in_a_bowl.jpg/640px-Ghee_in_a_bowl.jpg', description:'Farm-fresh A2 cow ghee, slow-churned the traditional way.', weight:'500ml', is_bestseller:true, is_new:false, rating:4.9, review_count:2847, in_stock:true },
+      { id:'d2', name:'Fresh Paneer', name_hindi:'ताज़ा पनीर', category:'dairy', price:180, mrp:200, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Paneer_%28Indian_Cheese%29.jpg/640px-Paneer_%28Indian_Cheese%29.jpg', description:'Soft, fresh paneer made daily from full-fat cow milk.', weight:'200g', is_bestseller:true, is_new:false, rating:4.8, review_count:1923, in_stock:true },
+      { id:'s1', name:'Turmeric Powder', name_hindi:'हल्दी पाउडर', category:'spices', price:120, mrp:150, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg', description:'Pure haldi sourced from Erode farms.', weight:'200g', is_bestseller:true, is_new:false, rating:4.9, review_count:3241, in_stock:true },
+      { id:'s2', name:'Garam Masala', name_hindi:'गरम मसाला', category:'spices', price:90, mrp:110, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg', description:'Authentic blend of 18 spices.', weight:'100g', is_bestseller:true, is_new:false, rating:4.8, review_count:2156, in_stock:true },
+      { id:'c1', name:'Starter Pack', name_hindi:'स्टार्टर पैक', category:'combos', price:599, mrp:750, image_url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Indian_Spices.jpg/640px-Indian_Spices.jpg', description:'Ghee + Paneer + 3 spices.', weight:'5 items', is_bestseller:true, is_new:true, rating:4.9, review_count:562, in_stock:true }
+    ];
+
+    // Initialize application settings & configs from endpoints
+    async function initApp() {
       try {
-        const res = await fetch(API_URL + '/products');
+        const res = await fetch('/api/config');
         if (res.ok) {
-          products = await res.json();
-        } else {
-          products = [...DEFAULT_PRODUCTS];
+          const configData = await res.json();
+          RAZORPAY_KEY = configData.razorpayKeyId;
+          OWNER_WHATSAPP = configData.ownerWhatsapp;
+          // Update whatsapp float link dynamically
+          const floatWaBtn = document.querySelector('.float-wa');
+          if (floatWaBtn) {
+            floatWaBtn.href = `https://wa.me/${OWNER_WHATSAPP}?text=Hi!%20I'm%20interested%20in%20ordering%20fresh%20spices%20and%20dairy.`;
+          }
         }
-      } catch (err) {
-        products = [...DEFAULT_PRODUCTS];
+      } catch (e) {
+        console.error('Error fetching config endpoint, using default variables', e);
+      }
+
+      startCountdownTimer();
+      await loadSiteSettings();
+      await loadProducts();
+      updateCartBadge();
+    }
+
+    // Live Offer Countdown Timer
+    function startCountdownTimer() {
+      const timerDisplay = document.getElementById('countdown-timer');
+      if (!timerDisplay) return;
+
+      let timeRemaining = parseInt(localStorage.getItem('flash_offer_timer') || (3 * 60 * 60 + 45 * 60)); // 3h 45m defaults
+
+      const countdown = setInterval(() => {
+        if (timeRemaining <= 0) {
+          timeRemaining = 3 * 60 * 60 + 45 * 60; // reset
+        }
+
+        timeRemaining--;
+        localStorage.setItem('flash_offer_timer', timeRemaining);
+
+        const hrs = Math.floor(timeRemaining / 3600);
+        const mins = Math.floor((timeRemaining % 3600) / 60);
+        const secs = timeRemaining % 60;
+
+        timerDisplay.textContent = `${hrs.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+      }, 1000);
+    }
+
+    async function loadSiteSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const settings = await res.json();
+          settings.forEach(item => {
+            const val = typeof item.value === 'string' ? JSON.parse(item.value) : item.value;
+            if (item.key === 'announcement') {
+              const marquee = document.getElementById('announcement-marquee');
+              if (marquee) marquee.innerHTML = `<span>${val.text}</span>`;
+            }
+            if (item.key === 'hero') {
+              const headline = document.getElementById('hero-headline');
+              const subheadline = document.getElementById('hero-subheadline');
+              if (headline) headline.textContent = val.headline;
+              if (subheadline) subheadline.textContent = val.subheadline;
+            }
+            if (item.key === 'stats') {
+              const p = document.getElementById('stat-products');
+              const c = document.getElementById('stat-customers');
+              const s = document.getElementById('stat-states');
+              const si = document.getElementById('stat-since');
+              if (p) p.dataset.target = val.products;
+              if (c) c.dataset.target = val.customers;
+              if (s) s.dataset.target = val.states;
+              if (si) si.dataset.target = val.since;
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error fetching settings from database:', e);
       }
     }
-    
-    if(loader) loader.style.display = 'none';
-    renderProducts();
-  } catch (error) {
-    console.error('Error loading products:', error);
-    products = [...DEFAULT_PRODUCTS];
-    renderProducts();
-  }
-}
 
-// CART FUNCTIONS
-function addToCart(id){
-  const product = PRODUCTS.find(p => p.id === id);
-  if(!product) return;
-  const existing = cart.find(c => c.id === id);
-  if(existing) {
-    existing.qty++;
-  } else {
-    cart.push({id, name:product.name, hindi:product.hindi, price:product.price, img:product.img, weight:product.weight, qty:1});
-  }
-  saveCart();
-  updateCartBadge();
-  renderProducts();
-  showToast(`✅ ${product.name} added to cart!`);
-}
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          PRODUCTS = data.length > 0 ? data : DEFAULT_PRODUCTS;
+        } else {
+          PRODUCTS = DEFAULT_PRODUCTS;
+        }
+      } catch (e) {
+        console.error('Error loading products from database:', e);
+        PRODUCTS = DEFAULT_PRODUCTS;
+      }
+      products = [...PRODUCTS];
+      updateTabCounts();
+      renderProducts();
+      setupStatsObserver();
+    }
 
-function removeFromCart(id){
-  cart = cart.filter(c => c.id !== id);
-  saveCart();
-  updateCartBadge();
-  renderCartSidebar();
-  renderProducts();
-}
+    // ─── RENDER CATALOG ───────────────────────────────────────────
+    function renderProducts() {
+      let filtered = [...PRODUCTS];
+      if (activeCategory !== 'all') {
+        filtered = filtered.filter(p => p.category === activeCategory);
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(p =>
+          p.name?.toLowerCase().includes(q) ||
+          p.name_hindi?.includes(searchQuery) ||
+          p.description?.toLowerCase().includes(q) ||
+          p.category?.toLowerCase().includes(q)
+        );
+      }
+      products = filtered;
 
-function updateQty(id, delta){
-  const item = cart.find(c => c.id === id);
-  if(!item) return;
-  item.qty += delta;
-  if(item.qty <= 0) { removeFromCart(id); return; }
-  saveCart();
-  updateCartBadge();
-  renderCartSidebar();
-}
+      const grid = document.getElementById('product-grid');
+      if (!grid) return;
 
-function clearCart(){
-  cart = [];
-  saveCart();
-  updateCartBadge();
-  renderCartSidebar();
-  renderProducts();
-}
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <span class="emoji">🔍</span>
+            <h3>No products found</h3>
+            <p>Try searching for something else or browse another category.</p>
+          </div>`;
+        document.getElementById('product-count').textContent = '0 products';
+        return;
+      }
 
-function saveCart(){
-  localStorage.setItem('psdCart', JSON.stringify(cart));
-}
+      grid.innerHTML = products.map(p => {
+        const discount = p.mrp > p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0;
+        const inCart   = cart.some(c => c.id === p.id);
+        const ratingVal = parseFloat(p.rating || 4.5);
+        const stars    = '★'.repeat(Math.floor(ratingVal)) + (ratingVal % 1 >= 0.5 ? '½' : '');
+        const imgUrl   = p.image_url || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name);
+        
+        return `
+        <div class="product-card" id="card-${p.id}">
+          <div class="badges">
+            <span>${p.is_bestseller ? '<span class="badge-bestseller">⭐ Best Seller</span>' : ''}</span>
+            <span>${discount > 0 ? `<span class="badge-discount">${discount}% OFF</span>` : ''}</span>
+          </div>
+          ${p.is_new ? '<div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:9;"><span class="badge-new">✨ New</span></div>' : ''}
+          <img class="product-image" src="${imgUrl}" alt="${p.name}" loading="lazy" onclick="showProductDetails('${p.id}')"
+               onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(p.name)}'">
+          <div class="product-body">
+            ${p.name_hindi ? `<div class="product-name-hindi hindi" onclick="showProductDetails('${p.id}')">${p.name_hindi}</div>` : ''}
+            <div class="product-name" onclick="showProductDetails('${p.id}')">${p.name}</div>
+            ${p.weight ? `<div class="product-weight">${p.weight}</div>` : ''}
+            <div class="product-rating">
+              <span class="stars">${stars}</span>
+              <span style="color:var(--text-muted)">${ratingVal} (${(p.review_count || 0).toLocaleString()})</span>
+            </div>
+            <div class="product-pricing">
+              <span class="price">₹${p.price}</span>
+              ${p.mrp > p.price ? `<span class="mrp">₹${p.mrp}</span>` : ''}
+              ${discount > 0 ? `<span class="discount">Save ₹${p.mrp - p.price}</span>` : ''}
+            </div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-cart ${inCart ? 'in-cart' : ''}" onclick="toggleCart('${p.id}')">
+              ${inCart ? '✓ Added' : '🛒 Add to Cart'}
+            </button>
+            <button class="btn-wa" onclick="waOrder('${p.id}')" title="Order on WhatsApp">💬</button>
+          </div>
+        </div>`;
+      }).join('');
 
-function updateCartBadge(){
-  const count = cart.reduce((s,i) => s+i.qty, 0);
-  document.getElementById('cartCount').textContent = count;
-  document.getElementById('cartCountMobile').textContent = count;
-}
+      document.getElementById('product-count').textContent = `${products.length} products`;
+    }
 
-function openCart(){
-  document.getElementById('cartOverlay').classList.add('open');
-  document.getElementById('cartSidebar').classList.add('open');
-  renderCartSidebar();
-}
+    // Category filtering
+    function filterByCategory(cat) {
+      activeCategory = cat;
+      searchQuery = '';
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) searchInput.value = '';
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+      renderProducts();
+    }
 
-function closeCart(){
-  document.getElementById('cartOverlay').classList.remove('open');
-  document.getElementById('cartSidebar').classList.remove('open');
-}
+    // Search query filtering
+    function searchProducts() {
+      const searchInput = document.getElementById('search-input');
+      searchQuery = searchInput ? searchInput.value.trim() : '';
+      activeCategory = 'all';
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === 'all');
+      });
+      renderProducts();
+    }
 
-function renderCartSidebar(){
-  const list = document.getElementById('cartItemsList');
-  const footer = document.getElementById('cartFooter');
-  if(cart.length === 0){
-    list.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p style="font-weight:600;margin-bottom:8px">Your cart is empty</p><p style="font-size:.85rem;color:var(--gray)">Add some delicious dairy products or spices!</p><button onclick="closeCart()" style="margin-top:16px;background:var(--dairy-accent);color:#fff;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:600">Shop Now</button></div>`;
-    footer.style.display = 'none';
-    return;
-  }
-  const subtotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
-  const delivery = subtotal >= 499 ? 0 : 40;
-  const total = subtotal + delivery;
-  list.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <div class="cart-item-img"><img src="${item.img}" alt="${item.name}" loading="lazy"></div>
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div style="font-size:.75rem;color:var(--gray)">${item.weight}</div>
-        <div class="cart-item-price">₹${item.price} × ${item.qty} = ₹${item.price * item.qty}</div>
-        <div class="cart-item-controls">
-          <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
-          <span class="qty-num">${item.qty}</span>
-          <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
-          <span class="remove-item" onclick="removeFromCart(${item.id})">Remove</span>
+    // Tab counts update
+    function updateTabCounts() {
+      const counts = { all: PRODUCTS.length };
+      PRODUCTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const cat = btn.dataset.cat;
+        const count = counts[cat] || 0;
+        const span = btn.querySelector('.tab-count');
+        if (span) span.textContent = count;
+      });
+    }
+
+    // Show Product Details Modal
+    function showProductDetails(productId) {
+      const p = PRODUCTS.find(x => x.id === productId);
+      if (!p) return;
+
+      const discount = p.mrp > p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0;
+      const ratingVal = parseFloat(p.rating || 4.5);
+      const stars = '★'.repeat(Math.floor(ratingVal)) + (ratingVal % 1 >= 0.5 ? '½' : '');
+      const imgUrl = p.image_url || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name);
+      
+      const content = `
+        <div style="text-align: center;">
+          <img src="${imgUrl}" alt="${p.name}" style="max-height: 220px; border-radius: var(--radius); object-fit: cover; box-shadow: var(--shadow-sm); width: 100%;">
         </div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('cartSubtotal').textContent = '₹'+subtotal;
-  document.getElementById('cartDelivery').textContent = delivery === 0 ? '🎉 FREE' : '₹'+delivery;
-  document.getElementById('cartTotal').textContent = '₹'+total;
-  const remaining = 499 - subtotal;
-  document.getElementById('freeShipNote').textContent = delivery === 0 ? '🎉 You have free delivery!' : `Add ₹${remaining} more for FREE delivery!`;
-  footer.style.display = 'block';
-}
+        <div>
+          ${p.name_hindi ? `<div class="hindi" style="font-size: 14px; color: var(--text-muted); font-weight: 500">${p.name_hindi}</div>` : ''}
+          <h2 style="font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 700; margin-top: 4px;">${p.name}</h2>
+          <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Category: <strong>${p.category.toUpperCase()}</strong> | Weight: <strong>${p.weight || 'N/A'}</strong></div>
+          <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px;">
+            <span style="color:#F5A623">${stars}</span>
+            <span><strong>${ratingVal}</strong> (${p.review_count || 0} reviews)</span>
+          </div>
+          <div style="margin-top: 12px; display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 24px; font-weight: 700; color: var(--primary)">₹${p.price}</span>
+            ${p.mrp > p.price ? `<span style="text-decoration: line-through; color: var(--text-muted); font-size: 15px;">₹${p.mrp}</span>` : ''}
+            ${discount > 0 ? `<span style="background: var(--secondary); color:#fff; font-size: 11px; padding: 2px 6px; border-radius: var(--radius-pill); font-weight: 600;">${discount}% OFF</span>` : ''}
+          </div>
+          <p style="margin-top: 16px; font-size: 14px; color: #4A4A4A; line-height: 1.5;">${p.description || 'Authentic pure product sourced from premium fields. Sourced natural, chemical-free and packed under clean hygienic standards.'}</p>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 16px;">
+          <button class="btn-checkout" style="flex: 1" onclick="toggleCart('${p.id}'); document.getElementById('product-detail-modal').classList.remove('open');">
+            ${cart.some(c => c.id === p.id) ? 'Remove From Cart' : '🛒 Add to Cart'}
+          </button>
+          <button class="btn-wa" onclick="waOrder('${p.id}')">💬 Ask on WA</button>
+        </div>
+      `;
 
-
-function sendCheckoutOTP() {
-  const phone = document.getElementById('checkoutPhone').value;
-  if(phone.length < 10) { alert('Enter valid number'); return; }
-  document.getElementById('loginStep1').style.display = 'none';
-  document.getElementById('loginStep2').style.display = 'block';
-  alert('OTP sent to ' + phone + '. Use any 4 digit OTP for demo.');
-}
-function verifyCheckoutOTP() {
-  const otp = document.getElementById('checkoutOTP').value;
-  if(otp.length === 4) {
-    localStorage.setItem('isLoggedIn', 'true');
-    document.getElementById('checkoutLoginModal').style.display = 'none';
-    processWhatsAppOrder();
-  } else {
-    alert('Invalid OTP');
-  }
-}
-function checkoutWhatsApp() {
-  if(cart.length === 0) return;
-  if(localStorage.getItem('isLoggedIn') === 'true') {
-    processWhatsAppOrder();
-  } else {
-    document.getElementById('checkoutLoginModal').style.display = 'flex';
-  }
-}
-function processWhatsAppOrder() {
-  const items = cart.map(i => `✅ ${i.name} (${i.weight}) x ${i.qty} = ₹${i.price*i.qty}`).join('\n');
-  const subtotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
-  const delivery = subtotal >= 499 ? 0 : 40;
-  const msg = `🛒 *New Order - Indian Dairy & Spices*\n\n${items}\n\n💰 Subtotal: ₹${subtotal}\n🚚 Delivery: ₹${delivery}\n🧾 *Total: ₹${subtotal+delivery}*\n\nPlease confirm my order! `;
-  window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
-}
-
-
-function whatsappOrder(id){
-  const p = PRODUCTS.find(x => x.id === id);
-  if(!p) return;
-  const msg = `Hi! I want to order:\n\n✨ *${p.name}* (${p.hindi})\n📦 Weight: ${p.weight}\n💰 Price: ₹${p.price}\n\nPlease confirm availability and delivery details. Thank you!`;
-  window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
-}
-
-function whatsappCombo(id){
-  const c = COMBOS.find(x => x.id === id);
-  if(!c) return;
-  const msg = `Hi! I want to order the *${c.name}* Combo Pack!\n\n📦 Includes: ${c.includes.join(', ')}\n💰 Price: ₹${c.price} (${c.save})\n\nPlease confirm availability. Thank you!`;
-  window.open('https://wa.me/919892360874?text='+encodeURIComponent(msg), '_blank');
-}
-
-// PINCODE
-function checkPincode(){
-  const pin = document.getElementById('pincodeInput').value.trim();
-  const result = document.getElementById('pinResult');
-  if(pin.length !== 6){ result.textContent = '⚠️ Please enter a valid 6-digit pincode'; result.className='pin-result no'; return; }
-  if(PINCODES_OK.includes(pin)){
-    result.textContent = `✅ Great news! We deliver to ${pin}. Estimated delivery: 1-2 days`;
-    result.className = 'pin-result ok';
-  } else {
-    result.textContent = `❌ Sorry, we don't deliver to ${pin} yet. Coming soon!`;
-    result.className = 'pin-result no';
-  }
-}
-
-// MOBILE MENU
-function openMobileMenu(){ document.getElementById('mobileMenu').classList.add('open'); }
-function closeMobileMenu(){ document.getElementById('mobileMenu').classList.remove('open'); }
-function closeMobileMenuOnOverlay(e){ if(e.target === document.getElementById('mobileMenu')) closeMobileMenu(); }
-
-// NEWSLETTER
-function subscribeNewsletter(){
-  showToast('🎉 Subscribed! You will get ₹50 off your first order!');
-}
-
-// DIWALI MODE
-let diwaliActive = false;
-function toggleDiwaliMode(){
-  diwaliActive = !diwaliActive;
-  const overlay = document.getElementById('sparkleOverlay');
-  overlay.classList.toggle('active', diwaliActive);
-  if(diwaliActive){
-    overlay.innerHTML = '';
-    for(let i=0;i<30;i++){
-      const s = document.createElement('span');
-      s.className = 'sparkle';
-      s.textContent = ['✨','🌟','⭐','💫','🎇','🧨'][Math.floor(Math.random()*6)];
-      s.style.left = Math.random()*100+'%';
-      s.style.animationDelay = Math.random()*3+'s';
-      s.style.animationDuration = (2+Math.random()*3)+'s';
-      overlay.appendChild(s);
+      document.getElementById('product-detail-content').innerHTML = content;
+      document.getElementById('product-detail-modal').classList.add('open');
     }
-    showToast('🪔 Festive Mode ON! Happy Festivities! 🎉');
-  }
-}
 
-// TOAST
-function showToast(msg){
-  let toast = document.getElementById('toastMsg');
-  if(toast) toast.remove();
-  toast = document.createElement('div');
-  toast.id = 'toastMsg';
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:30px;font-size:.9rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideUp .3s ease';
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-// SCROLL ANIMATIONS
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
+    // ─── CART HANDLERS ───────────────────────────────────────────
+    function toggleCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+      const idx = cart.findIndex(c => c.id === productId);
+      if (idx === -1) {
+        cart.push({ id: product.id, name: product.name, price: product.price, image_url: product.image_url, weight: product.weight, qty: 1 });
+      } else {
+        cart.splice(idx, 1);
+      }
+      saveCart();
+      renderProducts();
+      renderCartSidebar();
     }
-  });
-}, {threshold:0.1});
 
-function setupAnimations(){
-  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => observer.observe(el));
-}
-
-// COUNTER ANIMATION
-function animateCounter(el){
-  const target = parseInt(el.dataset.target);
-  const duration = 2000;
-  const start = performance.now();
-  const update = (time) => {
-    const elapsed = time - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1-progress, 3);
-    const current = Math.floor(eased * target);
-    el.textContent = target === 2010 ? current : (current >= 1000 ? current.toLocaleString()+'+' : current+'+');
-    if(progress < 1) requestAnimationFrame(update);
-    else el.textContent = target === 2010 ? target : (target >= 1000 ? target.toLocaleString()+'+' : target+'+');
-  };
-  requestAnimationFrame(update);
-}
-
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      animateCounter(entry.target);
-      counterObserver.unobserve(entry.target);
+    function updateQty(productId, delta) {
+      const item = cart.find(c => c.id === productId);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + delta);
+      saveCart();
+      renderCartSidebar();
     }
-  });
-}, {threshold:0.3});
 
-// INIT
-document.addEventListener('DOMContentLoaded', () => {
-  renderProducts();
-  renderCombos();
-  renderReviews();
-  setupAnimations();
-  updateCartBadge();
-  document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+    function removeFromCart(productId) {
+      cart = cart.filter(c => c.id !== productId);
+      saveCart();
+      renderProducts();
+      renderCartSidebar();
+    }
 
-  // Count tabs
-  document.getElementById('count-all').textContent = PRODUCTS.length;
-  document.getElementById('count-spice').textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
-  document.getElementById('count-dairy').textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
-  document.getElementById('count-combo').textContent = PRODUCTS.filter(p=>p.cat==='combo').length;
+    function clearCart() {
+      cart = [];
+      couponCode = '';
+      discountPercent = 0;
+      saveCart();
+      renderProducts();
+      renderCartSidebar();
+    }
 
-  // Pincode enter key
-  document.getElementById('pincodeInput').addEventListener('keypress', e => {
-    if(e.key === 'Enter') checkPincode();
-  });
+    function saveCart() {
+      localStorage.setItem('spiceCart', JSON.stringify(cart));
+      updateCartBadge();
+    }
 
-  // Search enter
-  document.getElementById('searchInput').addEventListener('keypress', e => {
-    if(e.key === 'Enter') searchProducts(e.target.value);
-  });
-});
+    function updateCartBadge() {
+      const total = cart.reduce((sum, c) => sum + c.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      if (badge) {
+        badge.textContent = total;
+        badge.style.display = total > 0 ? 'flex' : 'none';
+      }
+    }
 
-// Add CSS animation for toast
-const style = document.createElement('style');
-style.textContent = '@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
-document.head.appendChild(style);
+    function applyCoupon() {
+      const input = document.getElementById('coupon-input');
+      const code = input ? input.value.trim().toUpperCase() : '';
+      const msg = document.getElementById('coupon-message');
 
-// CHATBOT LOGIC
-let chatOpen = false;
-function toggleChat() {
-  chatOpen = !chatOpen;
-  const widget = document.getElementById('chatbotWidget');
-  if(chatOpen) {
-    widget.classList.add('open');
-    document.getElementById('chatInput').focus();
-  } else {
-    widget.classList.remove('open');
-  }
-}
+      if (code === 'FRESH10') {
+        couponCode = 'FRESH10';
+        discountPercent = 10;
+        msg.textContent = '🎉 Coupon applied! 10% discount subtracted.';
+        msg.style.display = 'block';
+        msg.style.color = 'var(--secondary)';
+      } else {
+        msg.textContent = '❌ Invalid Coupon Code';
+        msg.style.display = 'block';
+        msg.style.color = '#E53935';
+        couponCode = '';
+        discountPercent = 0;
+      }
+      renderCartSidebar();
+    }
 
-function sendChat() {
-  const input = document.getElementById('chatInput');
-  const msg = input.value.trim();
-  if(!msg) return;
-  
-  const chatBody = document.getElementById('chatBody');
-  // User msg
-  const userDiv = document.createElement('div');
-  userDiv.className = 'chat-msg user';
-  userDiv.textContent = msg;
-  chatBody.appendChild(userDiv);
-  input.value = '';
-  
-  // Scroll to bottom
-  chatBody.scrollTop = chatBody.scrollHeight;
-  
-  // Bot reply
-  setTimeout(() => {
-    const botDiv = document.createElement('div');
-    botDiv.className = 'chat-msg bot';
-    let reply = "I'm sorry, I couldn't understand that. You can browse our categories above or reach us on WhatsApp!";
-    const lower = msg.toLowerCase();
-    
-    if(lower.includes('hello') || lower.includes('hi')) reply = "Hello! Looking for fresh paneer or spices?";
-    else if(lower.includes('price') || lower.includes('cost')) reply = "Our prices are very competitive! A2 Ghee starts at ₹650.";
-    else if(lower.includes('delivery') || lower.includes('time')) reply = "We deliver within 45-90 minutes across Thane district.";
-    else if(lower.includes('paneer')) reply = "Our Malai Paneer is fresh every morning. Add it to your cart!";
-    else if(lower.includes('ghee')) reply = "100% pure A2 Bilona cow ghee is our bestseller!";
-    else if(lower.includes('contact') || lower.includes('number')) reply = "You can WhatsApp us at +91 9892360874.";
-    
-    botDiv.textContent = reply;
-    chatBody.appendChild(botDiv);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }, 1000);
-}
+    function renderCartSidebar() {
+      const container = document.getElementById('cart-items-container');
+      if (!container) return;
 
-// MAP LOGIC HOOK
-const originalCheckPincode = checkPincode;
-checkPincode = function() {
-  originalCheckPincode();
-  const pin = document.getElementById('pincodeInput').value.trim();
-  const mapSection = document.getElementById('mapSection');
-  const deliveryMap = document.getElementById('deliveryMap');
-  
-  if(pin.length === 6) {
-    mapSection.style.display = 'block';
-    // Embed a map centered around Thane
-    deliveryMap.src = `https://maps.google.com/maps?q=Thane%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
-  } else {
-    mapSection.style.display = 'none';
-  }
-}
-</script>
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <span class="emoji">🛒</span>
+            <p>Your cart is empty</p>
+          </div>`;
+        document.getElementById('cart-subtotal').textContent = '₹0';
+        document.getElementById('cart-delivery').textContent = '₹0';
+        document.getElementById('cart-total').textContent = '₹0';
+        document.getElementById('discount-row').style.display = 'none';
+        
+        const progressBar = document.getElementById('free-delivery-progress-bar');
+        const progressText = document.getElementById('free-delivery-progress-text');
+        if (progressBar && progressText) {
+          progressBar.style.width = '0%';
+          progressText.innerHTML = `Add <strong>₹${FREE_DELIVERY_MIN}</strong> more to get <strong>FREE Delivery</strong>!`;
+        }
+        return;
+      }
 
-<!-- LOGIN MODAL -->
-<div id="checkoutLoginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; align-items:center; justify-content:center;">
-  <div style="background:#fff; padding:2rem; border-radius:15px; width:90%; max-width:400px; text-align:center;">
-    <h2 style="color:var(--saffron); margin-bottom:1rem;">Login to Order</h2>
-    <p style="margin-bottom:1.5rem; color:#666;">Please verify your phone number to proceed with your order.</p>
-    <div id="loginStep1">
-      <input type="tel" id="checkoutPhone" placeholder="+91 Enter Mobile Number" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; margin-bottom:1rem; font-size:1rem;">
-      <button onclick="sendCheckoutOTP()" style="width:100%; background:var(--saffron); color:#fff; padding:12px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Send OTP</button>
-    </div>
-    <div id="loginStep2" style="display:none;">
-      <input type="text" id="checkoutOTP" placeholder="Enter 4-digit OTP" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px; margin-bottom:1rem; font-size:1rem; text-align:center; letter-spacing:5px;">
-      <button onclick="verifyCheckoutOTP()" style="width:100%; background:var(--saffron); color:#fff; padding:12px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Verify & Order</button>
-    </div>
-    <button onclick="document.getElementById('checkoutLoginModal').style.display='none'" style="margin-top:1rem; background:none; border:none; color:#888; cursor:pointer; text-decoration:underline;">Cancel</button>
-  </div>
-</div>
+      container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image_url || 'https://via.placeholder.com/64'}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/64'">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div style="font-size: 11px; color: var(--text-muted)">${item.weight || ''}</div>
+            <div class="cart-item-price">₹${item.price} × ${item.qty} = ₹${item.price * item.qty}</div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="updateQty('${item.id}', -1)">−</button>
+              <span class="qty-display">${item.qty}</span>
+              <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+            </div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">🗑️</button>
+        </div>`).join('');
 
+      const subtotal = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+      const discount = discountPercent > 0 ? Math.round(subtotal * (discountPercent / 100)) : 0;
+      const delivery = (subtotal - discount) >= FREE_DELIVERY_MIN ? 0 : DELIVERY_CHARGE;
+      const total    = subtotal - discount + delivery;
+
+      // Update Free Delivery Progress Bar
+      const totalAfterDiscount = subtotal - discount;
+      const progressPercent = Math.min((totalAfterDiscount / FREE_DELIVERY_MIN) * 100, 100);
+      const progressBar = document.getElementById('free-delivery-progress-bar');
+      const progressText = document.getElementById('free-delivery-progress-text');
+      if (progressBar && progressText) {
+        progressBar.style.width = `${progressPercent}%`;
+        if (totalAfterDiscount >= FREE_DELIVERY_MIN) {
+          progressText.innerHTML = '🎉 You qualify for <strong>FREE Delivery</strong>!';
+        } else {
+          const needed = FREE_DELIVERY_MIN - totalAfterDiscount;
+          progressText.innerHTML = `Add <strong>₹${needed}</strong> more to get <strong>FREE Delivery</strong>!`;
+        }
+      }
+
+      document.getElementById('cart-subtotal').textContent = '₹' + subtotal;
+      
+      const discRow = document.getElementById('discount-row');
+      if (discount > 0) {
+        discRow.style.display = 'flex';
+        document.getElementById('cart-discount').textContent = '-₹' + discount;
+      } else {
+        discRow.style.display = 'none';
+      }
+
+      document.getElementById('cart-delivery').textContent = delivery === 0 ? 'FREE 🎉' : '₹' + delivery;
+      document.getElementById('cart-total').textContent    = '₹' + total;
+    }
+
+    function openCart() {
+      document.getElementById('cart-sidebar').classList.add('open');
+      document.getElementById('cart-overlay').classList.add('open');
+      renderCartSidebar();
+    }
+
+    function closeCart() {
+      document.getElementById('cart-sidebar').classList.remove('open');
+      document.getElementById('cart-overlay').classList.remove('open');
+    }
+
+    // Toggle menu drawer on mobile
+    function toggleMobileDrawer() {
+      document.getElementById('mobile-drawer').classList.toggle('open');
+    }
+
+    // WhatsApp Order for individual product
+    function waOrder(productId) {
+      const p = PRODUCTS.find(x => x.id === productId);
+      if (!p) return;
+      const msg = encodeURIComponent(`Namaste! I want to order:\n\n*${p.name}* (${p.weight || ''}) - ₹${p.price}\n\nPlease confirm availability. Thank you!`);
+      window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${msg}`, '_blank');
+    }
+
+    // ─── CHECKOUT & PLACING ORDERS ───────────────────────────────
+    function proceedToCheckout() {
+      if (cart.length === 0) { alert('Your cart is empty!'); return; }
+      closeCart();
+      document.getElementById('address-modal').classList.add('open');
+    }
+
+    function selectPayment(method) {
+      paymentMethod = method;
+      document.querySelectorAll('.payment-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.method === method);
+      });
+    }
+
+    async function placeOrder() {
+      const name    = document.getElementById('cust-name').value.trim();
+      const phone   = document.getElementById('cust-phone').value.trim();
+      const address = document.getElementById('cust-address').value.trim();
+      const pincode = document.getElementById('cust-pincode').value.trim();
+
+      if (!name || !phone || !address || !pincode) { alert('Please fill all required fields'); return; }
+      if (!/^[6-9]\d{9}$/.test(phone)) { alert('Please enter a valid 10-digit mobile number'); return; }
+      if (!/^\d{6}$/.test(pincode)) { alert('Please enter a valid 6-digit pincode'); return; }
+
+      const subtotal = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+      const discount = discountPercent > 0 ? Math.round(subtotal * (discountPercent / 100)) : 0;
+      const delivery = (subtotal - discount) >= FREE_DELIVERY_MIN ? 0 : DELIVERY_CHARGE;
+      const total    = subtotal - discount + delivery;
+
+      const orderData = {
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: address,
+        customer_pincode: pincode,
+        items: cart,
+        subtotal,
+        delivery_charge: delivery,
+        total,
+        payment_method: paymentMethod,
+        payment_status: 'pending',
+        order_status: 'placed',
+        notes: couponCode ? `Coupon applied: ${couponCode} (-₹${discount})` : ''
+      };
+
+      const btn = document.getElementById('place-order-btn');
+      btn.disabled = true;
+
+      if (paymentMethod === 'cod') {
+        btn.textContent = 'Placing Order...';
+        await saveOrder(orderData, 'COD');
+      } else {
+        btn.textContent = 'Opening Payment...';
+        await initiateRazorpay(orderData);
+      }
+    }
+
+    async function saveOrder(orderData, method) {
+      const btn = document.getElementById('place-order-btn');
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+        const responseData = await res.json();
+        
+        if (!res.ok || !responseData.success) {
+          throw new Error(responseData.error || 'Failed to place order.');
+        }
+
+        const orderId = responseData.orderId;
+        notifyOwnerWhatsApp(orderData, orderId, method);
+        document.getElementById('address-modal').classList.remove('open');
+        showOrderSuccess(orderId, method.toLowerCase(), orderData.total);
+        clearCart();
+      } catch (e) {
+        alert('Error placing order. Please try ordering via WhatsApp directly.');
+        console.error(e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Place Order';
+      }
+    }
+
+    async function initiateRazorpay(orderData) {
+      const btn = document.getElementById('place-order-btn');
+      try {
+        const res = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: orderData.total, currency: 'INR' })
+        });
+        const rzpData = await res.json();
+        if (!res.ok || rzpData.error) throw new Error(rzpData.error || 'Payment initiation failed');
+
+        const options = {
+          key: RAZORPAY_KEY,
+          amount: orderData.total * 100,
+          currency: 'INR',
+          name: '🌶️ Indian Dairy & Spices',
+          description: `Payment for ${orderData.items.length} item(s)`,
+          order_id: rzpData.orderId,
+          prefill: {
+            name: orderData.customer_name,
+            contact: orderData.customer_phone
+          },
+          theme: { color: '#D4520A' },
+          handler: async function (response) {
+            orderData.razorpay_order_id  = response.razorpay_order_id;
+            orderData.razorpay_payment_id = response.razorpay_payment_id;
+            orderData.payment_status      = 'paid';
+            await saveOrder(orderData, 'Razorpay');
+          },
+          modal: {
+            ondismiss: function () {
+              btn.disabled = false;
+              btn.textContent = 'Place Order';
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } catch (e) {
+        alert('Payment checkout could not open. Please try COD or ordering via WhatsApp.');
+        console.error(e);
+        btn.disabled = false;
+        btn.textContent = 'Place Order';
+      }
+    }
+
+    function notifyOwnerWhatsApp(order, orderId, method) {
+      const itemsText = order.items.map(i => `- ${i.name} × ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+      const isPaid = order.payment_status === 'paid' ? '✅ PAID ONLINE' : '💵 COD (Pay on Delivery)';
+      const couponDetails = couponCode ? `\n🏷️ Coupon Code: ${couponCode}` : '';
+      const msg = encodeURIComponent(
+        `🛒 *NEW ORDER PLACED!*\n` +
+        `Order ID: ${orderId}\n` +
+        `Payment Method: ${method} (${isPaid})${couponDetails}\n\n` +
+        `👤 Customer Name: ${order.customer_name}\n` +
+        `📞 Phone: ${order.customer_phone}\n` +
+        `📍 Delivery Address: ${order.customer_address}\n` +
+        `📮 Pincode: ${order.customer_pincode}\n\n` +
+        `📦 Ordered Items:\n${itemsText}\n\n` +
+        `💰 Subtotal: ₹${order.subtotal}\n` +
+        (discountPercent > 0 ? `🏷️ Promo Discount: -₹${Math.round(order.subtotal * (discountPercent/100))}\n` : '') +
+        `🚚 Delivery Charge: ₹${order.delivery_charge}\n` +
+        `💵 *TOTAL AMOUNT: ₹${order.total}*`
+      );
+      window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${msg}`, '_blank');
+    }
+
+    function showOrderSuccess(orderId, method, total) {
+      const modal = document.getElementById('success-modal');
+      document.getElementById('success-order-id').textContent = `Order ID: ${orderId.slice(0,8).toUpperCase()}`;
+      modal.querySelector('.success-total').textContent = `₹${total}`;
+      modal.querySelector('.success-method').textContent = method === 'cod' ? 'Cash on Delivery 💵' : 'Online Payment Verified ✅';
+      modal.classList.add('open');
+    }
+
+    // ─── PINCODE CHECK & GOOGLE MAPS ──────────────────────────────
+    function checkPincode() {
+      const pin = document.getElementById('pincode-input').value.trim();
+      const result = document.getElementById('pincode-result');
+      const mapSection = document.getElementById('map-section');
+      const gMap = document.getElementById('google-map');
+
+      if (!/^\d{6}$/.test(pin)) {
+        result.textContent = '⚠️ Please enter a valid 6-digit pincode';
+        result.className = 'pin-result no';
+        mapSection.style.display = 'none';
+        return;
+      }
+
+      if (PINCODES_OK.includes(pin)) {
+        result.textContent = `✅ Delivery available to Thane / Mumbai Area ${pin}! Sourced fresh, arriving in 1-2 days.`;
+        result.className = 'pin-result ok';
+        
+        // Show real embedded Google Map centered at Thane / Mumbai Pincode
+        mapSection.style.display = 'block';
+        gMap.src = `https://maps.google.com/maps?q=Mumbai%20Thane%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+      } else {
+        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver inside Thane, Mumbai & Navi Mumbai.`;
+        result.className = 'pin-result no';
+        mapSection.style.display = 'none';
+      }
+    }
+
+    // ─── REVIEWS SLIDER ──────────────────────────────────────────
+    function nextReview() {
+      currentTestimonialIndex = (currentTestimonialIndex + 1) % TESTIMONIALS.length;
+      updateReviewUI();
+    }
+
+    function prevReview() {
+      currentTestimonialIndex = (currentTestimonialIndex - 1 + TESTIMONIALS.length) % TESTIMONIALS.length;
+      updateReviewUI();
+    }
+
+    function updateReviewUI() {
+      const txt = document.getElementById('review-text');
+      const author = document.getElementById('review-author');
+      if (txt && author) {
+        txt.style.opacity = 0;
+        setTimeout(() => {
+          txt.textContent = TESTIMONIALS[currentTestimonialIndex].text;
+          author.textContent = TESTIMONIALS[currentTestimonialIndex].author;
+          txt.style.opacity = 1;
+        }, 150);
+      }
+    }
+
+    // ─── CHATBOT LOGIC ───────────────────────────────────────────
+    const CHATBOT_RESPONSES = {
+      'ghee':    'Our Pure Desi Ghee is ₹450 for 500ml — slow-churned A2 cow milk ghee. Authentic aroma and golden texture! 🫙',
+      'paneer':  'Fresh Paneer made daily from rich cow milk, completely chemical-free! 200g for ₹180. 🥛',
+      'delivery':'We offer free home delivery on orders above ₹499! For smaller orders, it is ₹40 flat. 🚚',
+      'return':  'We offer a 7-day hassle-free return policy. If you are not satisfied, we will refund you, no questions asked! 🔄',
+      'payment': 'You can pay online via Razorpay (UPI, cards, net banking) or choose Cash on Delivery (COD)! 💳',
+      'combo':   'Check out our Combo Starter Pack (₹599) and Festival Gift Hamper (₹1199) for amazing discounts! 🎁',
+      'cake':    'Our sweets and cakes, like our Milk Cake / Kalakand (₹149 for 200g) are made fresh daily! 🍰',
+      'default': 'I can assist you with products, orders, shipping rates, and refund questions. Feel free to WhatsApp the owner directly at +91 98923 60874! 😊'
+    };
+
+    function toggleChatbot() {
+      document.getElementById('chatbot-widget').classList.toggle('open');
+    }
+
+    function quickReply(keyword) {
+      addChatMsg(keyword.charAt(0).toUpperCase() + keyword.slice(1), 'user');
+      setTimeout(() => {
+        processChatbotResponse(keyword);
+      }, 400);
+    }
+
+    function chatSend() {
+      const input = document.getElementById('chatbot-user-msg');
+      const text = input.value.trim();
+      if (!text) return;
+
+      addChatMsg(text, 'user');
+      input.value = '';
+
+      setTimeout(() => {
+        processChatbotResponse(text);
+      }, 400);
+    }
+
+    function processChatbotResponse(text) {
+      const lower = text.toLowerCase();
+      
+      // 1. Search for live products in DB
+      let matchedProduct = null;
+      if (PRODUCTS && PRODUCTS.length > 0) {
+        matchedProduct = PRODUCTS.find(p => 
+          lower.includes(p.name.toLowerCase()) || 
+          (p.name_hindi && lower.includes(p.name_hindi.toLowerCase()))
+        );
+        
+        // General query match falls
+        if (!matchedProduct) {
+          if (lower.includes('ghee')) matchedProduct = PRODUCTS.find(p => p.name.toLowerCase().includes('ghee'));
+          else if (lower.includes('paneer')) matchedProduct = PRODUCTS.find(p => p.name.toLowerCase().includes('paneer'));
+          else if (lower.includes('turmeric') || lower.includes('haldi')) matchedProduct = PRODUCTS.find(p => p.name.toLowerCase().includes('turmeric'));
+          else if (lower.includes('garam') || lower.includes('masala')) matchedProduct = PRODUCTS.find(p => p.name.toLowerCase().includes('garam') || p.name.toLowerCase().includes('masala'));
+          else if (lower.includes('lassi')) matchedProduct = PRODUCTS.find(p => p.name.toLowerCase().includes('lassi'));
+          else if (lower.includes('dahi')) matchedProduct = PRODUCTS.find(p => p.name.toLowerCase().includes('dahi'));
+          else if (lower.includes('cake') || lower.includes('sweets') || lower.includes('kalakand')) matchedProduct = PRODUCTS.find(p => p.category === 'cakes');
+        }
+      }
+
+      if (matchedProduct) {
+        const inCart = cart.some(c => c.id === matchedProduct.id);
+        const msgHtml = `
+          We have <strong>${matchedProduct.name}</strong> (${matchedProduct.weight || '1 pc'}) for <strong>₹${matchedProduct.price}</strong>.<br>
+          <div style="margin-top: 8px; display: flex; gap: 6px; align-items: center;">
+            <button onclick="toggleCart('${matchedProduct.id}'); this.textContent='✓ In Cart'; this.disabled=true;" style="padding: 6px 10px; font-size: 11px; background: var(--secondary); color: #fff; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;">
+              ${inCart ? '✓ In Cart' : '🛒 Add to Cart'}
+            </button>
+            <button onclick="showProductDetails('${matchedProduct.id}')" style="padding: 6px 10px; font-size: 11px; background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; color: var(--text-dark)">Details</button>
+          </div>
+        `;
+        addChatMsgHTML(msgHtml, 'bot');
+        return;
+      }
+
+      // 2. Fall back to standard answers
+      const key = Object.keys(CHATBOT_RESPONSES).find(k => lower.includes(k));
+      const responseText = CHATBOT_RESPONSES[key] || CHATBOT_RESPONSES.default;
+      addChatMsg(responseText, 'bot');
+    }
+
+    function addChatMsg(text, sender) {
+      const messagesContainer = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${sender}`;
+      div.textContent = text;
+      messagesContainer.appendChild(div);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function addChatMsgHTML(htmlText, sender) {
+      const messagesContainer = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${sender}`;
+      div.innerHTML = htmlText;
+      messagesContainer.appendChild(div);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // ─── ORDER TRACKING ──────────────────────────────────────────
+    async function trackOrder() {
+      const orderIdInput = document.getElementById('track-order-id');
+      const trackResult = document.getElementById('track-result');
+      if (!orderIdInput || !trackResult) return;
+      
+      const orderId = orderIdInput.value.trim();
+      if (!orderId) {
+        trackResult.textContent = '⚠️ Please enter an Order ID.';
+        trackResult.style.color = '#E53935';
+        trackResult.style.display = 'block';
+        return;
+      }
+      
+      try {
+        trackResult.textContent = 'Searching...';
+        trackResult.style.color = 'var(--text-muted)';
+        trackResult.style.display = 'block';
+        
+        const res = await fetch('/api/orders');
+        if (res.ok) {
+          const orders = await res.json();
+          const found = orders.find(o => 
+            o.id.toLowerCase() === orderId.toLowerCase() || 
+            o.id.toLowerCase().startsWith(orderId.toLowerCase())
+          );
+          if (found) {
+            let statusText = found.order_status || 'placed';
+            let badgeColor = 'orange';
+            if (statusText.toLowerCase() === 'shipped') badgeColor = '#004085';
+            if (statusText.toLowerCase() === 'delivered') badgeColor = 'green';
+            
+            trackResult.innerHTML = `
+              <div style="border: 2px solid ${badgeColor}; padding: 16px; border-radius: var(--radius); background: #FFF8F0; text-align: left; max-width: 450px; margin: 0 auto; box-shadow: var(--shadow-sm);">
+                <div style="margin-bottom: 8px;"><strong>Customer:</strong> ${found.customer_name}</div>
+                <div style="margin-bottom: 8px;"><strong>Status:</strong> <span style="background: ${badgeColor}; color: #fff; padding: 2px 8px; border-radius: var(--radius-pill); text-transform: uppercase; font-size: 11px; font-weight: 700;">${statusText}</span></div>
+                <div style="margin-bottom: 8px;"><strong>Total Amount:</strong> ₹${found.total} (${found.payment_method.toUpperCase()})</div>
+                <div style="margin-bottom: 8px;"><strong>Delivery Address:</strong> ${found.customer_address}, Pincode: ${found.customer_pincode || 'N/A'}</div>
+                <div><strong>Order Date:</strong> ${new Date(found.created_at).toLocaleDateString('en-IN', {dateStyle: 'medium'})}</div>
+              </div>
+            `;
+          } else {
+            trackResult.textContent = '❌ Order ID not found. Please check and try again.';
+            trackResult.style.color = '#E53935';
+          }
+        } else {
+          throw new Error('Failed to fetch orders');
+        }
+      } catch (e) {
+        console.error(e);
+        trackResult.textContent = '❌ Error fetching order status. Try again later.';
+        trackResult.style.color = '#E53935';
+      }
+    }
+
+    // ─── STATS ANIMATIONS ─────────────────────────────────────────
+    function setupStatsObserver() {
+      const statsElements = document.querySelectorAll('.stat-number');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = parseInt(el.dataset.target || 0);
+          const duration = 1500;
+          const start = Date.now();
+          const startVal = 0;
+          
+          function tick() {
+            const pct = Math.min((Date.now() - start) / duration, 1);
+            const val = Math.round(startVal + (target - startVal) * pct);
+            el.textContent = target === 2020 ? val.toString() : val.toLocaleString() + '+';
+            if (pct < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              el.textContent = target === 2020 ? target.toString() : target.toLocaleString() + '+';
+            }
+          }
+          tick();
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.2 });
+
+      statsElements.forEach(el => observer.observe(el));
+    }
+
+    // Bootstrapping the site
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>

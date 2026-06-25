@@ -17,6 +17,7 @@
     <a href="index.html" class="menu-item active">📊 Dashboard</a>
     <a href="orders.html" class="menu-item">📦 Orders</a>
     <a href="products.html" class="menu-item">📋 Products Inventory</a>
+    <a href="settings.html" class="menu-item">⚙️ Site Settings</a>
     
     <div class="menu-label">Settings</div>
     <a href="#" onclick="api.logout()" class="menu-item">🚪 Logout</a>
@@ -123,7 +124,7 @@ async function initDashboard() {
     if(o.status==='DELIVERED') badge = 'badge-delivered';
     return `
       <tr>
-        <td><strong>#ORD-${o.id}</strong></td>
+        <td><strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong></td>
         <td>${o.customer_name}</td>
         <td>${formatDate(o.created_at)}</td>
         <td><strong>${formatMoney(o.total_amount)}</strong></td>
