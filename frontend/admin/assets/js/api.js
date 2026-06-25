@@ -21,7 +21,19 @@ class AdminAPI {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      if (!res.ok) throw new Error('Invalid credentials');
+      if (!res.ok) {
+        if (res.status === 404) {
+          throw new Error('Authentication API endpoint not found (404). Please wait a moment for the new Vercel deployment to finish building, or verify project settings.');
+        }
+        let errorMsg = 'Invalid credentials';
+        try {
+          const errData = await res.json();
+          if (errData && errData.error) {
+            errorMsg = errData.error;
+          }
+        } catch (_) {}
+        throw new Error(errorMsg);
+      }
       const data = await res.json();
       this.token = data.access_token;
       localStorage.setItem('zomatoAdminToken', this.token);
