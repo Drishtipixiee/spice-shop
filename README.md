@@ -65,8 +65,9 @@ If you prefer running the Python backend:
 ---
 
 ## 📦 Live Deployments on Vercel
-This repository is pre-configured for Vercel deployment:
-- Vercel executes the root build command: `"node -e \"...\""` which copies the static files from `frontend/` to `dist/` dynamically.
+This repository is pre-configured for Vercel deployment using **Vite**:
+- **Live Demo Link:** [https://spice-shop-beta.vercel.app](https://spice-shop-beta.vercel.app) (or your Vercel project domain)
+- Vercel executes the root build command: `npm run build` which uses Vite to bundle the static files from `frontend/` to `dist/`.
 - Vercel deploys the contents of `dist/` as the static website root.
 - Vercel deploys the JavaScript files in the root `api/` directory as live serverless functions.
 - Local configuration is handled securely via Vercel Environment Variables.
