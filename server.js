@@ -101,22 +101,30 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Serve static files from frontend directory
-  // Normalize path to prevent directory traversal
+  // Prevent serving private configuration files
+  const forbiddenFiles = ['.env', 'package.json', 'package-lock.json', 'vercel.json', 'server.js', 'README.md', 'task.md', 'schema.sql', 'docker-compose.yml'];
+  const requestedFile = path.basename(pathname);
+  if (forbiddenFiles.includes(requestedFile) || pathname.includes('/api/')) {
+    res.writeHead(403, { 'Content-Type': 'text/html' });
+    res.end('<h1>403 Forbidden</h1>', 'utf-8');
+    return;
+  }
+
+  // Serve static files from root directory
   let safePath = pathname === '/' ? '/index.html' : pathname;
   // If no extension, try adding .html (clean URLs support)
   if (!path.extname(safePath) && !safePath.endsWith('/')) {
     safePath += '.html';
   }
   
-  const filePath = path.join(__dirname, 'frontend', safePath);
+  const filePath = path.join(__dirname, safePath);
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        fs.readFile(path.join(__dirname, 'frontend', '404.html'), (err, htmlContent) => {
+        fs.readFile(path.join(__dirname, '404.html'), (err, htmlContent) => {
           res.writeHead(404, { 'Content-Type': 'text/html' });
           res.end(htmlContent || '<h1>404 Not Found</h1>', 'utf-8');
         });
