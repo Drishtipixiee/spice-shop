@@ -14,8 +14,8 @@ module.exports = async function handler(req, res) {
 
   const { email, password } = req.body;
   
-  const expectedEmail = process.env.ADMIN_EMAIL || 'admin@spiceshop.in';
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'Admin@1234';
+  const expectedEmail = 'admin@spiceshop.in';
+  const expectedPassword = 'Admin@1234';
 
   if (email === expectedEmail && password === expectedPassword) {
     return res.status(200).json({ 
