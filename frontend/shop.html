@@ -891,29 +891,68 @@ const DEFAULT_PRODUCTS = [
   {id:6,name:'Garam Masala Special',cat:'spice',price:180,mrp:220,weight:'100g',stock:50,desc:'Blend of 15 spices.',img:'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=640&h=480&fit=crop',badges:['bestseller'],rating:4.9,reviews:543,tags:[]}
 ];
 let PRODUCTS = [...DEFAULT_PRODUCTS];
+let RAZORPAY_KEY = 'rzp_test_51I0O96U8Z397p';
+let OWNER_WHATSAPP = '919892360874';
+
 async function loadProducts() {
   try {
-    const res = await fetch(API_URL + '/products');
+    // 1. Fetch Config Settings
+    const configRes = await fetch('/api/config');
+    if (configRes.ok) {
+      const configData = await configRes.json();
+      RAZORPAY_KEY = configData.razorpayKeyId;
+      OWNER_WHATSAPP = configData.ownerWhatsapp;
+      const waFloat = document.querySelector('.wa-float');
+      if (waFloat) {
+        waFloat.onclick = () => window.open(`https://wa.me/${OWNER_WHATSAPP}?text=Hi!%20I%20want%20to%20order%20from%20Indian%20Dairy%20%26%20Spices.%20Please%20help%20me!`, '_blank');
+      }
+    }
+
+    // 2. Fetch Products Catalog
+    const res = await fetch('/api/products');
     if (!res.ok) throw new Error('API down');
     const data = await res.json();
-    if(data && data.length > 0) {
-      PRODUCTS = data.map(p => ({
-        id: p.id,
-        name: p.name,
-        hindi: p.hindi_name || p.name,
-        cat: p.category_id === 1 ? 'spice' : (p.category_id === 2 ? 'dairy' : 'cake'),
-        price: p.price,
-        mrp: p.mrp || (p.price + 50),
-        weight: '1 pc',
-        img: p.image_url || 'https://via.placeholder.com/150',
-        badges: p.is_bestseller ? ['bestseller'] : [],
-        rating: 5, reviews: Math.floor(Math.random()*500), tags: []
-      }));
+    if (data && data.length > 0) {
+      PRODUCTS = data.map(p => {
+        let mappedCat = 'spice';
+        if (p.category === 'dairy') mappedCat = 'dairy';
+        else if (p.category === 'combos' || p.category === 'combo') mappedCat = 'combo';
+        
+        const badges = [];
+        if (p.is_bestseller) badges.push('bestseller');
+        if (p.is_new) badges.push('new');
+
+        return {
+          id: p.id,
+          name: p.name,
+          hindi: p.name_hindi || p.name,
+          cat: mappedCat,
+          price: parseFloat(p.price),
+          mrp: parseFloat(p.mrp || (parseFloat(p.price) + 50)),
+          weight: p.weight || '1 pc',
+          img: p.image_url || 'https://via.placeholder.com/150',
+          badges: badges,
+          rating: 5,
+          reviews: Math.floor(Math.random() * 300) + 40,
+          tags: []
+        };
+      });
+      
+      // Update UI counts and re-render
+      renderProducts();
+      const countAll = document.getElementById('count-all');
+      if (countAll) countAll.textContent = PRODUCTS.length;
+      const countSpice = document.getElementById('count-spice');
+      if (countSpice) countSpice.textContent = PRODUCTS.filter(p=>p.cat==='spice').length;
+      const countDairy = document.getElementById('count-dairy');
+      if (countDairy) countDairy.textContent = PRODUCTS.filter(p=>p.cat==='dairy').length;
+      const countCombo = document.getElementById('count-combo');
+      if (countCombo) countCombo.textContent = PRODUCTS.filter(p=>p.cat==='combo').length;
     }
-    } catch (e) {
-      console.warn('Backend unavailable, using fallback');
-    }
+  } catch (e) {
+    console.warn('Backend unavailable, using fallback:', e);
   }
+}
 
 
 // FLASH SALE TIMER
@@ -1029,58 +1068,127 @@ async function processOrder() {
   const phone = document.getElementById('custPhone').value.trim();
   const addr = document.getElementById('custAddr').value.trim();
   if(!name || !phone || !addr) { alert("Please enter delivery details."); return; }
+  if(!/^[6-9]\d{9}$/.test(phone)) { alert("Please enter a valid 10-digit mobile number."); return; }
+
+  const finalPayBtn = document.getElementById('finalPayBtn');
+  finalPayBtn.disabled = true;
   
   if(payMethod === 'razorpay') {
-    const options = {
-      "key": "rzp_test_dummykey", 
-      "amount": checkoutTotal * 100,
-      "currency": "INR",
-      "name": "Indian Dairy & Spices",
-      "description": "Order via Razorpay",
-      "handler": function (res){
-        saveAndSuccess(name, phone, addr, "Razorpay Online", res.razorpay_payment_id);
-      },
-      "prefill": { "name": name, "contact": phone },
-      "theme": { "color": "#7c3aed" }
-    };
-    new Razorpay(options).open();
+    finalPayBtn.textContent = 'Opening Payment...';
+    try {
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: checkoutTotal, currency: 'INR' })
+      });
+      const rzpData = await res.json();
+      if (!res.ok || rzpData.error) throw new Error(rzpData.error || 'Payment initiation failed');
+
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: checkoutTotal * 100,
+        currency: 'INR',
+        name: '🌶️ Indian Dairy & Spices',
+        description: 'Order Payment',
+        order_id: rzpData.orderId,
+        prefill: {
+          name: name,
+          contact: phone
+        },
+        theme: { color: '#7c3aed' },
+        handler: async function (response) {
+          await saveAndSuccess(name, phone, addr, "Razorpay Online", response.razorpay_payment_id, response.razorpay_order_id);
+        },
+        modal: {
+          ondismiss: function () {
+            finalPayBtn.disabled = false;
+            finalPayBtn.textContent = 'Pay ₹' + checkoutTotal;
+          }
+        }
+      };
+      new Razorpay(options).open();
+    } catch (e) {
+      alert("Payment initiation failed. Please try UPI/COD or ordering via WhatsApp directly.");
+      console.error(e);
+      finalPayBtn.disabled = false;
+      finalPayBtn.textContent = 'Pay ₹' + checkoutTotal;
+    }
   } else {
+    finalPayBtn.textContent = 'Processing Order...';
     const upiLink = `upi://pay?pa=anuragpandey15@okaxis&pn=IndianDairy&am=${checkoutTotal}&cu=INR&tn=Order Payment`;
     window.location.href = upiLink;
-    setTimeout(() => {
-      saveAndSuccess(name, phone, addr, "GPay/UPI to Anurag", "UPI_Pending");
+    setTimeout(async () => {
+      await saveAndSuccess(name, phone, addr, "GPay/UPI to Anurag", "UPI_Pending");
+      finalPayBtn.disabled = false;
+      finalPayBtn.textContent = 'Pay ₹' + checkoutTotal;
     }, 1500);
   }
 }
 
-async function saveAndSuccess(name, phone, addr, method, payId) {
+async function saveAndSuccess(name, phone, addr, method, payId, rzpOrderId = null) {
+  const pincode = document.getElementById('pincodeInput')?.value.trim() || '';
+  const subtotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const delivery = subtotal >= 499 ? 0 : 40;
+
   const orderData = {
     customer_name: name,
     customer_phone: phone,
-    delivery_address: addr,
-    total_amount: checkoutTotal,
+    customer_address: addr,
+    customer_pincode: pincode,
+    items: cart,
+    subtotal: subtotal,
+    delivery_charge: delivery,
+    total: checkoutTotal,
     payment_method: method,
-    payment_id: payId,
-    items: cart.map(i => ({ product_id: i.id, quantity: i.qty, price_at_time: i.price }))
+    payment_status: payId && payId.startsWith('pay_') ? 'paid' : 'pending',
+    razorpay_payment_id: payId && payId.startsWith('pay_') ? payId : null,
+    razorpay_order_id: rzpOrderId,
+    order_status: 'placed',
+    notes: 'Ordered from shop page'
   };
   
   try {
-    const res = await fetch(API_URL + '/orders/', {
+    const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
     });
-    const data = await res.json();
+    const responseData = await res.json();
+    if (!res.ok || !responseData.success) {
+      throw new Error(responseData.error || 'Failed to place order.');
+    }
     
+    // Notify WhatsApp
+    notifyOwnerWhatsApp(orderData, responseData.orderId, method);
+
     cart = []; saveCart(); updateCartBadge(); renderCartSidebar();
     closeAddressModal(); closeCart();
     document.getElementById('successOverlay').classList.add('open');
     document.getElementById('successSidebar').classList.add('open');
-    document.getElementById('succId').textContent = "ORD-" + data.id;
+    document.getElementById('succId').textContent = "ORD-" + responseData.orderId;
   } catch(e) {
-    alert("Order placement failed. Please try again.");
+    alert("Order placement failed. Please try ordering via WhatsApp directly.");
     console.error(e);
   }
+}
+
+function notifyOwnerWhatsApp(order, orderId, method) {
+  const itemsText = order.items.map(i => `- ${i.name} × ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+  const isPaid = order.payment_status === 'paid' ? '✅ PAID ONLINE' : '💵 COD (Pay on Delivery)';
+  const msg = encodeURIComponent(
+    `🛒 *NEW ORDER PLACED (SHOP PAGE)*!\n` +
+    `Order ID: ${orderId}\n` +
+    `Payment Method: ${method} (${isPaid})\n\n` +
+    `👤 Customer Name: ${order.customer_name}\n` +
+    `📞 Phone: ${order.customer_phone}\n` +
+    `📍 Delivery Address: ${order.customer_address}\n` +
+    `📮 Pincode: ${order.customer_pincode || 'N/A'}\n\n` +
+    `📦 Ordered Items:\n${itemsText}\n\n` +
+    `💰 Subtotal: ₹${order.subtotal}\n` +
+    `🚚 Delivery Charge: ₹${order.delivery_charge}\n` +
+    `💵 *TOTAL AMOUNT: ₹${order.total}*`
+  );
+  window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${msg}`, '_blank');
 }
 
 

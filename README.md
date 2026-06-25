@@ -1,264 +1,89 @@
 # 🌶️ Pure Spice & Dairy — Indian E-Commerce Store
 
-A complete, production-ready e-commerce website for an Indian spices and dairy business. Built with **Next.js 14** and **FastAPI**, it supports **WhatsApp ordering** (zero setup) and optional **Razorpay payments**. Ships with a full admin panel, product catalog with variants, pincode-based delivery validation, and mobile-responsive UI — all backed by zero-config SQLite.
+A complete, production-ready full-stack e-commerce website for an Indian spices and dairy business. 
+
+This repository has a dual-architecture setup (Python FastAPI backend for traditional deployment, and Node.js serverless functions for zero-config Vercel deployment) serving a lightweight Vanilla JS storefront and admin panel. It supports live product lookup, shopping cart, custom WhatsApp order dispatch, and Razorpay online payments.
 
 ---
 
-## 🖥️ Tech Stack
+## 🖥️ Architecture & Tech Stack
 
-| Layer | Technology |
-|------------|----------------------------------------------|
-| Frontend | Next.js 14 (App Router) + TypeScript + Tailwind CSS |
-| Backend | FastAPI (Python 3.11) + SQLAlchemy |
-| Database | SQLite (zero configuration) |
-| Payments | WhatsApp (primary) + Razorpay (optional) |
-| Auth | JWT + bcrypt |
-| Deployment | Docker / Railway (backend) / Vercel (frontend) |
+### Frontend
+- **Vanilla HTML5, CSS3, & JavaScript** (located inside the [frontend/](file:///c:/Users/pande/New%20folder/spice-shop/frontend) directory). No React, Next.js, or Tailwind compiler overhead.
+- Includes a Customer Storefront ([index.html](file:///c:/Users/pande/New%20folder/spice-shop/frontend/index.html)), a Commercial Landing Catalog ([shop.html](file:///c:/Users/pande/New%20folder/spice-shop/frontend/shop.html)), and an Admin Portal ([admin/index.html](file:///c:/Users/pande/New%20folder/spice-shop/frontend/admin/index.html)).
 
----
+### Database
+- **Supabase PostgreSQL** — Live database server storing products, categories, and customer orders.
 
-## 🚀 Quick Start
-
-### Option 1: Docker (Recommended)
-
-```bash
-docker-compose up
-```
-
-That's it! Visit [http://localhost:3000](http://localhost:3000)
-
-The backend API will be available at [http://localhost:8000](http://localhost:8000) and API docs at [http://localhost:8000/docs](http://localhost:8000/docs).
-
-### Option 2: Manual Start (Single Command)
-
-**Prerequisites:** Python 3.11+, Node.js 18+, npm
-
-```bash
-chmod +x start.sh
-./start.sh
-```
-
-This starts both services and seeds the database automatically.
-
-### Option 3: Start Services Separately
-
-**Backend:**
-
-```bash
-cd backend
-pip install -r requirements.txt
-python seed.py
-uvicorn main:app --reload --port 8000
-```
-
-**Frontend:**
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### Backend (Dual Options)
+1. **Serverless Mode (Active Live Vercel Architecture)**:
+   - Written in Node.js / JavaScript (located in the root [/api](file:///c:/Users/pande/New%20folder/spice-shop/api) directory).
+   - Automatically mapped by Vercel to zero-config serverless api endpoints.
+2. **Traditional API Mode**:
+   - Python FastAPI server (located in the [backend/](file:///c:/Users/pande/New%20folder/spice-shop/backend) directory).
+   - Backed by SQLAlchemy. Used for running locally with Docker or deploying to services like Railway.
 
 ---
 
-## 🔐 Admin Panel
+## 🚀 Running Locally
 
-| Field | Value |
-|----------|-------------------------------|
-| URL | http://localhost:3000/admin/login |
-| Email | admin@spiceshop.in |
-| Password | Admin@1234 |
+### Option 1: Live Serverless Local Emulation (Recommended)
+You can run the entire e-commerce app (both the Vanilla frontend and JavaScript api functions) using the custom Node development server:
 
-### Admin Features
+1. **Install dependencies** in the root directory:
+   ```bash
+   npm install
+   ```
+2. **Setup Environment**: Ensure you have a `.env` file in the root directory with your Supabase credentials:
+   ```env
+   DATABASE_URL=postgresql://postgres:...
+   ADMIN_EMAIL=admin@spiceshop.in
+   ADMIN_PASSWORD=Admin@1234
+   JWT_SECRET=supersecretjwtkey
+   WHATSAPP_NUMBER=919892360874
+   ```
+3. **Start the server**:
+   ```bash
+   node server.js
+   ```
+4. Visit the site at [http://localhost:3000](http://localhost:3000)
 
-- **Dashboard** — Sales overview with order counts, revenue summary, and recent activity
-- **Product Management** — Add, edit, and delete products with images, variants, and categories
-- **Order Management** — View all orders, update order status (Pending → Confirmed → Shipped → Delivered)
+### Option 2: Python FastAPI Backend + Local Dev Server
+If you prefer running the Python backend:
+1. Start the backend:
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   uvicorn main:app --reload --port 8000
+   ```
+2. Start the frontend:
+   ```bash
+   cd frontend
+   node server.js
+   ```
+
+---
+
+## 📦 Live Deployments on Vercel
+This repository is pre-configured for Vercel deployment:
+- Vercel executes the root build command: `"node -e \"...\""` which copies the static files from `frontend/` to `dist/` dynamically.
+- Vercel deploys the contents of `dist/` as the static website root.
+- Vercel deploys the JavaScript files in the root `api/` directory as live serverless functions.
+- Local configuration is handled securely via Vercel Environment Variables.
 
 ---
 
 ## 🛒 Features
-
-- **Product Catalog** — Browse products organized by categories: Spices, Dairy, and Combo Packs
-- **Product Variants** — Multiple sizes and weights per product (e.g., 100g, 250g, 500g, 1kg)
-- **WhatsApp Ordering** — Primary order flow via WhatsApp with zero setup required
-- **Razorpay Payments** — Optional online payment integration (enable when ready)
-- **Pincode Validation** — Delivery availability check for Mumbai area pin codes
-- **Mobile-Responsive Design** — Fully responsive UI that works on all screen sizes
-- **Admin Panel** — Complete back-office for managing products, orders, and viewing analytics
-- **FSSAI Compliance** — Placeholder for FSSAI license number display in footer
-- **Search & Filter** — Find products by name, category, or price range
-- **Cart Management** — Add to cart, update quantities, remove items
-- **Order Tracking** — Customers can track order status updates
+- **Responsive Storefront & Commercial Catalog**: Fast, mobile-responsive pages.
+- **WhatsApp Order Integration**: Dispatches dynamic, pre-filled WhatsApp messages with order summaries directly to the owner's phone.
+- **Razorpay Checkout**: Online payment gateway integration, secure server-side order generation (`/api/create-order`), and payment verification.
+- **Pincode Delivery Check**: Custom checks for delivery service availability.
+- **Interactive Chatbot**: Built-in storefront chatbot widget with database product keyword search.
+- **Admin Dashboard**: Live portal (`/admin`) for editing products, categories, stock, and managing orders.
 
 ---
 
-## ⚙️ What to Change for Your Business
-
-### Essential (Update Environment Variables)
-
-| Setting | File | Description |
-|----------------------|-------------------------------|-------------|
-| `WHATSAPP_NUMBER` | `backend/.env` & `frontend/.env.local` | Your WhatsApp number with country code (e.g., `919876543210`) |
-| `ADMIN_PASSWORD` | `backend/.env` | Change the default admin password |
-| `JWT_SECRET` | `backend/.env` | Change to a random secure string (use `openssl rand -hex 32`) |
-| `ADMIN_EMAIL` | `backend/.env` | Your admin login email |
-
-### Recommended
-
-- Update the FSSAI license number in `frontend/src/components/Footer.tsx`
-- Replace product images in `frontend/public/images/` with your own product photos
-- Add your business name, logo, and contact details throughout the frontend
-- Update the `seed.py` file with your actual product catalog
-- Add more pin codes for your delivery area in the backend delivery validation
-
-### Optional — Enable Razorpay Payments
-
-1. Sign up at [https://razorpay.com](https://razorpay.com)
-2. Get your **Key ID** and **Key Secret** from Dashboard → Settings → API Keys
-3. Update both environment files:
-
-   **backend/.env:**
-   ```env
-   ENABLE_RAZORPAY=true
-   RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxxxx
-   RAZORPAY_KEY_SECRET=your_key_secret_here
-   ```
-
-   **frontend/.env.local:**
-   ```env
-   NEXT_PUBLIC_ENABLE_RAZORPAY=true
-   NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_xxxxxxxxxxxx
-   ```
-
-4. Restart the app — customers will now see both WhatsApp and Razorpay payment options
-
----
-
-## 🚀 Deploy to Production
-
-### Deploy Backend to Railway.app (Free Tier Available)
-
-1. Push your code to GitHub
-2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub**
-3. Select the `backend` directory — Railway auto-detects Python
-4. Add environment variables from `backend/.env`:
-   - `DATABASE_URL` = `sqlite:///./data/shop.db`
-   - `ADMIN_EMAIL` = your admin email
-   - `ADMIN_PASSWORD` = your secure password
-   - `JWT_SECRET` = your secure random string
-   - `ALLOWED_ORIGIN` = your Vercel frontend URL
-   - `WHATSAPP_NUMBER` = your WhatsApp number
-   - `ENABLE_RAZORPAY` = `true` or `false`
-   - `RAZORPAY_KEY_ID` = your key (if enabled)
-   - `RAZORPAY_KEY_SECRET` = your secret (if enabled)
-5. Your API will be live at `https://your-app.railway.app`
-
-### Deploy Frontend to Vercel (Free Tier Available)
-
-1. Go to [vercel.com](https://vercel.com) → **Import Git Repository**
-2. Set **Root Directory** to `frontend`
-3. Add environment variables:
-   - `NEXT_PUBLIC_API_URL` = your Railway backend URL (e.g., `https://your-app.railway.app`)
-   - `NEXT_PUBLIC_WHATSAPP_NUMBER` = your WhatsApp number
-   - `NEXT_PUBLIC_ENABLE_RAZORPAY` = `true` or `false`
-   - `NEXT_PUBLIC_RAZORPAY_KEY_ID` = your key (if enabled)
-4. Deploy! Your store will be live at `https://your-store.vercel.app`
-
----
-
-## 📁 Project Structure
-
-```
-spice-shop/
-├── docker-compose.yml          # Docker orchestration for both services
-├── start.sh                    # One-command local startup script
-├── .gitignore                  # Git ignore rules
-├── README.md                   # This file
-│
-├── backend/                    # FastAPI Backend (Port 8000)
-│   ├── Dockerfile              # Backend container configuration
-│   ├── requirements.txt        # Python dependencies
-│   ├── main.py                 # FastAPI app entry point & route registration
-│   ├── seed.py                 # Database seeder with sample products
-│   ├── database.py             # SQLAlchemy engine & session configuration
-│   ├── models.py               # SQLAlchemy ORM models (Product, Order, User, etc.)
-│   ├── schemas.py              # Pydantic request/response schemas
-│   ├── auth.py                 # JWT authentication & password hashing utilities
-│   ├── .env                    # Backend environment variables
-│   ├── data/                   # SQLite database storage
-│   │   ├── .gitkeep            # Ensures directory is tracked by git
-│   │   └── shop.db             # SQLite database (auto-created)
-│   └── routers/                # API route modules
-│       ├── products.py         # Product CRUD endpoints
-│       ├── orders.py           # Order management endpoints
-│       ├── admin.py            # Admin authentication & dashboard endpoints
-│       └── payments.py         # Razorpay payment integration endpoints
-│
-└── frontend/                   # Next.js 14 Frontend (Port 3000)
-    ├── Dockerfile              # Frontend container configuration
-    ├── package.json            # Node.js dependencies & scripts
-    ├── next.config.js          # Next.js configuration
-    ├── tailwind.config.ts      # Tailwind CSS configuration
-    ├── tsconfig.json           # TypeScript configuration
-    ├── postcss.config.js       # PostCSS configuration
-    ├── .env.local              # Frontend environment variables
-    ├── public/                 # Static assets
-    │   └── images/             # Product and brand images
-    └── src/
-        ├── app/                # Next.js App Router pages
-        │   ├── layout.tsx      # Root layout with providers
-        │   ├── page.tsx        # Homepage with hero & featured products
-        │   ├── products/       # Product listing & detail pages
-        │   ├── cart/           # Shopping cart page
-        │   ├── checkout/       # Checkout flow
-        │   └── admin/          # Admin panel pages
-        │       ├── login/      # Admin login page
-        │       ├── dashboard/  # Admin dashboard
-        │       ├── products/   # Product management (CRUD)
-        │       └── orders/     # Order management
-        ├── components/         # Reusable React components
-        │   ├── Navbar.tsx      # Navigation bar with cart icon
-        │   ├── Footer.tsx      # Footer with FSSAI info
-        │   ├── ProductCard.tsx # Product card component
-        │   ├── CartDrawer.tsx  # Slide-out cart drawer
-        │   └── WhatsAppButton.tsx # Floating WhatsApp button
-        ├── lib/                # Utility functions & API client
-        │   ├── api.ts          # Axios API client configuration
-        │   └── utils.ts        # Helper functions
-        └── context/            # React context providers
-            ├── CartContext.tsx  # Shopping cart state management
-            └── AuthContext.tsx  # Admin authentication state
-```
-
----
-
-## 🔒 Security
-
-- **JWT Authentication** — Secure token-based authentication for the admin panel with expiry
-- **bcrypt Password Hashing** — Industry-standard password hashing with salt rounds
-- **Rate Limiting** — Protection against brute-force attacks on login and sensitive endpoints
-- **CORS Protection** — Strict cross-origin resource sharing, only allowed origins can access the API
-- **Parameterized Queries** — SQLAlchemy ORM prevents SQL injection attacks
-- **Server-side Validation** — All inputs are validated using Pydantic schemas on the backend
-- **HTTP-only Cookies** — JWT tokens stored securely (not accessible via JavaScript)
-- **Environment Variables** — Sensitive configuration kept out of source code
-
----
-
-## 🐛 Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| Port 3000 or 8000 in use | Kill the process using the port: `lsof -ti:3000 \| xargs kill` |
-| Database errors | Delete `backend/data/shop.db` and re-run `python seed.py` |
-| npm install fails | Delete `node_modules` and `package-lock.json`, then run `npm install` |
-| Docker build fails | Run `docker-compose build --no-cache` for a clean rebuild |
-| CORS errors in browser | Ensure `ALLOWED_ORIGIN` in backend matches your frontend URL |
-| WhatsApp not opening | Verify `WHATSAPP_NUMBER` includes country code (e.g., `919876543210`) |
-
----
-
-## 📄 License
-
-MIT License — feel free to use this for your own spice and dairy business!
+## 🔐 Credentials (Default Local / DB)
+- **Admin Panel**: `/admin/login` (or `/admin`)
+- **Login Email**: `admin@spiceshop.in`
+- **Password**: `Admin@1234`
