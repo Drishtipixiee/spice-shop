@@ -10,7 +10,6 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         login: resolve(__dirname, 'login.html'),
-        adminRedirect: resolve(__dirname, 'admin.html'),
         deliveryMap: resolve(__dirname, 'delivery-map.html'),
         adminIndex: resolve(__dirname, 'admin/index.html'),
         adminProducts: resolve(__dirname, 'admin/products.html'),
