@@ -1453,7 +1453,7 @@
 
     function showOrderSuccess(orderId, method, total) {
       const modal = document.getElementById('success-modal');
-      document.getElementById('success-order-id').textContent = `Order ID: ${orderId.slice(0,8).toUpperCase()}`;
+      document.getElementById('success-order-id').textContent = `Order ID: ${orderId.toUpperCase()}`;
       modal.querySelector('.success-total').textContent = `₹${total}`;
       modal.querySelector('.success-method').textContent =
         method === 'cod' ? 'Cash on Delivery 💵' :
