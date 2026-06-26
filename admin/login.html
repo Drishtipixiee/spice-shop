@@ -4,16 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login | Enterprise Admin</title>
-<link rel="stylesheet" href="/admin/assets/css/admin.css">
+<link rel="stylesheet" href="assets/css/admin.css">
 <style>
+  html, body {
+    margin: 0;
+    min-height: 100%;
+  }
   body.login-body {
     background:
       radial-gradient(circle at top, rgba(226, 58, 69, 0.12), transparent 35%),
       linear-gradient(180deg, #fff8f2 0%, #f8efe3 100%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .login-container {
+    display: block;
+    width: min(440px, calc(100vw - 32px));
+    padding: 40px;
+    border-radius: 16px;
     border: 1px solid rgba(226, 58, 69, 0.12) !important;
     box-shadow: 0 20px 40px rgba(226, 58, 69, 0.08) !important;
+    background: #fff;
   }
 </style>
 </head>
