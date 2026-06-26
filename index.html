@@ -465,13 +465,13 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="#" class="nav-logo">🌶️ Indian Dairy & Spices</a>
+      <a href="#products" class="nav-logo" onclick="filterByCategory('all', true); return false;">🌶️ Indian Dairy & Spices</a>
       <div class="nav-links">
-        <a href="#" onclick="filterByCategory('all'); return false;">Home</a>
-        <a href="#" onclick="filterByCategory('dairy'); return false;">Dairy</a>
-        <a href="#" onclick="filterByCategory('spices'); return false;">Spices</a>
-        <a href="#" onclick="filterByCategory('combos'); return false;">Combos</a>
-        <a href="#" onclick="filterByCategory('cakes'); return false;">Sweets &amp; Cakes</a>
+        <a href="#products" onclick="filterByCategory('all', true); return false;">Home</a>
+        <a href="#products" onclick="filterByCategory('dairy', true); return false;">Dairy</a>
+        <a href="#products" onclick="filterByCategory('spices', true); return false;">Spices</a>
+        <a href="#products" onclick="filterByCategory('combos', true); return false;">Combos</a>
+        <a href="#products" onclick="filterByCategory('cakes', true); return false;">Sweets &amp; Cakes</a>
       </div>
       <button class="nav-cart-btn" onclick="openCart()">
         🛒 Cart
@@ -484,11 +484,11 @@
   <!-- Mobile Menu Drawer -->
   <div class="mobile-drawer" id="mobile-drawer">
     <button class="drawer-close" onclick="toggleMobileDrawer()">✕</button>
-    <a href="#" onclick="filterByCategory('all'); toggleMobileDrawer(); return false;">Home</a>
-    <a href="#" onclick="filterByCategory('dairy'); toggleMobileDrawer(); return false;">Dairy</a>
-    <a href="#" onclick="filterByCategory('spices'); toggleMobileDrawer(); return false;">Spices</a>
-    <a href="#" onclick="filterByCategory('combos'); toggleMobileDrawer(); return false;">Combos</a>
-    <a href="#" onclick="filterByCategory('cakes'); toggleMobileDrawer(); return false;">Sweets &amp; Cakes</a>
+    <a href="#products" onclick="filterByCategory('all', true); toggleMobileDrawer(); return false;">Home</a>
+    <a href="#products" onclick="filterByCategory('dairy', true); toggleMobileDrawer(); return false;">Dairy</a>
+    <a href="#products" onclick="filterByCategory('spices', true); toggleMobileDrawer(); return false;">Spices</a>
+    <a href="#products" onclick="filterByCategory('combos', true); toggleMobileDrawer(); return false;">Combos</a>
+    <a href="#products" onclick="filterByCategory('cakes', true); toggleMobileDrawer(); return false;">Sweets &amp; Cakes</a>
   </div>
 
   <!-- Hero Section -->
@@ -509,8 +509,8 @@
         </div>
 
         <div class="hero-buttons" style="margin-top: 24px;">
-          <button class="btn-primary" onclick="filterByCategory('dairy')">Shop Dairy</button>
-          <button class="btn-secondary" onclick="filterByCategory('spices')">Shop Spices</button>
+          <button class="btn-primary" onclick="filterByCategory('dairy', true)">Shop Dairy</button>
+          <button class="btn-secondary" onclick="filterByCategory('spices', true)">Shop Spices</button>
         </div>
       </div>
       <div class="hero-images">
@@ -532,7 +532,7 @@
   </div>
 
   <!-- Products Section -->
-  <section class="products-section">
+  <section class="products-section" id="products">
     <h2 class="section-title">Explore Our Shop</h2>
     <p class="section-subtitle">Premium dairy products &amp; hand-ground spice blends</p>
 
@@ -743,7 +743,8 @@
       </div>
       <div class="form-group">
         <label for="cust-pincode">Pincode (6-digit) *</label>
-        <input type="text" id="cust-pincode" placeholder="6-digit pincode" maxlength="6" required>
+        <input type="text" id="cust-pincode" placeholder="6-digit pincode" maxlength="6" oninput="handleCheckoutPincodeInput()" onblur="checkCheckoutDeliveryLocation()" required>
+        <div id="checkout-location-status" style="font-size: 12px; margin-top: 6px; color: var(--text-muted);"></div>
       </div>
       <div class="form-group">
         <label>Payment Method</label>
@@ -800,6 +801,9 @@
       // Palghar / Vasai / Virar / Nallasopara pincodes
       "401209", "401203", "401201", "401202", "401207", "401208", "401303", "401305", "401404", "401501", "401502", "401504", "401506", "401601", "401602"
     ];
+    const DELIVERY_DISTRICTS = ['thane', 'palghar'];
+    const DELIVERY_STATE = 'maharashtra';
+    const pincodeLocationCache = {};
 
     // Testimonials List
     const TESTIMONIALS = [
@@ -932,7 +936,7 @@
     function renderProducts() {
       let filtered = [...PRODUCTS];
       if (activeCategory !== 'all') {
-        filtered = filtered.filter(p => p.category === activeCategory);
+        filtered = filtered.filter(p => normalizeCategory(p.category) === activeCategory);
       }
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -940,7 +944,7 @@
           p.name?.toLowerCase().includes(q) ||
           p.name_hindi?.includes(searchQuery) ||
           p.description?.toLowerCase().includes(q) ||
-          p.category?.toLowerCase().includes(q)
+          normalizeCategory(p.category).includes(q)
         );
       }
       products = filtered;
@@ -1002,15 +1006,27 @@
     }
 
     // Category filtering
-    function filterByCategory(cat) {
-      activeCategory = cat;
+    function normalizeCategory(category) {
+      const value = String(category || '').trim().toLowerCase();
+      if (['spice', 'spices', 'whole spices', 'powdered spices'].includes(value)) return 'spices';
+      if (['combo', 'combos', 'gift packs', 'gift pack'].includes(value)) return 'combos';
+      if (['cake', 'cakes', 'sweets', 'sweets & cakes', 'sweet'].includes(value)) return 'cakes';
+      if (['dairy', 'milk', 'ghee', 'paneer'].includes(value)) return 'dairy';
+      return value || 'spices';
+    }
+
+    function filterByCategory(cat, shouldScroll = false) {
+      activeCategory = normalizeCategory(cat);
       searchQuery = '';
       const searchInput = document.getElementById('search-input');
       if (searchInput) searchInput.value = '';
       document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.cat === cat);
+        btn.classList.toggle('active', btn.dataset.cat === activeCategory);
       });
       renderProducts();
+      if (shouldScroll) {
+        document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     // Search query filtering
@@ -1027,7 +1043,10 @@
     // Tab counts update
     function updateTabCounts() {
       const counts = { all: PRODUCTS.length };
-      PRODUCTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+      PRODUCTS.forEach(p => {
+        const cat = normalizeCategory(p.category);
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
       document.querySelectorAll('.tab-btn').forEach(btn => {
         const cat = btn.dataset.cat;
         const count = counts[cat] || 0;
@@ -1276,6 +1295,11 @@
 
       if (!/^[6-9]\d{9}$/.test(phone)) { alert('Please enter a valid 10-digit mobile number'); return; }
       if (!/^\d{6}$/.test(pincode)) { alert('Please enter a valid 6-digit pincode'); return; }
+      const deliveryCheck = await checkCheckoutDeliveryLocation();
+      if (!deliveryCheck.ok) {
+        alert(deliveryCheck.message);
+        return;
+      }
 
       const subtotal = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
       const discount = discountPercent > 0 ? Math.round(subtotal * (discountPercent / 100)) : 0;
@@ -1329,8 +1353,12 @@
         showOrderSuccess(orderId, method.toLowerCase(), orderData.total);
         clearCart();
       } catch (e) {
-        alert('Error placing order. Please try ordering via WhatsApp directly.');
         console.error(e);
+        const fallbackOrderId = `WA-${Date.now().toString().slice(-8)}`;
+        notifyOwnerWhatsApp(orderData, fallbackOrderId, `${method} - WhatsApp`);
+        document.getElementById('address-modal').classList.remove('open');
+        showOrderSuccess(fallbackOrderId, 'whatsapp', orderData.total);
+        clearCart();
       } finally {
         btn.disabled = false;
         btn.textContent = 'Place Order';
@@ -1402,15 +1430,92 @@
         `🚚 Delivery Charge: ₹${order.delivery_charge}\n` +
         `💵 *TOTAL AMOUNT: ₹${order.total}*`
       );
-      window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${msg}`, '_blank');
+      const whatsappUrl = `https://wa.me/${OWNER_WHATSAPP}?text=${msg}`;
+      const opened = window.open(whatsappUrl, '_blank');
+      if (!opened) window.location.href = whatsappUrl;
     }
 
     function showOrderSuccess(orderId, method, total) {
       const modal = document.getElementById('success-modal');
       document.getElementById('success-order-id').textContent = `Order ID: ${orderId.slice(0,8).toUpperCase()}`;
       modal.querySelector('.success-total').textContent = `₹${total}`;
-      modal.querySelector('.success-method').textContent = method === 'cod' ? 'Cash on Delivery 💵' : 'Online Payment Verified ✅';
+      modal.querySelector('.success-method').textContent =
+        method === 'cod' ? 'Cash on Delivery 💵' :
+        method === 'whatsapp' ? 'Order sent on WhatsApp 💬' :
+        'Online Payment Verified ✅';
       modal.classList.add('open');
+    }
+
+    function handleCheckoutPincodeInput() {
+      const input = document.getElementById('cust-pincode');
+      input.value = input.value.replace(/\D/g, '').slice(0, 6);
+      const status = document.getElementById('checkout-location-status');
+      if (status) {
+        status.textContent = input.value.length === 6 ? 'Checking delivery location...' : 'Delivery available only in Thane and Palghar, Maharashtra.';
+        status.style.color = 'var(--text-muted)';
+      }
+    }
+
+    async function fetchPincodeLocation(pin) {
+      if (pincodeLocationCache[pin]) return pincodeLocationCache[pin];
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
+      if (!res.ok) throw new Error('Unable to verify pincode');
+      const data = await res.json();
+      const office = data?.[0]?.PostOffice?.[0];
+      if (!office) throw new Error('Pincode not found');
+      const location = {
+        district: (office.District || '').trim(),
+        state: (office.State || '').trim()
+      };
+      pincodeLocationCache[pin] = location;
+      return location;
+    }
+
+    async function checkCheckoutDeliveryLocation() {
+      const pin = document.getElementById('cust-pincode').value.trim();
+      const status = document.getElementById('checkout-location-status');
+
+      if (!/^\d{6}$/.test(pin)) {
+        const message = 'Please enter a valid 6-digit pincode.';
+        if (status) {
+          status.textContent = message;
+          status.style.color = '#E53935';
+        }
+        return { ok: false, message };
+      }
+
+      try {
+        const location = await fetchPincodeLocation(pin);
+        const district = location.district.toLowerCase();
+        const state = location.state.toLowerCase();
+        const ok = DELIVERY_DISTRICTS.includes(district) && state === DELIVERY_STATE;
+        const placeText = `${location.district}, ${location.state}`;
+
+        if (status) {
+          status.textContent = ok
+            ? `Delivery available in ${placeText}.`
+            : `Sorry, delivery is available only in Thane and Palghar, Maharashtra. Detected: ${placeText}.`;
+          status.style.color = ok ? 'var(--secondary)' : '#E53935';
+        }
+
+        return {
+          ok,
+          message: ok ? 'Delivery available.' : `Sorry, we currently accept orders only for Thane and Palghar, Maharashtra. Detected pincode location: ${placeText}.`
+        };
+      } catch (e) {
+        console.error(e);
+        const fallbackOk = PINCODES_OK.includes(pin);
+        if (status) {
+          status.textContent = fallbackOk
+            ? 'Delivery available for this service pincode.'
+            : 'Could not verify this pincode. Please use a Thane or Palghar, Maharashtra pincode.';
+          status.style.color = fallbackOk ? 'var(--secondary)' : '#E53935';
+        }
+        return {
+          ok: fallbackOk,
+          message: fallbackOk ? 'Delivery available.' : 'Could not verify this pincode. Please enter a valid Thane or Palghar, Maharashtra pincode.'
+        };
+      }
     }
 
     // ─── PINCODE CHECK & GOOGLE MAPS ──────────────────────────────
@@ -1428,14 +1533,14 @@
       }
 
       if (PINCODES_OK.includes(pin)) {
-        result.textContent = `✅ Delivery available to Thane / Mumbai / Palghar Area ${pin}! Sourced fresh, arriving in 1-2 days.`;
+        result.textContent = `✅ Delivery available to Thane / Palghar, Maharashtra Area ${pin}! Sourced fresh, arriving in 1-2 days.`;
         result.className = 'pin-result ok';
         
-        // Show real embedded Google Map centered at Thane / Mumbai / Palghar Pincode
+        // Show real embedded Google Map centered at Thane / Palghar Pincode
         mapSection.style.display = 'block';
-        gMap.src = `https://maps.google.com/maps?q=Mumbai%20Thane%20Palghar%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        gMap.src = `https://maps.google.com/maps?q=Thane%20Palghar%20Maharashtra%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       } else {
-        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver inside Thane, Mumbai, Navi Mumbai & Palghar.`;
+        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver only inside Thane and Palghar, Maharashtra.`;
         result.className = 'pin-result no';
         mapSection.style.display = 'none';
       }
