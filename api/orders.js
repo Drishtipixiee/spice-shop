@@ -3,14 +3,9 @@ const { readData, saveData } = require('./github.js');
 const MAHARASHTRA_SERVICE_PINCODES = new Set([
   // Thane city / district service pincodes
   '400601', '400602', '400603', '400604', '400605', '400606', '400607', '400608', '400609', '400610',
-  '400612', '400615', '400701', '400708', '401105', '401107',
-  // Palghar / Vasai / Virar / Nallasopara service pincodes
-  '401201', '401202', '401203', '401204', '401205', '401206', '401207', '401208', '401209',
-  '401301', '401302', '401303', '401304', '401305', '401401', '401402', '401403', '401404', '401405',
-  '401501', '401502', '401503', '401504', '401506', '401601', '401602', '401603', '401604', '401605',
-  '401606', '401607', '401608', '401609', '401610', '401701', '401702', '401703'
+  '400612', '400615', '400701', '400708', '401105', '401107'
 ]);
-const SERVICE_DISTRICTS = new Set(['thane', 'palghar']);
+const SERVICE_DISTRICTS = new Set(['thane']);
 
 function isServiceablePincode(pincode) {
   return /^\d{6}$/.test(String(pincode || '')) && MAHARASHTRA_SERVICE_PINCODES.has(String(pincode));
@@ -62,7 +57,7 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Missing required order fields' });
       }
       if (!await validateServiceablePincode(customer_pincode)) {
-        return res.status(400).json({ error: 'Delivery is available only in Thane and Palghar, Maharashtra.' });
+        return res.status(400).json({ error: 'Delivery is available only in Thane, Maharashtra.' });
       }
 
       const orderId = 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();

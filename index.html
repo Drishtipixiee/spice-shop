@@ -797,11 +797,9 @@
     // Supported delivery pincodes
     const PINCODES_OK = [
       "400601", "400602", "400603", "400604", "400605", "400606", "400607", "400608", "400609", "400610",
-      "400615", "400708", "401105", "401107",
-      // Palghar / Vasai / Virar / Nallasopara pincodes
-      "401209", "401203", "401201", "401202", "401207", "401208", "401303", "401305", "401404", "401501", "401502", "401504", "401506", "401601", "401602"
+      "400612", "400615", "400701", "400708", "401105", "401107"
     ];
-    const DELIVERY_DISTRICTS = ['thane', 'palghar'];
+    const DELIVERY_DISTRICTS = ['thane'];
     const DELIVERY_STATE = 'maharashtra';
     const pincodeLocationCache = {};
 
@@ -905,6 +903,17 @@
               if (c) c.dataset.target = val.customers;
               if (s) s.dataset.target = val.states;
               if (si) si.dataset.target = val.since;
+            }
+            if (item.key === 'owner_whatsapp' || item.key === 'contact') {
+              const candidate = typeof val === 'string' ? val : (val.whatsapp || val.owner_whatsapp || val.phone1 || '');
+              const digits = String(candidate).replace(/\D/g, '');
+              if (digits.length >= 10) {
+                OWNER_WHATSAPP = digits.slice(-10);
+                const floatWaBtn = document.querySelector('.float-wa');
+                if (floatWaBtn) {
+                  floatWaBtn.href = `https://wa.me/${OWNER_WHATSAPP}?text=Hi!%20I'm%20interested%20in%20ordering%20fresh%20spices%20and%20dairy.`;
+                }
+              }
             }
           });
         }
@@ -1291,7 +1300,7 @@
       if (!name || !phoneRaw || !address || !pincode) { alert('Please fill all required fields'); return; }
       
       // Clean phone number: remove spaces, dashes, and leading +91 / 91 / 0
-      const phone = phoneRaw.replace(/[\s-]/g, '').replace(/^\+91/, '').replace(/^91(?=\d{10})/, '').replace(/^0/, '');
+      const phone = phoneRaw.replace(/\D/g, '').replace(/^91(?=\d{10})/, '').replace(/^0/, '');
 
       if (!/^[6-9]\d{9}$/.test(phone)) { alert('Please enter a valid 10-digit mobile number'); return; }
       if (!/^\d{6}$/.test(pincode)) { alert('Please enter a valid 6-digit pincode'); return; }
@@ -1494,13 +1503,13 @@
         if (status) {
           status.textContent = ok
             ? `Delivery available in ${placeText}.`
-            : `Sorry, delivery is available only in Thane and Palghar, Maharashtra. Detected: ${placeText}.`;
+            : `Sorry, delivery is available only in Thane, Maharashtra. Detected: ${placeText}.`;
           status.style.color = ok ? 'var(--secondary)' : '#E53935';
         }
 
         return {
           ok,
-          message: ok ? 'Delivery available.' : `Sorry, we currently accept orders only for Thane and Palghar, Maharashtra. Detected pincode location: ${placeText}.`
+          message: ok ? 'Delivery available.' : `Sorry, we currently accept orders only for Thane, Maharashtra. Detected pincode location: ${placeText}.`
         };
       } catch (e) {
         console.error(e);
@@ -1508,12 +1517,12 @@
         if (status) {
           status.textContent = fallbackOk
             ? 'Delivery available for this service pincode.'
-            : 'Could not verify this pincode. Please use a Thane or Palghar, Maharashtra pincode.';
+            : 'Could not verify this pincode. Please use a Thane, Maharashtra pincode.';
           status.style.color = fallbackOk ? 'var(--secondary)' : '#E53935';
         }
         return {
           ok: fallbackOk,
-          message: fallbackOk ? 'Delivery available.' : 'Could not verify this pincode. Please enter a valid Thane or Palghar, Maharashtra pincode.'
+          message: fallbackOk ? 'Delivery available.' : 'Could not verify this pincode. Please enter a valid Thane, Maharashtra pincode.'
         };
       }
     }
@@ -1533,14 +1542,14 @@
       }
 
       if (PINCODES_OK.includes(pin)) {
-        result.textContent = `✅ Delivery available to Thane / Palghar, Maharashtra Area ${pin}! Sourced fresh, arriving in 1-2 days.`;
+        result.textContent = `✅ Delivery available to Thane, Maharashtra Area ${pin}! Sourced fresh, arriving soon.`;
         result.className = 'pin-result ok';
         
-        // Show real embedded Google Map centered at Thane / Palghar Pincode
+        // Show real embedded Google Map centered at Thane Pincode
         mapSection.style.display = 'block';
-        gMap.src = `https://maps.google.com/maps?q=Thane%20Palghar%20Maharashtra%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        gMap.src = `https://maps.google.com/maps?q=Thane%20Maharashtra%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       } else {
-        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver only inside Thane and Palghar, Maharashtra.`;
+        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver only inside Thane, Maharashtra.`;
         result.className = 'pin-result no';
         mapSection.style.display = 'none';
       }
