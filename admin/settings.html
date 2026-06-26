@@ -119,7 +119,14 @@ async function loadSettings() {
   try {
     const data = await api.getSettings();
     data.forEach(item => {
-      const val = typeof item.value === 'string' ? JSON.parse(item.value) : item.value;
+      let val = item.value;
+      if (typeof item.value === 'string') {
+        try {
+          val = JSON.parse(item.value);
+        } catch (e) {
+          val = item.value;
+        }
+      }
       currentSettings[item.key] = val;
     });
 

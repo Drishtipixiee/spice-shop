@@ -883,7 +883,14 @@
         if (res.ok) {
           const settings = await res.json();
           settings.forEach(item => {
-            const val = typeof item.value === 'string' ? JSON.parse(item.value) : item.value;
+            let val = item.value;
+            if (typeof item.value === 'string') {
+              try {
+                val = JSON.parse(item.value);
+              } catch (e) {
+                val = item.value;
+              }
+            }
             if (item.key === 'announcement') {
               const marquee = document.getElementById('announcement-marquee');
               if (marquee) marquee.innerHTML = `<span>${val.text}</span>`;
