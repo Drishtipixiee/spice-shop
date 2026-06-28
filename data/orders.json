@@ -211,5 +211,43 @@
     "status": "placed",
     "notes": "Coupon applied: FRESH10 (-₹10)",
     "created_at": "2026-06-28T12:16:18.790Z"
+  },
+  {
+    "id": "ORD-LZ6IVZNNH",
+    "customer_name": "ferry",
+    "customer_phone": "7984345647",
+    "customer_address": "vaishali road",
+    "delivery_address": "vaishali road",
+    "customer_pincode": "400609",
+    "items": [
+      {
+        "id": "spice-garam-masala-100",
+        "name": "Garam Masala",
+        "price": 95,
+        "image_url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSzCup2TL4mbbNHz9gFnHLoZTqgcPXeKVr1qzya3YpTA-xp2Z7ToLZBG2f46Yhy",
+        "weight": "100g",
+        "qty": 1
+      },
+      {
+        "id": "spice-red-chilli-200",
+        "name": "Kashmiri Red Chilli Powder",
+        "price": 165,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQicigi_9-GYo0lJurRW_wEnzloGFhUiWt7kd8qAPztg&s=10",
+        "weight": "200g",
+        "qty": 1
+      }
+    ],
+    "subtotal": 260,
+    "delivery_charge": 40,
+    "total": 300,
+    "total_amount": 300,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "",
+    "created_at": "2026-06-28T13:17:44.853Z"
   }
 ]
