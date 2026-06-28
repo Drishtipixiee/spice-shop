@@ -17,19 +17,10 @@ async function validateServiceablePincode(pincode) {
   const pin = String(pincode || '');
   if (!/^\d{6}$/.test(pin)) return false;
 
-  try {
-    const response = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
-    if (!response.ok) throw new Error('Pincode lookup failed');
-    const data = await response.json();
-    const offices = data?.[0]?.PostOffice || [];
-    return offices.some(office => (
-      SERVICE_DISTRICTS.has(String(office.District || '').trim().toLowerCase()) &&
-      String(office.State || '').trim().toLowerCase() === 'maharashtra'
-    ));
-  } catch (error) {
-    console.error('Pincode lookup failed, using fallback list:', error);
-    return isServiceablePincode(pin);
-  }
+  // Strict whitelist check — only allow pincodes in our service set
+  // The postal API returns "Thane" as district for Palghar pincodes too,
+  // so we can't rely on district-based checks alone
+  return MAHARASHTRA_SERVICE_PINCODES.has(pin);
 }
 
 module.exports = async function handler(req, res) {
