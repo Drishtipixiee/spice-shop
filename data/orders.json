@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": "ORD-B61J9NAH1",
+    "customer_name": "Test User",
+    "customer_phone": "9876543210",
+    "customer_address": "123 Test Lane, Thane West",
+    "delivery_address": "123 Test Lane, Thane West",
+    "customer_pincode": "400601",
+    "items": [
+      {
+        "id": "spice-turmeric-200",
+        "name": "Turmeric Powder",
+        "price": 120,
+        "qty": 2
+      }
+    ],
+    "subtotal": 240,
+    "delivery_charge": 0,
+    "total": 240,
+    "total_amount": 240,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "",
+    "created_at": "2026-06-28T11:29:57.719Z"
+  }
+]
