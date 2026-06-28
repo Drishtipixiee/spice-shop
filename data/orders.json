@@ -22,9 +22,108 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
+    "order_status": "shipped",
+    "status": "shipped",
+    "notes": "",
+    "created_at": "2026-06-28T11:29:57.719Z",
+    "updated_at": "2026-06-28T11:45:54.185Z"
+  },
+  {
+    "id": "ORD-YNBB98XBN",
+    "customer_name": "namrata",
+    "customer_phone": "9156610416",
+    "customer_address": "302, deep pt",
+    "delivery_address": "302, deep pt",
+    "customer_pincode": "400601",
+    "items": [
+      {
+        "id": "spice-garam-masala-100",
+        "name": "Garam Masala",
+        "price": 95,
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Garam_masala.jpg/640px-Garam_masala.jpg",
+        "weight": "100g",
+        "qty": 1
+      },
+      {
+        "id": "spice-red-chilli-200",
+        "name": "Kashmiri Red Chilli Powder",
+        "price": 165,
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Red_chili_powder.jpg/800px-Red_chili_powder.jpg",
+        "weight": "200g",
+        "qty": 1
+      }
+    ],
+    "subtotal": 260,
+    "delivery_charge": 40,
+    "total": 274,
+    "total_amount": 274,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "Coupon applied: FRESH10 (-₹26)",
+    "created_at": "2026-06-28T11:33:36.355Z"
+  },
+  {
+    "id": "ORD-K6IZ7F8JL",
+    "customer_name": "namrata",
+    "customer_phone": "9156610416",
+    "customer_address": "manavta hospital, thane",
+    "delivery_address": "manavta hospital, thane",
+    "customer_pincode": "401209",
+    "items": [
+      {
+        "id": "dairy-khoya-250",
+        "name": "Fresh Mawa Khoya",
+        "price": 180,
+        "image_url": "https://images.unsplash.com/photo-1574653853027-5382a3d23a15?auto=format&fit=crop&w=800&q=80",
+        "weight": "250g",
+        "qty": 1
+      }
+    ],
+    "subtotal": 180,
+    "delivery_charge": 40,
+    "total": 220,
+    "total_amount": 220,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
     "order_status": "placed",
     "status": "placed",
     "notes": "",
-    "created_at": "2026-06-28T11:29:57.719Z"
+    "created_at": "2026-06-28T11:38:41.703Z"
+  },
+  {
+    "id": "ORD-UCE6T1J42",
+    "customer_name": "deepa",
+    "customer_phone": "8894374393",
+    "customer_address": "aarav bldg",
+    "delivery_address": "aarav bldg",
+    "customer_pincode": "401209",
+    "items": [
+      {
+        "id": "dairy-khoya-250",
+        "name": "Fresh Mawa Khoya",
+        "price": 180,
+        "image_url": "https://images.unsplash.com/photo-1574653853027-5382a3d23a15?auto=format&fit=crop&w=800&q=80",
+        "weight": "250g",
+        "qty": 1
+      }
+    ],
+    "subtotal": 180,
+    "delivery_charge": 40,
+    "total": 202,
+    "total_amount": 202,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "Coupon applied: FRESH10 (-₹18)",
+    "created_at": "2026-06-28T11:42:29.846Z"
   }
 ]
