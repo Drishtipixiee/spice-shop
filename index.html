@@ -594,7 +594,7 @@
   <!-- Pincode Section -->
   <div class="pincode-section">
     <h2>📍 Check Delivery Availability</h2>
-    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we service your area in Mumbai, Thane &amp; Palghar</p>
+    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we service your area in Thane, Maharashtra</p>
     <div class="pincode-form">
       <input class="pincode-input" id="pincode-input" type="text" maxlength="6" placeholder="Enter 6-digit Pincode">
       <button class="pin-btn" onclick="checkPincode()">Check</button>
@@ -680,6 +680,8 @@
       <button onclick="quickReply('cake')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Cakes & Sweets 🍰</button>
       <button onclick="quickReply('delivery')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Free Delivery 🚚</button>
       <button onclick="quickReply('payment')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Payments 💳</button>
+      <button onclick="quickReply('track')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Track Order 📦</button>
+      <button onclick="quickReply('helpline')" style="padding: 6px 12px; border: 1px solid var(--primary); border-radius: var(--radius-pill); background: #fff; color: var(--primary); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap;">Helpline 📞</button>
     </div>
     <div class="chatbot-input">
       <input type="text" id="chatbot-user-msg" placeholder="Type a message..." onkeypress="if(event.key==='Enter')chatSend()">
@@ -1590,12 +1592,16 @@
     const CHATBOT_RESPONSES = {
       'ghee':    'Our Pure Desi Ghee is ₹450 for 500ml — slow-churned A2 cow milk ghee. Authentic aroma and golden texture! 🫙',
       'paneer':  'Fresh Paneer made daily from rich cow milk, completely chemical-free! 200g for ₹180. 🥛',
-      'delivery':'We offer free home delivery on orders above ₹499! For smaller orders, it is ₹40 flat. 🚚',
+      'delivery':'We offer free home delivery on orders above ₹499! For smaller orders, it is ₹40 flat. We deliver only in Thane, Maharashtra. 🚚',
       'return':  'We offer a 7-day hassle-free return policy. If you are not satisfied, we will refund you, no questions asked! 🔄',
       'payment': 'You can pay online via Razorpay (UPI, cards, net banking) or choose Cash on Delivery (COD)! 💳',
       'combo':   'Check out our Combo Starter Pack (₹599) and Festival Gift Hamper (₹1199) for amazing discounts! 🎁',
       'cake':    'Our sweets and cakes, like our Milk Cake / Kalakand (₹149 for 200g) are made fresh daily! 🍰',
-      'default': 'I can assist you with products, orders, shipping rates, and refund questions. Feel free to WhatsApp the owner directly at +91 98923 60874! 😊'
+      'helpline':'📞 Helpline: +91 98923 60874 (Anurag)\nWhatsApp: wa.me/919892360874\nAvailable Mon-Sat, 9 AM - 9 PM. We are happy to help! 😊',
+      'help':    '📞 Helpline: +91 98923 60874 (Anurag)\nWhatsApp: wa.me/919892360874\nAvailable Mon-Sat, 9 AM - 9 PM. We are happy to help! 😊',
+      'contact': '📞 Helpline: +91 98923 60874 (Anurag)\nWhatsApp: wa.me/919892360874\nAvailable Mon-Sat, 9 AM - 9 PM. We are happy to help! 😊',
+      'phone':   '📞 Helpline: +91 98923 60874 (Anurag)\nWhatsApp: wa.me/919892360874\nAvailable Mon-Sat, 9 AM - 9 PM. We are happy to help! 😊',
+      'default': 'I can assist you with products, orders, order tracking, shipping rates, and refund questions. Call our helpline at +91 98923 60874 or WhatsApp us! 😊'
     };
 
     function toggleChatbot() {
@@ -1624,6 +1630,26 @@
 
     function processChatbotResponse(text) {
       const lower = text.toLowerCase();
+
+      // 0. Order tracking via chatbot
+      if (lower.includes('track') || lower.includes('order status') || lower.includes('shipment') || lower.includes('where is my order') || lower.startsWith('ord-')) {
+        // Extract order ID if present
+        const idMatch = text.match(/ORD-[A-Za-z0-9]+/i);
+        if (idMatch) {
+          chatbotTrackOrder(idMatch[0].toUpperCase());
+        } else {
+          const msgHtml = `
+            📦 <strong>Track your order</strong><br>
+            Enter your Order ID below to check status:<br>
+            <div style="margin-top:8px;display:flex;gap:6px;align-items:center">
+              <input type="text" id="chatbot-track-input" placeholder="e.g. ORD-B61J9NAH1" style="padding:6px 10px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;width:160px">
+              <button onclick="chatbotTrackOrder(document.getElementById('chatbot-track-input').value.trim().toUpperCase())" style="padding:6px 12px;font-size:11px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:600;cursor:pointer">Track</button>
+            </div>
+          `;
+          addChatMsgHTML(msgHtml, 'bot');
+        }
+        return;
+      }
       
       // 1. Search for live products in DB
       let matchedProduct = null;
@@ -1664,6 +1690,46 @@
       const key = Object.keys(CHATBOT_RESPONSES).find(k => lower.includes(k));
       const responseText = CHATBOT_RESPONSES[key] || CHATBOT_RESPONSES.default;
       addChatMsg(responseText, 'bot');
+    }
+
+    // Chatbot order tracking helper
+    async function chatbotTrackOrder(orderId) {
+      if (!orderId || orderId.length < 3) {
+        addChatMsg('⚠️ Please enter a valid Order ID (e.g. ORD-B61J9NAH1).', 'bot');
+        return;
+      }
+      addChatMsg('🔍 Searching for your order...', 'bot');
+      try {
+        const res = await fetch('/api/orders');
+        if (!res.ok) throw new Error('API error');
+        const orders = await res.json();
+        const found = orders.find(o => 
+          o.id.toUpperCase() === orderId.toUpperCase() || 
+          o.id.toUpperCase().startsWith(orderId.toUpperCase())
+        );
+        if (found) {
+          let statusEmoji = '⏳';
+          if ((found.order_status || '').toLowerCase() === 'shipped') statusEmoji = '🚚';
+          if ((found.order_status || '').toLowerCase() === 'delivered') statusEmoji = '✅';
+          const msgHtml = `
+            ${statusEmoji} <strong>Order Found!</strong><br>
+            <div style="margin-top:6px;padding:10px;background:#FFF8F0;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;line-height:1.6">
+              <strong>ID:</strong> ${found.id}<br>
+              <strong>Customer:</strong> ${found.customer_name}<br>
+              <strong>Status:</strong> <span style="text-transform:uppercase;font-weight:700;color:${(found.order_status||'').toLowerCase()==='delivered'?'green':(found.order_status||'').toLowerCase()==='shipped'?'#004085':'orange'}">${found.order_status || 'placed'}</span><br>
+              <strong>Total:</strong> ₹${found.total}<br>
+              <strong>Payment:</strong> ${(found.payment_method || 'cod').toUpperCase()}<br>
+              <strong>Date:</strong> ${new Date(found.created_at).toLocaleDateString('en-IN', {dateStyle:'medium'})}
+            </div>
+            <div style="margin-top:6px;font-size:11px;color:var(--text-muted)">Need help? Call 📞 +91 98923 60874</div>
+          `;
+          addChatMsgHTML(msgHtml, 'bot');
+        } else {
+          addChatMsg('❌ Order not found. Please check your Order ID and try again. Need help? Call 📞 +91 98923 60874', 'bot');
+        }
+      } catch(e) {
+        addChatMsg('❌ Error checking order. Please try again later or call 📞 +91 98923 60874', 'bot');
+      }
     }
 
     function addChatMsg(text, sender) {

@@ -101,7 +101,7 @@ async function loadOrders() {
       return `
         <tr>
           <td>
-            <strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong><br>
+            <strong>#${o.id.toUpperCase()}</strong><br>
             <span style="font-size:0.8rem;color:var(--text-muted)">${formatDate(o.created_at)}</span>
           </td>
           <td>

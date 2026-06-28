@@ -126,7 +126,7 @@ async function initDashboard() {
       if(o.status==='DELIVERED') badge = 'badge-delivered';
       return `
         <tr>
-          <td><strong>#ORD-${o.id.slice(0,8).toUpperCase()}</strong></td>
+          <td><strong>#${o.id.toUpperCase()}</strong></td>
           <td>${o.customer_name}</td>
           <td>${formatDate(o.created_at)}</td>
           <td><strong>${formatMoney(o.total_amount)}</strong></td>

@@ -1,19 +1,16 @@
 const { readData, saveData } = require('./github.js');
 
 const MAHARASHTRA_SERVICE_PINCODES = new Set([
-  // Thane city / district service pincodes
+  // Thane city / district service pincodes ONLY
   '400601', '400602', '400603', '400604', '400605', '400606', '400607', '400608', '400609', '400610',
-  '400612', '400615', '400701', '400708', '401105', '401107',
-  // Palghar district service pincodes
-  '401404', '401501', '401502', '401506', '401403', '401402', '401401'
+  '400612', '400615', '400701', '400708', '401105', '401107'
 ]);
-const SERVICE_DISTRICTS = new Set(['thane', 'palghar']);
+const SERVICE_DISTRICTS = new Set(['thane']);
 
 function isServiceablePincode(pincode) {
   const pin = String(pincode || '');
   if (!/^\d{6}$/.test(pin)) return false;
-  // Regional prefix check for Thane/Palghar/Mumbai: 400, 401, 421
-  return pin.startsWith('400') || pin.startsWith('401') || pin.startsWith('421');
+  return MAHARASHTRA_SERVICE_PINCODES.has(pin);
 }
 
 async function validateServiceablePincode(pincode) {
