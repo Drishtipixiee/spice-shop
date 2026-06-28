@@ -181,5 +181,35 @@
     "status": "placed",
     "notes": "",
     "created_at": "2026-06-28T12:03:05.794Z"
+  },
+  {
+    "id": "ORD-Y9I7LLLHX",
+    "customer_name": "ferry",
+    "customer_phone": "7984345647",
+    "customer_address": "russ apt",
+    "delivery_address": "russ apt",
+    "customer_pincode": "400601",
+    "items": [
+      {
+        "id": "dairy-paneer-200",
+        "name": "Fresh Malai Paneer",
+        "price": 95,
+        "image_url": "https://img.freepik.com/premium-photo/paneer-isolated-white-background_759447-1790.jpg",
+        "weight": "200g",
+        "qty": 1
+      }
+    ],
+    "subtotal": 95,
+    "delivery_charge": 40,
+    "total": 125,
+    "total_amount": 125,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "Coupon applied: FRESH10 (-₹10)",
+    "created_at": "2026-06-28T12:16:18.790Z"
   }
 ]
