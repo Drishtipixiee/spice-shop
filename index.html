@@ -1021,8 +1021,8 @@
 <section class="hero">
   <canvas id="particle-canvas"></canvas>
   <video class="hero-video-bg" autoplay muted loop playsinline>
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-pouring-hot-ghee-sauce-42358-large.mp4" type="video/mp4">
-    <source src="https://videos.pexels.com/video-files/5865043/5865043-uhd_2560_1440_24fps.mp4" type="video/mp4">
+    <source src="https://videos.pexels.com/video-files/28283514/12415174_1920_1080_30fps.mp4" type="video/mp4">
+    <source src="https://videos.pexels.com/video-files/32736578/13019808_1920_1080_30fps.mp4" type="video/mp4">
   </video>
   <div class="hero-gradient"></div>
 
@@ -1499,6 +1499,8 @@ try { cart = JSON.parse(localStorage.getItem('spiceCart')) || []; } catch(e) { c
 
 // ─── INIT ─────────────────────────────────────────────────────
 async function initApp() {
+  // Sync fallback local storage key from admin dashboard
+  GEMINI_API_KEY = localStorage.getItem('admin_gemini_key') || GEMINI_API_KEY;
   try {
     const res = await fetch('/api/config');
     if (res.ok) {
