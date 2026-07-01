@@ -263,6 +263,7 @@ async function loadConfig() {
     const resp = await fetch('/api/config');
     if (resp.ok) {
       const cfg = await resp.json();
+      // Only overwrite if Vercel has a valid key configured, otherwise keep localstorage/preset
       if (cfg.geminiApiKey && cfg.geminiApiKey.length > 10) {
         GEMINI_KEY = cfg.geminiApiKey;
         localStorage.setItem('admin_gemini_key', GEMINI_KEY);
