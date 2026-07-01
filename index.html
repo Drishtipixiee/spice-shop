@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drishtipixiee Farms — Pure Dairy & Authentic Spices | Thane & Mulund</title>
+  <title>Canaan Farms — Pure Dairy & Authentic Spices | Thane & Mulund</title>
   <meta name="description" content="Farm-fresh A2 Desi Ghee, hand-churned dairy & authentic spices. FSSAI certified. Free delivery in Thane & Mulund, Mumbai.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
@@ -983,7 +983,7 @@
   <div class="nav-inner">
     <a href="#" class="nav-logo">
       <div class="nav-logo-icon">🌶️</div>
-      <span>Drishtipixiee Farms</span>
+      <span>Canaan Farms</span>
     </a>
     <div class="nav-links">
       <a href="#products" onclick="filterByCategory('dairy',true);return false">🥛 Dairy</a>
@@ -1021,8 +1021,8 @@
 <section class="hero">
   <canvas id="particle-canvas"></canvas>
   <video class="hero-video-bg" autoplay muted loop playsinline>
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-pouring-hot-ghee-sauce-42358-large.mp4" type="video/mp4">
     <source src="https://videos.pexels.com/video-files/5865043/5865043-uhd_2560_1440_24fps.mp4" type="video/mp4">
-    <source src="https://videos.pexels.com/video-files/3296266/3296266-uhd_2560_1440_25fps.mp4" type="video/mp4">
   </video>
   <div class="hero-gradient"></div>
 
@@ -1269,11 +1269,11 @@
 <footer class="footer">
   <div class="footer-inner">
     <div>
-      <div class="footer-brand">🌶️ Drishtipixiee Farms</div>
+      <div class="footer-brand">🌶️ Canaan Farms</div>
       <p class="footer-desc">Farm-fresh A2 dairy products and authentic Indian spices, sourced directly from our partner farms. FSSAI certified, chemical-free, delivering pure goodness to Thane &amp; Mulund since 2018.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
         <a href="https://wa.me/919892360874" style="color:var(--gold);font-weight:600;font-size:13px">💬 WhatsApp</a>
-        <a href="mailto:drishtipixiee@gmail.com" style="color:var(--gold);font-weight:600;font-size:13px">📧 Email</a>
+        <a href="mailto:canaanfarms@gmail.com" style="color:var(--gold);font-weight:600;font-size:13px">📧 Email</a>
         <a href="/admin/" style="color:var(--gold);font-weight:600;font-size:13px">⚙️ Admin</a>
       </div>
     </div>
@@ -1298,7 +1298,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    © 2025 Drishtipixiee Farms · FSSAI License · Made with ❤️ in Thane
+    © 2025 Canaan Farms · FSSAI License · Made with ❤️ in Thane
     <span style="margin-left:16px">
       <a href="/admin/" style="color:rgba(255,255,255,0.3);font-size:12px">Admin ↗</a>
     </span>
@@ -2058,7 +2058,7 @@ async function aiStripAsk() {
   resultEl.style.paddingTop='14px';
   try {
     const prodContext=PRODUCTS.slice(0,20).map(p=>`${p.name} (₹${p.price})`).join(', ');
-    const prompt=`You are an expert Indian food assistant for "Drishtipixiee Farms" store in Thane, Mumbai. Available products include: ${prodContext}. Customer asks: "${query}". Give a helpful, friendly answer in 2-3 sentences. Mention relevant products if applicable. Use emojis.`;
+    const prompt=`You are an expert Indian food assistant for "Canaan Farms" store in Thane, Mumbai. Available products include: ${prodContext}. Customer asks: "${query}". Give a helpful, friendly answer in 2-3 sentences. Mention relevant products if applicable. Use emojis.`;
     const text=await callGemini(prompt);
     resultEl.innerHTML=text;
   } catch(e) {
@@ -2086,7 +2086,7 @@ async function aiPanelSend(preset) {
   if(!GEMINI_API_KEY){loading.innerHTML='⚠️ AI not configured. Add GEMINI_API_KEY to Vercel environment variables. <a href="https://vercel.com" target="_blank" style="color:#7C3AED">Go to Vercel →</a>';return;}
   try {
     const prodContext=PRODUCTS.slice(0,20).map(p=>`${p.name} (${normalizeCategory(p.category)}, ₹${p.price})`).join(', ');
-    const prompt=`You are a helpful, friendly AI assistant for "Drishtipixiee Farms" — an Indian dairy & spices store in Thane & Mulund, Mumbai. Products available: ${prodContext}. Customer asks: "${query}". Respond helpfully in 2-4 sentences. Include emojis. If relevant, mention specific products.`;
+    const prompt=`You are a helpful, friendly AI assistant for "Canaan Farms" — an Indian dairy & spices store in Thane & Mulund, Mumbai. Products available: ${prodContext}. Customer asks: "${query}". Respond helpfully in 2-4 sentences. Include emojis. If relevant, mention specific products.`;
     const text=await callGemini(prompt);
     loading.innerHTML=text;
   } catch(e) {
