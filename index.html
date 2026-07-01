@@ -1021,8 +1021,8 @@
 <section class="hero">
   <canvas id="particle-canvas"></canvas>
   <video class="hero-video-bg" autoplay muted loop playsinline>
-    <source src="https://videos.pexels.com/video-files/28283514/12415174_1920_1080_30fps.mp4" type="video/mp4">
-    <source src="https://videos.pexels.com/video-files/32736578/13019808_1920_1080_30fps.mp4" type="video/mp4">
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-pouring-hot-ghee-sauce-42358-large.mp4" type="video/mp4">
+    <source src="https://videos.pexels.com/video-files/5865043/5865043-uhd_2560_1440_24fps.mp4" type="video/mp4">
   </video>
   <div class="hero-gradient"></div>
 
@@ -1138,7 +1138,7 @@
     <div class="ai-feat-card" onclick="toggleAIPanel()">
       <div class="ai-feat-icon">🍳</div>
       <div class="ai-feat-title">AI Recipe Generator</div>
-      <div class="ai-feat-desc">Click any product → get an authentic Indian recipe using that ingredient, powered by Gemini AI</div>
+      <div class="ai-feat-desc">Click any product → get an authentic Indian recipe using that ingredient, powered by Groq AI</div>
       <button class="ai-feat-btn">Try Recipe AI →</button>
     </div>
     <div class="ai-feat-card" onclick="document.getElementById('ai-ask-input').focus();document.getElementById('ai-ask-input').scrollIntoView({behavior:'smooth'})">
@@ -1317,11 +1317,11 @@
   <div class="ai-panel-head">
     <span style="font-size:22px">✨</span>
     <h3>AI Shopping Assistant</h3>
-    <span style="font-size:11px;color:rgba(255,255,255,0.6);margin-right:8px">Powered by Gemini</span>
+    <span style="font-size:11px;color:rgba(255,255,255,0.6);margin-right:8px">Powered by Groq</span>
     <button class="ai-panel-close" onclick="toggleAIPanel()">✕</button>
   </div>
   <div class="ai-messages" id="ai-messages">
-    <div class="ai-msg bot">Namaste! 🙏 I'm your AI assistant powered by Google Gemini. Ask me about:<br><br>🍳 Recipes using our products<br>🛒 Product recommendations<br>❓ Health benefits &amp; cooking tips<br>📦 Order help<br><br>How can I help you today?</div>
+    <div class="ai-msg bot">Namaste! 🙏 I'm your AI assistant powered by Groq Llama3. Ask me about:<br><br>🍳 Recipes using our products<br>🛒 Product recommendations<br>❓ Health benefits &amp; cooking tips<br>📦 Order help<br><br>How can I help you today?</div>
   </div>
   <div class="ai-quick-btns">
     <button class="ai-quick" onclick="aiPanelSend('Best ghee for cooking?')">Best ghee?</button>
@@ -1476,7 +1476,7 @@ const DELIVERY_CHARGE    = 40;
 // Config vars (fetched from /api/config)
 let RAZORPAY_KEY   = 'rzp_test_placeholder';
 let OWNER_WHATSAPP = '919892360874';
-let GEMINI_API_KEY = '';
+let GROQ_API_KEY = '';
 
 // State
 let PRODUCTS = [], products = [], cart = [], activeCategory = 'all', searchQuery = '';
@@ -1500,14 +1500,14 @@ try { cart = JSON.parse(localStorage.getItem('spiceCart')) || []; } catch(e) { c
 // ─── INIT ─────────────────────────────────────────────────────
 async function initApp() {
   // Sync fallback local storage key from admin dashboard
-  GEMINI_API_KEY = localStorage.getItem('admin_gemini_key') || GEMINI_API_KEY;
+  GROQ_API_KEY = localStorage.getItem('admin_groq_key') || GROQ_API_KEY;
   try {
     const res = await fetch('/api/config');
     if (res.ok) {
       const cfg = await res.json();
       RAZORPAY_KEY   = cfg.razorpayKeyId   || RAZORPAY_KEY;
       OWNER_WHATSAPP = cfg.ownerWhatsapp   || OWNER_WHATSAPP;
-      GEMINI_API_KEY = cfg.geminiApiKey    || GEMINI_API_KEY;
+      GROQ_API_KEY = cfg.groqApiKey    || GROQ_API_KEY;
       // Update WhatsApp link
       document.getElementById('float-wa').href = `https://wa.me/${OWNER_WHATSAPP}?text=Hi!%20I'm%20interested%20in%20ordering%20fresh%20spices%20and%20dairy.`;
     }
@@ -1703,7 +1703,7 @@ function searchProducts() {
   activeCategory = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
   const wordCount = searchQuery.split(' ').filter(w => w.length > 0).length;
-  if (searchQuery.length > 3 && wordCount >= 2 && GEMINI_API_KEY) {
+  if (searchQuery.length > 3 && wordCount >= 2 && GROQ_API_KEY) {
     clearTimeout(aiSearchTimeout);
     aiSearchTimeout = setTimeout(() => aiSmartSearch(searchQuery), 700);
   } else {
@@ -1768,7 +1768,7 @@ function showProductDetails(id) {
       <button class="btn-checkout" style="flex:1" onclick="toggleCart('${p.id}');document.getElementById('product-detail-modal').classList.remove('open')">
         ${cart.some(c=>c.id===p.id)?'Remove From Cart':'🛒 Add to Cart'}
       </button>
-      ${GEMINI_API_KEY ? `<button class="btn-ai-recipe" onclick="showAIRecipe('${p.id}','${p.name.replace(/'/g,"'")}')">🍳 AI Recipe</button>` : ''}
+      ${GROQ_API_KEY ? `<button class="btn-ai-recipe" onclick="showAIRecipe('${p.id}','${p.name.replace(/'/g,"'")}')">🍳 AI Recipe</button>` : ''}
       <button class="btn-wa" onclick="waOrder('${p.id}')">💬</button>
     </div>`;
   document.getElementById('product-detail-modal').classList.add('open');
@@ -1911,7 +1911,7 @@ async function initiateRazorpay(od) {
   try {
     const res=await fetch('/api/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:od.total,currency:'INR'})});
     const rzp=await res.json(); if(!res.ok||rzp.error) throw new Error(rzp.error);
-    const options={key:RAZORPAY_KEY,amount:od.total*100,currency:'INR',name:'🌶️ Drishtipixiee Farms',description:`Order for ${od.items.length} item(s)`,order_id:rzp.orderId,prefill:{name:od.customer_name,contact:od.customer_phone},theme:{color:'#E8600A'},handler:async r=>{od.razorpay_payment_id=r.razorpay_payment_id;od.payment_status='paid';await saveOrder(od,'Razorpay');},modal:{ondismiss:()=>{btn.disabled=false;btn.textContent='Place Order 🛒';}}};
+    const options={key:RAZORPAY_KEY,amount:od.total*100,currency:'INR',name:'🌶️ Canaan Farms',description:`Order for ${od.items.length} item(s)`,order_id:rzp.orderId,prefill:{name:od.customer_name,contact:od.customer_phone},theme:{color:'#E8600A'},handler:async r=>{od.razorpay_payment_id=r.razorpay_payment_id;od.payment_status='paid';await saveOrder(od,'Razorpay');},modal:{ondismiss:()=>{btn.disabled=false;btn.textContent='Place Order 🛒';}}};
     new window.Razorpay(options).open();
   } catch(e) { alert('Payment failed. Try COD or WhatsApp order.'); btn.disabled=false; btn.textContent='Place Order 🛒'; }
 }
@@ -2035,17 +2035,21 @@ function waOrder(id) {
   window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${msg}`,'_blank');
 }
 
-// ─── AI FEATURES ──────────────────────────────────────────────
-// Core Gemini call
 async function callGemini(prompt) {
-  if(!GEMINI_API_KEY) throw new Error('AI not configured');
-  const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
+  const resp = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROQ_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'llama3-8b-8192',
+      messages: [{ role: 'user', content: prompt }]
+    })
   });
-  if(!resp.ok) throw new Error('Gemini API error: '+resp.status);
-  const data=await resp.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  if (!resp.ok) throw new Error('AI API error: ' + resp.status);
+  const data = await resp.json();
+  return data?.choices?.[0]?.message?.content || '';
 }
 
 // AI Strip (homepage ask-anything)
@@ -2054,7 +2058,7 @@ async function aiStripAsk() {
   const resultEl=document.getElementById('ai-ask-result');
   const query=inp.value.trim();
   if(!query) return;
-  if(!GEMINI_API_KEY){resultEl.innerHTML='⚠️ AI not configured yet. Please set GEMINI_API_KEY in Vercel.';resultEl.style.maxHeight='100px';resultEl.style.paddingTop='14px';return;}
+  if(!GROQ_API_KEY){resultEl.innerHTML='⚠️ AI not configured yet. Please set GROQ_API_KEY.';resultEl.style.maxHeight='100px';resultEl.style.paddingTop='14px';return;}
   resultEl.innerHTML='⏳ Thinking...';
   resultEl.style.maxHeight='300px';
   resultEl.style.paddingTop='14px';
@@ -2085,7 +2089,7 @@ async function aiPanelSend(preset) {
   const loading=document.createElement('div');
   loading.className='ai-msg bot'; loading.textContent='✨ Thinking...'; msgs.appendChild(loading);
   msgs.scrollTop=msgs.scrollHeight;
-  if(!GEMINI_API_KEY){loading.innerHTML='⚠️ AI not configured. Add GEMINI_API_KEY to Vercel environment variables. <a href="https://vercel.com" target="_blank" style="color:#7C3AED">Go to Vercel →</a>';return;}
+  if(!GROQ_API_KEY){loading.innerHTML='⚠️ AI not configured. Add GROQ_API_KEY to environment variables.';return;}
   try {
     const prodContext=PRODUCTS.slice(0,20).map(p=>`${p.name} (${normalizeCategory(p.category)}, ₹${p.price})`).join(', ');
     const prompt=`You are a helpful, friendly AI assistant for "Canaan Farms" — an Indian dairy & spices store in Thane & Mulund, Mumbai. Products available: ${prodContext}. Customer asks: "${query}". Respond helpfully in 2-4 sentences. Include emojis. If relevant, mention specific products.`;
@@ -2102,16 +2106,16 @@ async function showAIRecipe(id, name) {
   const overlay=document.getElementById('recipe-modal-overlay');
   const content=document.getElementById('recipe-modal-content');
   if(!overlay||!content) return;
-  content.innerHTML=`<div style="text-align:center;padding:32px"><div style="font-size:48px;margin-bottom:12px">🍳</div><p>Generating AI recipe for <strong>${name}</strong>...</p><div style="margin-top:12px;font-size:12px;color:var(--muted)">Powered by Google Gemini ✨</div></div>`;
+  content.innerHTML=`<div style="text-align:center;padding:32px"><div style="font-size:48px;margin-bottom:12px">🍳</div><p>Generating AI recipe for <strong>${name}</strong>...</p><div style="margin-top:12px;font-size:12px;color:var(--muted)">Powered by Groq ✨</div></div>`;
   overlay.classList.add('open');
-  if(!GEMINI_API_KEY){content.innerHTML='<p style="color:#EF4444">⚠️ AI not configured. Add GEMINI_API_KEY to Vercel environment variables.</p>';return;}
+  if(!GROQ_API_KEY){content.innerHTML='<p style="color:#EF4444">⚠️ AI not configured. Add GROQ_API_KEY to environment variables.</p>';return;}
   try {
     const text=await callGemini(`You are an expert Indian chef. Create a simple authentic Indian recipe using "${name}". Format as HTML: <h3>Recipe Name</h3>, <p><strong>Ingredients:</strong></p><ul>...</ul>, <p><strong>Method:</strong></p><ol>...</ol>, <p><strong>Pro Tip:</strong>...</p>. Keep it concise and add emojis.`);
     content.innerHTML=`
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
         <span style="font-size:28px">🍳</span>
         <div><div style="font-size:11px;color:var(--muted)">AI Recipe for</div><div style="font-weight:700;font-size:16px;color:var(--saffron)">${name}</div></div>
-        <span class="ai-badge" style="margin-left:auto">✨ Gemini</span>
+        <span class="ai-badge" style="margin-left:auto">✨ Groq</span>
       </div>
       <div style="font-size:14px;line-height:1.7;color:#333">${text}</div>
       <div style="margin-top:20px;padding:12px;background:#fff8f0;border-radius:var(--r-sm);font-size:12px">
@@ -2122,7 +2126,7 @@ async function showAIRecipe(id, name) {
 
 // AI Recommendations
 async function showAIRecommendations() {
-  if(!cart.length||!PRODUCTS.length||!GEMINI_API_KEY) return;
+  if(!cart.length||!PRODUCTS.length||!GROQ_API_KEY) return;
   try {
     const cartNames=cart.map(c=>c.name).join(', ');
     const allNames=PRODUCTS.map((p,i)=>`${i}:${p.name}`).join(', ');
