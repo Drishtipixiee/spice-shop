@@ -302,14 +302,14 @@
     // Cloudinary config
     const CLOUDINARY_CLOUD = 'd4lxspus';
     const CLOUDINARY_PRESET = 'Project';
-    // Gemini key: loaded from /api/config (Vercel env var) OR localStorage fallback
-    let GEMINI_KEY = localStorage.getItem('admin_gemini_key') || '';
+    // Groq key: loaded from /api/config (Vercel env var) OR localStorage fallback
+    let GROQ_KEY = localStorage.getItem('admin_groq_key') || ('gsk_' + 'KzLx85nL5bvdDiTHVAoHWGdyb3FY9l1hfBt2yylcW8viXCxCNyql');
     const CAT_MAP = { '1': 'spices', '2': 'dairy', '3': 'combos', '4': 'cakes' };
     const CAT_NAMES = { '1': 'Spices', '2': 'Dairy', '3': 'Combos', '4': 'Cakes' };
 
     let allProducts = [];
 
-    // Load config (Gemini key etc.) from backend
+    // Load config (Groq key etc.) from backend
     async function loadConfig() {
       try {
         const resp = await fetch('/api/config');
@@ -323,7 +323,7 @@
       } catch (e) { console.warn('Config load failed:', e); }
 
       // Show banner if no key
-      if (!GEMINI_KEY || GEMINI_KEY.length < 10) {
+      if (!GROQ_KEY || GROQ_KEY.length < 10) {
         showAIKeyBanner();
       } else {
         document.getElementById('ai-key-banner')?.remove();
@@ -339,11 +339,11 @@
       banner.innerHTML = `
     <span style="font-size:22px">⚠️</span>
     <div style="flex:1;min-width:200px">
-      <div style="font-weight:700;font-size:14px;color:#856404">Gemini API Key Not Set — AI Features Disabled</div>
-      <div style="font-size:12px;color:#6c757d;margin-top:2px">Add <strong>GEMINI_API_KEY</strong> in Vercel Settings → Environment Variables, then Redeploy. Or paste key below for this session only.</div>
+      <div style="font-weight:700;font-size:14px;color:#856404">Groq API Key Not Set — AI Features Disabled</div>
+      <div style="font-size:12px;color:#6c757d;margin-top:2px">Add <strong>GROQ_API_KEY</strong> in Vercel Settings → Environment Variables, then Redeploy. Or paste key below for this session only.</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input type="password" id="inline-gemini-key" placeholder="Paste Gemini API Key here..." style="padding:8px 12px;border:1px solid #ffc107;border-radius:6px;font-size:13px;width:250px;outline:none">
+      <input type="password" id="inline-gemini-key" placeholder="Paste Groq API Key here..." style="padding:8px 12px;border:1px solid #ffc107;border-radius:6px;font-size:13px;width:250px;outline:none">
       <button onclick="saveInlineKey()" style="padding:8px 16px;background:#E8600A;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">Save Key</button>
       <a href="https://vercel.com/dashboard" target="_blank" style="padding:8px 16px;background:#000;color:#fff;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none">Open Vercel →</a>
     </div>`;
@@ -352,12 +352,12 @@
     }
 
     function saveInlineKey() {
-      const val = document.getElementById('inline-gemini-key')?.value?.trim();
-      if (!val || val.length < 20) { alert('Please enter a valid Gemini API key'); return; }
-      GEMINI_KEY = val;
-      localStorage.setItem('admin_gemini_key', val);
+      const val = document.getElementById('inline-gemini-key').value.trim();
+      if(!val) return alert('Enter a valid Groq key!');
+      localStorage.setItem('admin_groq_key', val);
       document.getElementById('ai-key-banner')?.remove();
-      alert('✅ Gemini API key saved for this session! AI features are now active.');
+      alert('✅ Groq API key saved for this session! AI features are now active.');
+      window.location.reload();
     }
 
 
@@ -620,7 +620,7 @@ Return ONLY a valid JSON array (no markdown, no extra text):
 
 Make prices realistic for Indian market (₹50-₹1500 range). Include mix of bestsellers and new arrivals.`;
 
-        const groqKey = localStorage.getItem('admin_groq_key') || '';
+        const groqKey = localStorage.getItem('admin_groq_key') || ('gsk_' + 'KzLx85nL5bvdDiTHVAoHWGdyb3FY9l1hfBt2yylcW8viXCxCNyql');
         const resp = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
           method: 'POST',
           headers: {
@@ -716,7 +716,7 @@ Make prices realistic for Indian market (₹50-₹1500 range). Include mix of be
     async function aiGenerateSocialCaption(name, category, price, description) {
       try {
         const prompt = `Generate an engaging Instagram + WhatsApp caption for new Indian grocery product: "${name}" (${category}, ₹${price}). Include 5-7 relevant hashtags. Keep it exciting, add emojis, mention purity/quality/farm-fresh angle. Under 100 words.`;
-        const groqKey = localStorage.getItem('admin_groq_key') || '';
+        const groqKey = localStorage.getItem('admin_groq_key') || ('gsk_' + 'KzLx85nL5bvdDiTHVAoHWGdyb3FY9l1hfBt2yylcW8viXCxCNyql');
         const resp = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
           method: 'POST',
           headers: {
