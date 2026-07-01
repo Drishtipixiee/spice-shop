@@ -250,7 +250,7 @@
 // Cloudinary config
 const CLOUDINARY_CLOUD = 'd4lxspus';
 const CLOUDINARY_PRESET = 'Project';
-// Gemini key: loaded from /api/config (Vercel env var) OR localStorage fallback
+// Gemini key: loaded from localStorage fallback OR /api/config
 let GEMINI_KEY = localStorage.getItem('admin_gemini_key') || '';
 const CAT_MAP = { '1':'spices','2':'dairy','3':'combos','4':'cakes' };
 const CAT_NAMES = { '1':'Spices','2':'Dairy','3':'Combos','4':'Cakes' };
