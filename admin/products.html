@@ -28,7 +28,7 @@
 <main class="main-wrapper">
   <header class="topbar">
     <div class="topbar-search">
-      🔍 <input type="text" placeholder="Search inventory...">
+      🔍 <input type="text" id="searchInput" placeholder="Search inventory..." oninput="filterTable(this.value)">
     </div>
     <div class="topbar-right">
       <div class="admin-profile">
@@ -42,6 +42,27 @@
   </header>
 
   <div class="page-content">
+    <!-- AI Bulk Catalog Generator Panel -->
+    <div id="ai-catalog-panel" style="background:linear-gradient(135deg,#f0e8ff,#fff0fb);border:1px solid #c9a8ff;border-radius:14px;padding:20px 24px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:24px;">🤖</span>
+        <div>
+          <div style="font-weight:700;font-size:16px;color:#5a1fa0;">AI Bulk Catalog Generator</div>
+          <div style="font-size:12px;color:#8b5cf6;">Type a category name → AI generates 10 ready-to-publish products</div>
+        </div>
+        <span style="margin-left:auto;background:linear-gradient(135deg,#7B2FF7,#F72585);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:0.5px;">✨ GEMINI AI</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <input type="text" id="ai-cat-input" placeholder="e.g. spice blends, dairy, festival hampers..." 
+          style="flex:1;min-width:200px;padding:10px 14px;border:1px solid #c9a8ff;border-radius:8px;font-size:14px;background:#fff;outline:none;">
+        <button onclick="aiGenerateCatalog()" id="ai-gen-btn"
+          style="padding:10px 22px;background:linear-gradient(135deg,#7B2FF7,#F72585);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;">
+          ✨ Generate Catalog
+        </button>
+      </div>
+      <div id="ai-catalog-result" style="margin-top:16px;display:none;"></div>
+    </div>
+
     <div class="page-header">
       <h1 class="page-title">Products Inventory</h1>
       <div class="page-actions">
@@ -59,11 +80,12 @@
               <th>Category</th>
               <th>Price (₹)</th>
               <th>MRP (₹)</th>
+              <th>Video</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="productsTable">
-            <tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>
+            <tr><td colspan="6" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>
           </tbody>
         </table>
       </div>
@@ -73,7 +95,7 @@
 
 <!-- MODAL -->
 <div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
-<div class="modal" id="prodModal">
+<div class="modal" id="prodModal" style="max-width:640px;">
   <div class="modal-header">
     <h3 class="modal-title" id="modalTitle">Edit Product</h3>
     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -81,13 +103,27 @@
   <div class="modal-body">
     <input type="hidden" id="pId">
     
+    <!-- AI Description Generator -->
+    <div style="background:linear-gradient(135deg,#f0e8ff,#fff);border:1px solid #c9a8ff;border-radius:10px;padding:14px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span>🤖</span>
+        <span style="font-weight:700;font-size:13px;color:#5a1fa0;">AI Description Generator</span>
+        <span style="font-size:10px;color:#8b5cf6;">Fill name & category first, then click Generate</span>
+      </div>
+      <button type="button" onclick="aiGenerateDescription()" id="ai-desc-btn"
+        style="padding:8px 18px;background:linear-gradient(135deg,#7B2FF7,#F72585);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;">
+        ✨ Generate SEO Description + Hindi Name
+      </button>
+      <div id="ai-desc-status" style="margin-top:8px;font-size:12px;color:#8b5cf6;display:none;"></div>
+    </div>
+
     <div class="grid-2">
       <div class="form-group">
         <label class="form-label">Product Name (English)</label>
         <input type="text" id="pName" class="form-control" placeholder="e.g. Turmeric Powder">
       </div>
       <div class="form-group">
-        <label class="form-label">Product Name (Hindi)</label>
+        <label class="form-label">Product Name (Hindi) <span id="hindi-ai-badge" style="display:none;background:linear-gradient(135deg,#7B2FF7,#F72585);color:#fff;font-size:9px;padding:1px 6px;border-radius:999px;font-weight:700;">AI</span></label>
         <input type="text" id="pNameHindi" class="form-control" placeholder="e.g. हल्दी पाउडर">
       </div>
     </div>
@@ -114,39 +150,73 @@
         <input type="number" id="pPrice" class="form-control">
       </div>
       <div class="form-group">
-        <label class="form-label">MRP (₹)</label>
+        <label class="form-label">MRP (₹) <span id="ai-price-badge" style="font-size:10px;color:#8b5cf6;font-weight:600;"></span></label>
         <input type="number" id="pMrp" class="form-control">
       </div>
     </div>
 
-    <div class="form-group" style="background: #fafbfc; border: 1px solid var(--border); padding: 16px; border-radius: 10px; margin-bottom: 20px;">
-      <label class="form-label" style="font-weight: 700; color: var(--text-main); margin-bottom: 12px; font-size: 0.95rem;">Product Photo</label>
+    <!-- Description field (AI-fillable) -->
+    <div class="form-group">
+      <label class="form-label">Product Description <span id="desc-ai-indicator" style="display:none;background:linear-gradient(135deg,#7B2FF7,#F72585);color:#fff;font-size:9px;padding:1px 6px;border-radius:999px;font-weight:700;margin-left:4px;">AI Generated</span></label>
+      <textarea id="pDescription" class="form-control" rows="3" placeholder="SEO-friendly product description..."></textarea>
+    </div>
+
+    <!-- Product Photo Section -->
+    <div class="form-group" style="background: #fafbfc; border: 1px solid var(--border); padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+      <label class="form-label" style="font-weight: 700; color: var(--text-main); margin-bottom: 12px; font-size: 0.95rem;">📷 Product Photo</label>
       
-      <!-- Option A: File Upload -->
       <div style="margin-bottom: 12px;">
-        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block;">Option 1: Upload from Device (JPG/JPEG)</label>
-        <input type="file" id="pImgFile" accept="image/jpeg, image/jpg" class="form-control" style="padding: 6px 12px; height: auto; background: #fff;">
+        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block;">Option 1: Upload from Device (JPG/JPEG) → Cloudinary</label>
+        <input type="file" id="pImgFile" accept="image/jpeg, image/jpg, image/png, image/webp" class="form-control" style="padding: 6px 12px; height: auto; background: #fff;">
       </div>
       
-      <!-- OR Separator -->
       <div style="text-align: center; margin: 8px 0; font-size: 0.8rem; color: var(--text-muted); position: relative;">
         <span style="background: #fafbfc; padding: 0 10px; position: relative; z-index: 2; font-weight: 700;">— OR —</span>
         <div style="border-bottom: 1px solid var(--border); position: absolute; top: 50%; left: 0; right: 0; z-index: 1;"></div>
       </div>
       
-      <!-- Option B: Direct URL -->
       <div style="margin-bottom: 8px;">
         <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block;">Option 2: Paste Direct Image URL</label>
         <input type="text" id="pImg" class="form-control" placeholder="https://example.com/photo.jpg" style="background: #fff;">
       </div>
       
-      <div id="uploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">Select a photo from your gallery or paste a direct image link.</div>
+      <div id="uploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">Select a photo or paste a direct image link.</div>
       
-      <!-- Image Preview Container -->
       <div id="previewContainer" style="margin-top: 12px; display: none; text-align: center; border: 1px dashed var(--border); border-radius: 8px; padding: 12px; background: #fff; position: relative;">
         <img id="pImgPreview" src="" style="max-height: 140px; max-width: 100%; border-radius: 6px; object-fit: cover; box-shadow: var(--shadow-sm);">
         <div style="margin-top: 8px;">
           <button type="button" class="btn btn-sm btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="clearPreview()">Remove Photo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Video Section -->
+    <div class="form-group" style="background: #f0f8ff; border: 1px solid #b3d9ff; padding: 16px; border-radius: 10px; margin-bottom: 16px;">
+      <label class="form-label" style="font-weight: 700; color: #1a6fa0; margin-bottom: 12px; font-size: 0.95rem;">🎬 Product Video <span style="font-size:10px;font-weight:500;color:#5a9dc0;">(optional — plays on hover on storefront)</span></label>
+      
+      <div style="margin-bottom: 12px;">
+        <label class="form-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block;">Upload Video to Cloudinary (MP4/MOV/WEBM, max 100MB)</label>
+        <input type="file" id="pVideoFile" accept="video/mp4,video/quicktime,video/webm,video/*" class="form-control" style="padding: 6px 12px; height: auto; background: #fff;">
+        <div id="videoUploadProgress" style="display:none;margin-top:8px;">
+          <div style="background:#e0f0ff;border-radius:4px;height:6px;overflow:hidden;">
+            <div id="videoProgressBar" style="background:#1a6fa0;height:100%;width:0%;transition:width 0.3s;"></div>
+          </div>
+          <div id="videoProgressText" style="font-size:11px;color:#1a6fa0;margin-top:4px;">Uploading...</div>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin: 8px 0; font-size: 0.8rem; color: var(--text-muted); position: relative;">
+        <span style="background: #f0f8ff; padding: 0 10px; position: relative; z-index: 2; font-weight: 700;">— OR paste Cloudinary URL —</span>
+        <div style="border-bottom: 1px solid #b3d9ff; position: absolute; top: 50%; left: 0; right: 0; z-index: 1;"></div>
+      </div>
+      
+      <input type="text" id="pVideo" class="form-control" placeholder="https://res.cloudinary.com/..." style="background: #fff;">
+      <div id="videoStatus" style="font-size:0.75rem;color:#5a9dc0;margin-top:6px;">Upload raw footage or paste a Cloudinary video URL.</div>
+      
+      <div id="videoPreviewContainer" style="display:none;margin-top:12px;text-align:center;">
+        <video id="pVideoPreview" controls muted style="max-height:140px;max-width:100%;border-radius:8px;border:1px solid #b3d9ff;"></video>
+        <div style="margin-top:8px;">
+          <button type="button" onclick="clearVideoPreview()" style="padding:4px 10px;font-size:0.75rem;background:#E53935;color:#fff;border:none;border-radius:4px;cursor:pointer;">Remove Video</button>
         </div>
       </div>
     </div>
@@ -161,60 +231,56 @@
         <label for="pNew" class="form-label" style="margin-bottom: 0; cursor: pointer; font-weight: 600;">✨ New Arrival</label>
       </div>
     </div>
+
+    <!-- AI Social Caption (shown after save) -->
+    <div id="social-caption-box" style="display:none;margin-top:12px;background:linear-gradient(135deg,#f0fff0,#fff);border:1px solid #90ee90;border-radius:10px;padding:14px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📸 AI Social Caption Generated!</div>
+      <div id="social-caption-text" style="font-size:13px;line-height:1.6;color:#333;"></div>
+      <button onclick="copySocialCaption()" style="margin-top:8px;padding:6px 14px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">📋 Copy for WhatsApp/Instagram</button>
+    </div>
   </div>
   <div class="modal-footer">
     <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-    <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+    <button class="btn btn-primary" onclick="saveProduct()">💾 Save Product</button>
   </div>
 </div>
 
 <script type="module" src="/admin/assets/js/api.js"></script>
 <script>
+// Cloudinary config (matches storefront)
+const CLOUDINARY_CLOUD = 'd4lxspus';
+const CLOUDINARY_PRESET = 'Project';
+// Gemini key is fetched from /api/config → GEMINI_API_KEY Vercel env var
+let GEMINI_KEY = '';  // loaded via fetch('/api/config') below
+const CAT_MAP = { '1':'spices','2':'dairy','3':'combos','4':'cakes' };
+const CAT_NAMES = { '1':'Spices','2':'Dairy','3':'Combos','4':'Cakes' };
+
 let allProducts = [];
+
+// Load config (Gemini key etc.) from backend
+async function loadConfig() {
+  try {
+    const resp = await fetch('/api/config');
+    if (resp.ok) {
+      const cfg = await resp.json();
+      if (cfg.geminiApiKey) GEMINI_KEY = cfg.geminiApiKey;
+      if (cfg.cloudinaryUploadPreset) { /* already set */ }
+    }
+  } catch(e) { console.warn('Config load failed, AI features may not work:', e); }
+}
 
 async function loadProducts() {
   const tbody = document.getElementById('productsTable');
-  tbody.innerHTML = '<tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="6" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>';
   
   try {
     allProducts = await api.getProducts();
-    if(allProducts.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No products found.</td></tr>';
-      return;
-    }
-
-    tbody.innerHTML = allProducts.map(p => {
-      let catBadge = 'badge-spice';
-      let catText = 'Spices';
-      if(p.category_id === 2) { catBadge = 'badge-dairy'; catText = 'Dairy'; }
-      if(p.category_id === 3) { catBadge = 'badge-combo'; catText = 'Combos'; }
-      if(p.category_id === 4) { catBadge = 'badge-cake'; catText = 'Cakes'; }
-
-      return `
-        <tr>
-          <td>
-            <div class="prod-cell">
-              <img src="${p.image_url}" class="prod-img" onerror="this.src='https://via.placeholder.com/48x48?text=Product'">
-              <div class="prod-meta">
-                <strong>${p.name}</strong>
-                <span style="font-size:0.8rem;color:var(--text-muted)">${p.weight || '1 pc'}</span>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge ${catBadge}">${catText}</span></td>
-          <td><strong>${formatMoney(p.price)}</strong></td>
-          <td><strike style="color:var(--text-muted)">${formatMoney(p.mrp || p.price)}</strike></td>
-          <td>
-            <button class="btn btn-sm btn-outline" onclick="openModal('${p.id}')">Edit</button>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    renderTable(allProducts);
   } catch (err) {
     console.error("Error loading products:", err);
     tbody.innerHTML = `
       <tr>
-        <td colspan="5" style="text-align:center;padding:40px;color:var(--danger)">
+        <td colspan="6" style="text-align:center;padding:40px;color:var(--danger)">
           <div style="font-weight:600;margin-bottom:8px;">⚠️ Failed to load products inventory.</div>
           <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${err.message || "Network error or database unreachable."}</div>
           <button class="btn btn-sm btn-outline" onclick="loadProducts()">Try Again</button>
@@ -224,27 +290,85 @@ async function loadProducts() {
   }
 }
 
+function renderTable(products) {
+  const tbody = document.getElementById('productsTable');
+  if (!products || products.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">No products found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = products.map(p => {
+    let catBadge = 'badge-spice';
+    let catText = 'Spices';
+    if(p.category_id === 2 || p.category === 'dairy') { catBadge = 'badge-dairy'; catText = 'Dairy'; }
+    if(p.category_id === 3 || p.category === 'combos') { catBadge = 'badge-combo'; catText = 'Combos'; }
+    if(p.category_id === 4 || p.category === 'cakes') { catBadge = 'badge-cake'; catText = 'Cakes'; }
+
+    const hasVideo = p.video_url && p.video_url.trim();
+
+    return `
+      <tr>
+        <td>
+          <div class="prod-cell">
+            <img src="${p.image_url}" class="prod-img" onerror="this.src='https://via.placeholder.com/48x48?text=Product'">
+            <div class="prod-meta">
+              <strong>${p.name}</strong>
+              <span style="font-size:0.8rem;color:var(--text-muted)">${p.weight || '1 pc'}</span>
+              ${p.name_hindi ? `<span style="font-size:0.75rem;color:#8b5cf6;">${p.name_hindi}</span>` : ''}
+            </div>
+          </div>
+        </td>
+        <td><span class="badge ${catBadge}">${catText}</span></td>
+        <td><strong>₹${formatMoney(p.price)}</strong></td>
+        <td><strike style="color:var(--text-muted)">${formatMoney(p.mrp || p.price)}</strike></td>
+        <td>${hasVideo ? '<span style="color:#1a6fa0;font-weight:600;font-size:12px;">🎬 Has Video</span>' : '<span style="color:var(--text-muted);font-size:12px;">No video</span>'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline" onclick="openModal('${p.id}')">Edit</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterTable(query) {
+  const q = query.toLowerCase();
+  const filtered = allProducts.filter(p =>
+    p.name?.toLowerCase().includes(q) ||
+    p.name_hindi?.includes(query) ||
+    (p.category || '').toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+}
+
 function openModal(id = null) {
   document.getElementById('modalTitle').textContent = id ? "Edit Product" : "Add New Product";
+  document.getElementById('social-caption-box').style.display = 'none';
+  document.getElementById('ai-desc-status').style.display = 'none';
+  document.getElementById('desc-ai-indicator').style.display = 'none';
+  document.getElementById('hindi-ai-badge').style.display = 'none';
   
-  // Clear any status messages
   const statusEl = document.getElementById('uploadStatus');
-  statusEl.textContent = "Upload a JPEG/JPG photo from your gallery or paste a direct image URL.";
+  statusEl.textContent = "Upload a photo or paste a direct image URL.";
   statusEl.style.color = "var(--text-muted)";
   document.getElementById('pImgFile').value = "";
+  document.getElementById('pVideoFile').value = "";
+  clearVideoPreview();
 
   if(id) {
     const p = allProducts.find(x => x.id === id);
     document.getElementById('pId').value = p.id;
     document.getElementById('pName').value = p.name;
     document.getElementById('pNameHindi').value = p.name_hindi || '';
-    document.getElementById('pCat').value = p.category_id;
+    document.getElementById('pCat').value = p.category_id || 1;
     document.getElementById('pPrice').value = p.price;
     document.getElementById('pMrp').value = p.mrp || p.price;
     document.getElementById('pWeight').value = p.weight || '1 pc';
     document.getElementById('pImg').value = p.image_url;
+    document.getElementById('pDescription').value = p.description || '';
+    document.getElementById('pVideo').value = p.video_url || '';
     document.getElementById('pBestseller').checked = p.is_bestseller || false;
     document.getElementById('pNew').checked = p.is_new || false;
+    updateVideoPreview();
   } else {
     document.getElementById('pId').value = "";
     document.getElementById('pName').value = "";
@@ -253,12 +377,13 @@ function openModal(id = null) {
     document.getElementById('pMrp').value = "";
     document.getElementById('pWeight').value = "1 pc";
     document.getElementById('pImg').value = "";
+    document.getElementById('pDescription').value = "";
+    document.getElementById('pVideo').value = "";
     document.getElementById('pBestseller').checked = false;
     document.getElementById('pNew').checked = false;
   }
   
   updatePreview();
-  
   document.getElementById('overlay').classList.add('open');
   document.getElementById('prodModal').classList.add('open');
 }
@@ -270,17 +395,22 @@ function closeModal() {
 
 async function saveProduct() {
   const idStr = document.getElementById('pId').value;
+  const catVal = document.getElementById('pCat').value;
+  const catName = CAT_MAP[catVal] || 'spices';
+
   const payload = {
     name: document.getElementById('pName').value.trim(),
     name_hindi: document.getElementById('pNameHindi').value.trim(),
-    category_id: parseInt(document.getElementById('pCat').value),
+    category: catName,
+    category_id: parseInt(catVal),
     price: parseInt(document.getElementById('pPrice').value),
     mrp: parseInt(document.getElementById('pMrp').value) || parseInt(document.getElementById('pPrice').value),
     weight: document.getElementById('pWeight').value.trim(),
     image_url: document.getElementById('pImg').value.trim(),
+    video_url: document.getElementById('pVideo').value.trim() || null,
+    description: document.getElementById('pDescription').value.trim() || 'Authentic Product',
     is_bestseller: document.getElementById('pBestseller').checked,
-    is_new: document.getElementById('pNew').checked,
-    description: "Authentic Product"
+    is_new: document.getElementById('pNew').checked
   };
   
   if(!payload.name) { alert("Product name is required."); return; }
@@ -289,14 +419,219 @@ async function saveProduct() {
   
   try {
     await api.saveProduct(idStr || null, payload);
+    // Generate social caption via AI
+    aiGenerateSocialCaption(payload.name, payload.category, payload.price, payload.description);
     closeModal();
     loadProducts();
   } catch(e) {
-    alert("Failed to save product.");
+    alert("Failed to save product: " + e.message);
   }
 }
 
-// Preview and upload functions
+// ─── AI DESCRIPTION GENERATOR ───────────────────────────────────
+async function aiGenerateDescription() {
+  const name = document.getElementById('pName').value.trim();
+  const catVal = document.getElementById('pCat').value;
+  const catName = CAT_NAMES[catVal] || 'Spices';
+  
+  if (!name) { alert('Please enter a product name first.'); return; }
+  
+  const btn = document.getElementById('ai-desc-btn');
+  const statusEl = document.getElementById('ai-desc-status');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating...';
+  statusEl.style.display = 'block';
+  statusEl.textContent = '🤖 Generating SEO description + Hindi name with Gemini AI...';
+
+  try {
+    const prompt = `You are an expert Indian food copywriter for an e-commerce store. Generate for product: "${name}" (Category: ${catName}).
+
+Return ONLY valid JSON in this exact format (no markdown, no extra text):
+{
+  "description": "SEO-friendly 2-3 sentence English description mentioning key benefits, purity, origin. Under 120 words.",
+  "hindi_name": "Authentic Hindi name for ${name} in Devanagari script only"
+}`;
+
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    
+    if (!resp.ok) throw new Error(`AI API error: ${resp.status}`);
+    const data = await resp.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    
+    // Parse JSON from AI response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('AI returned unexpected format');
+    
+    const parsed = JSON.parse(jsonMatch[0]);
+    
+    if (parsed.description) {
+      document.getElementById('pDescription').value = parsed.description;
+      document.getElementById('desc-ai-indicator').style.display = 'inline';
+    }
+    if (parsed.hindi_name) {
+      document.getElementById('pNameHindi').value = parsed.hindi_name;
+      document.getElementById('hindi-ai-badge').style.display = 'inline';
+    }
+    
+    statusEl.textContent = '✅ Description & Hindi name generated successfully!';
+    statusEl.style.color = '#2E7D32';
+    btn.textContent = '✨ Regenerate';
+  } catch(e) {
+    statusEl.textContent = `❌ AI Error: ${e.message}. Check your Gemini API key.`;
+    statusEl.style.color = '#E53935';
+    btn.textContent = '✨ Generate SEO Description + Hindi Name';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ─── AI BULK CATALOG GENERATOR ───────────────────────────────────
+async function aiGenerateCatalog() {
+  const catInput = document.getElementById('ai-cat-input').value.trim();
+  if (!catInput) { alert('Please enter a category name (e.g. spice blends)'); return; }
+  
+  const btn = document.getElementById('ai-gen-btn');
+  const resultDiv = document.getElementById('ai-catalog-result');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating...';
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = '<div style="text-align:center;padding:20px;color:#8b5cf6;">🤖 Generating 10 products with Gemini AI...</div>';
+
+  try {
+    const prompt = `You are an Indian grocery e-commerce product manager. Generate 10 realistic product entries for category: "${catInput}".
+
+Return ONLY a valid JSON array (no markdown, no extra text):
+[
+  {
+    "name": "Product Name in English",
+    "name_hindi": "Hindi name in Devanagari",
+    "category": "${catInput}",
+    "price": 150,
+    "mrp": 180,
+    "weight": "200g",
+    "description": "2-sentence SEO description",
+    "is_bestseller": false,
+    "is_new": true
+  }
+]
+
+Make prices realistic for Indian market (₹50-₹1500 range). Include mix of bestsellers and new arrivals.`;
+
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    
+    if (!resp.ok) throw new Error(`AI API error: ${resp.status}`);
+    const data = await resp.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) throw new Error('AI returned unexpected format');
+    
+    const products = JSON.parse(jsonMatch[0]);
+    
+    resultDiv.innerHTML = `
+      <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+        <span style="font-weight:700;color:#5a1fa0;">✅ ${products.length} products generated for "${catInput}"</span>
+        <button onclick="publishAICatalog()" style="padding:8px 18px;background:#2E7D32;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;">
+          🚀 Publish All to Store
+        </button>
+        <button onclick="document.getElementById('ai-catalog-result').style.display='none'" style="padding:8px 14px;background:none;border:1px solid #ccc;border-radius:6px;font-size:13px;cursor:pointer;">
+          Discard
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;max-height:400px;overflow-y:auto;">
+        ${products.map((p, i) => `
+          <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:start;">
+              <div>
+                <div style="font-weight:700;font-size:14px;">${p.name}</div>
+                <div style="font-size:12px;color:#8b5cf6;margin-top:2px;">${p.name_hindi || ''}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;color:#D4520A;">₹${p.price}</div>
+                <div style="font-size:11px;text-decoration:line-through;color:#aaa;">₹${p.mrp}</div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:#666;margin-top:8px;line-height:1.4;">${p.description}</div>
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+              ${p.is_bestseller ? '<span style="background:#E53935;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;">⭐ Bestseller</span>' : ''}
+              ${p.is_new ? '<span style="background:#2E7D32;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;">✨ New</span>' : ''}
+              <span style="background:#f3f4f6;font-size:10px;padding:2px 6px;border-radius:4px;">${p.weight}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+    
+    // Store for publishing
+    resultDiv.dataset.products = JSON.stringify(products);
+    
+  } catch(e) {
+    resultDiv.innerHTML = `<div style="color:#E53935;padding:12px;">❌ Error: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✨ Generate Catalog';
+  }
+}
+
+async function publishAICatalog() {
+  const resultDiv = document.getElementById('ai-catalog-result');
+  const products = JSON.parse(resultDiv.dataset.products || '[]');
+  if (products.length === 0) return;
+  
+  const publishBtn = event.target;
+  publishBtn.disabled = true;
+  publishBtn.textContent = '⏳ Publishing...';
+  
+  let success = 0;
+  for (const p of products) {
+    try {
+      await api.saveProduct(null, {
+        ...p,
+        image_url: 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name),
+        video_url: null
+      });
+      success++;
+    } catch(e) { console.error('Failed to save:', p.name, e); }
+  }
+  
+  alert(`✅ Published ${success}/${products.length} products to your store! Go update their images now.`);
+  resultDiv.style.display = 'none';
+  loadProducts();
+}
+
+// ─── AI SOCIAL CAPTION GENERATOR ────────────────────────────────
+async function aiGenerateSocialCaption(name, category, price, description) {
+  try {
+    const prompt = `Generate an engaging Instagram + WhatsApp caption for new Indian grocery product: "${name}" (${category}, ₹${price}). Include 5-7 relevant hashtags. Keep it exciting, add emojis, mention purity/quality/farm-fresh angle. Under 100 words.`;
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    const caption = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    if (caption) {
+      document.getElementById('social-caption-text').textContent = caption;
+      document.getElementById('social-caption-box').style.display = 'block';
+    }
+  } catch(e) { /* silent */ }
+}
+
+function copySocialCaption() {
+  const text = document.getElementById('social-caption-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('✅ Caption copied to clipboard! Paste it on Instagram or WhatsApp status.');
+  });
+}
+
+// ─── PHOTO UPLOAD TO CLOUDINARY ─────────────────────────────────
 function updatePreview() {
   const urlVal = document.getElementById('pImg').value.trim();
   const previewImg = document.getElementById('pImgPreview');
@@ -313,94 +648,156 @@ function clearPreview() {
   document.getElementById('pImg').value = "";
   document.getElementById('pImgFile').value = "";
   updatePreview();
-  const statusEl = document.getElementById('uploadStatus');
-  statusEl.textContent = "Upload a JPEG/JPG photo from your gallery or paste a direct image URL.";
-  statusEl.style.color = "var(--text-muted)";
+  document.getElementById('uploadStatus').textContent = "Upload a photo or paste a direct image URL.";
+  document.getElementById('uploadStatus').style.color = "var(--text-muted)";
 }
 
-function compressAndLoadImage(file) {
-  return new Promise((resolve, reject) => {
-    if (!file) return reject(new Error("No file selected"));
-    
-    // Validate image format strictly
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/pjpeg'];
-    const extension = file.name.split('.').pop().toLowerCase();
-    if (!validTypes.includes(file.type) && !['jpg', 'jpeg'].includes(extension)) {
-      return reject(new Error("Please upload a JPG or JPEG photo only."));
-    }
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const img = new Image();
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 400; // Keep base64 data URL size small
-        const MAX_HEIGHT = 300;
-        let width = img.width;
-        let height = img.height;
-        
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width *= MAX_HEIGHT / height;
-            height = MAX_HEIGHT;
-          }
-        }
-        
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        
-        // Compress as JPEG at 70% quality (excellent quality-to-size trade off)
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        resolve(dataUrl);
-      };
-      img.onerror = function() {
-        reject(new Error("Invalid image format or corrupted file."));
-      };
-      img.src = e.target.result;
-    };
-    reader.onerror = function() {
-      reject(new Error("Failed to read the file."));
-    };
-    reader.readAsDataURL(file);
-  });
+// ─── VIDEO UPLOAD TO CLOUDINARY ─────────────────────────────────
+function updateVideoPreview() {
+  const urlVal = document.getElementById('pVideo').value.trim();
+  const previewVid = document.getElementById('pVideoPreview');
+  const previewContainer = document.getElementById('videoPreviewContainer');
+  if (urlVal) {
+    previewVid.src = urlVal;
+    previewContainer.style.display = 'block';
+  } else {
+    previewContainer.style.display = 'none';
+  }
+}
+
+function clearVideoPreview() {
+  document.getElementById('pVideo').value = "";
+  if (document.getElementById('pVideoFile')) document.getElementById('pVideoFile').value = "";
+  document.getElementById('videoPreviewContainer').style.display = 'none';
+  document.getElementById('videoStatus').textContent = "Upload raw footage or paste a Cloudinary video URL.";
+  document.getElementById('videoStatus').style.color = "#5a9dc0";
+}
+
+async function uploadToCloudinary(file, isVideo = false) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  formData.append('cloud_name', CLOUDINARY_CLOUD);
+  
+  const resourceType = isVideo ? 'video' : 'image';
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/${resourceType}/upload`;
+  
+  return fetch(url, { method: 'POST', body: formData });
 }
 
 // Setup event listeners
 document.addEventListener('DOMContentLoaded', () => {
+  loadConfig();
   loadProducts();
   
-  // URL Input Listener
+  // Photo URL preview
   document.getElementById('pImg').addEventListener('input', updatePreview);
   
-  // File Input Listener
+  // Video URL preview
+  document.getElementById('pVideo').addEventListener('input', updateVideoPreview);
+  
+  // Photo file upload → Cloudinary
   document.getElementById('pImgFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (!file) return;
     
     const statusEl = document.getElementById('uploadStatus');
-    statusEl.textContent = "⏳ Reading and compressing image...";
+    statusEl.textContent = "⏳ Uploading to Cloudinary...";
     statusEl.style.color = "var(--primary)";
     
     try {
-      const base64Str = await compressAndLoadImage(file);
-      document.getElementById('pImg').value = base64Str;
+      const resp = await uploadToCloudinary(file, false);
+      if (!resp.ok) {
+        const errData = await resp.json();
+        throw new Error(errData.error?.message || 'Upload failed');
+      }
+      const data = await resp.json();
+      document.getElementById('pImg').value = data.secure_url;
       updatePreview();
-      statusEl.textContent = "✅ Image loaded & compressed successfully.";
+      statusEl.textContent = `✅ Photo uploaded to Cloudinary!`;
       statusEl.style.color = "var(--success)";
     } catch(err) {
-      statusEl.textContent = `❌ ${err.message}`;
+      statusEl.textContent = `❌ Upload failed: ${err.message}`;
       statusEl.style.color = "var(--danger)";
       e.target.value = "";
     }
   });
+  
+  // Video file upload → Cloudinary
+  document.getElementById('pVideoFile').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const statusEl = document.getElementById('videoStatus');
+    const progressDiv = document.getElementById('videoUploadProgress');
+    const progressBar = document.getElementById('videoProgressBar');
+    const progressText = document.getElementById('videoProgressText');
+    
+    // Check size (100MB limit)
+    if (file.size > 100 * 1024 * 1024) {
+      statusEl.textContent = '❌ Video too large. Max 100MB allowed.';
+      statusEl.style.color = '#E53935';
+      e.target.value = '';
+      return;
+    }
+    
+    statusEl.textContent = "⏳ Uploading video to Cloudinary...";
+    statusEl.style.color = "#1a6fa0";
+    progressDiv.style.display = 'block';
+    progressBar.style.width = '10%';
+    progressText.textContent = 'Starting upload...';
+    
+    try {
+      // Use XMLHttpRequest for progress tracking
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_PRESET);
+      
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/video/upload`);
+      
+      xhr.upload.onprogress = (ev) => {
+        if (ev.lengthComputable) {
+          const pct = Math.round((ev.loaded / ev.total) * 100);
+          progressBar.style.width = pct + '%';
+          progressText.textContent = `Uploading... ${pct}%`;
+        }
+      };
+      
+      xhr.onload = () => {
+        progressDiv.style.display = 'none';
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          document.getElementById('pVideo').value = data.secure_url;
+          updateVideoPreview();
+          statusEl.textContent = `✅ Video uploaded! Duration: ${Math.round(data.duration || 0)}s`;
+          statusEl.style.color = '#2E7D32';
+        } else {
+          const err = JSON.parse(xhr.responseText);
+          statusEl.textContent = `❌ Upload failed: ${err.error?.message || 'Unknown error'}`;
+          statusEl.style.color = '#E53935';
+          e.target.value = '';
+        }
+      };
+      
+      xhr.onerror = () => {
+        progressDiv.style.display = 'none';
+        statusEl.textContent = '❌ Network error during upload. Please try again.';
+        statusEl.style.color = '#E53935';
+        e.target.value = '';
+      };
+      
+      xhr.send(formData);
+    } catch(err) {
+      progressDiv.style.display = 'none';
+      statusEl.textContent = `❌ Error: ${err.message}`;
+      statusEl.style.color = '#E53935';
+      e.target.value = "";
+    }
+  });
 });
+
+function formatMoney(n) { return n ? Number(n).toLocaleString('en-IN') : '0'; }
 </script>
 </body>
 </html>

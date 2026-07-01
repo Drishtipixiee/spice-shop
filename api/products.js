@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { name, name_hindi, category, price, mrp, image_url, description, weight, is_bestseller, is_new, in_stock } = req.body;
+      const { name, name_hindi, category, price, mrp, image_url, video_url, description, weight, is_bestseller, is_new, in_stock } = req.body;
       const newProduct = {
         id: Math.random().toString(36).substr(2, 9),
         name,
@@ -25,6 +25,7 @@ module.exports = async function handler(req, res) {
         price: parseInt(price),
         mrp: parseInt(mrp),
         image_url: image_url || 'https://via.placeholder.com/400x300?text=Product',
+        video_url: video_url || null,
         description: description || '',
         weight: weight || '',
         is_bestseller: is_bestseller || false,
@@ -42,7 +43,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'PUT') {
-      const { id, name, name_hindi, category, price, mrp, image_url, description, weight, is_bestseller, is_new, in_stock } = req.body;
+      const { id, name, name_hindi, category, price, mrp, image_url, video_url, description, weight, is_bestseller, is_new, in_stock } = req.body;
       if (!id) return res.status(400).json({ error: 'Product ID is required' });
       
       const index = products.findIndex(p => p.id === id);
@@ -56,6 +57,7 @@ module.exports = async function handler(req, res) {
         price: parseInt(price),
         mrp: parseInt(mrp),
         image_url: image_url || 'https://via.placeholder.com/400x300?text=Product',
+        video_url: video_url !== undefined ? (video_url || null) : products[index].video_url,
         description: description || '',
         weight: weight || '',
         is_bestseller: is_bestseller || false,

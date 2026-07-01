@@ -347,27 +347,120 @@
     .marquee span { padding: 0 40px; font-size: 13px; font-weight: 500; }
     @keyframes marquee { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
 
-    /* Hero */
+    /* Cinematic Hero */
     .hero {
-      background: linear-gradient(135deg, #FFF8F0 0%, #FFF0E0 100%);
-      padding: 64px 24px;
+      position: relative;
+      width: 100%; min-height: 85vh;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-video-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(26,10,3,0.72) 0%, rgba(91,30,8,0.55) 60%, rgba(20,20,20,0.35) 100%);
+      z-index: 1;
     }
     .hero-inner {
-      max-width: 1280px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+      position: relative; z-index: 2;
+      max-width: 1280px; width: 100%; margin: 0 auto;
+      padding: 80px 32px;
+      display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center;
     }
-    @media (max-width: 768px) { .hero-inner { grid-template-columns: 1fr; } }
-    .hero-text .eyebrow { font-size: 13px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-    .hero-text h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.2; margin-bottom: 16px; color: #5D2505; }
-    .hero-text p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
+    @media (max-width: 768px) { .hero-inner { grid-template-columns: 1fr; padding: 60px 20px; } }
+    .hero-text .eyebrow {
+      display: inline-block; font-size: 12px; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 2px;
+      background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.4);
+      padding: 4px 12px; border-radius: var(--radius-pill); margin-bottom: 16px;
+    }
+    .hero-text h1 {
+      font-size: clamp(32px, 5vw, 64px); line-height: 1.1;
+      margin-bottom: 18px; color: #fff;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .hero-text p {
+      font-size: 17px; color: rgba(255,255,255,0.85);
+      line-height: 1.7; margin-bottom: 32px;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    }
     .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-primary { padding: 14px 28px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; min-height: 44px; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { padding: 14px 28px; background: var(--secondary); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; min-height: 44px; }
-    .btn-secondary:hover { opacity: 0.9; }
-    .hero-images { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .hero-images img { border-radius: var(--radius); box-shadow: var(--shadow-md); height: 180px; object-fit: cover; width: 100%; }
-    .hero-images .img-large { grid-column: 1 / -1; height: 220px; }
+    .btn-primary {
+      padding: 14px 28px; background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius-pill); font-size: 15px;
+      font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: all 0.3s; min-height: 44px;
+      box-shadow: 0 4px 20px rgba(212,82,10,0.5);
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(212,82,10,0.6); }
+    .btn-secondary {
+      padding: 14px 28px; background: rgba(255,255,255,0.15); color: #fff;
+      border: 2px solid rgba(255,255,255,0.5); border-radius: var(--radius-pill);
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: all 0.3s;
+      min-height: 44px; backdrop-filter: blur(8px);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.25); border-color: #fff; transform: translateY(-2px); }
+    /* Hero stats strip */
+    .hero-stats {
+      display: flex; gap: 24px; flex-wrap: wrap; margin-top: 36px;
+    }
+    .hero-stat {
+      text-align: center;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 12px 20px; border-radius: var(--radius);
+    }
+    .hero-stat-num { font-size: 22px; font-weight: 700; color: var(--accent); font-family: 'Playfair Display', serif; }
+    .hero-stat-lbl { font-size: 11px; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.5px; }
+    /* Product media wrap */
+    .product-media-wrap {
+      position: relative; width: 100%; height: 180px; overflow: hidden;
+    }
+    .product-media-wrap .product-image {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; transition: opacity 0.4s ease; z-index: 1;
+    }
+    .product-media-wrap .product-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: 0; transition: opacity 0.4s ease; z-index: 2;
+    }
+    .product-media-wrap:hover .product-image { opacity: 0; }
+    .product-media-wrap:hover .product-video { opacity: 1; }
+    /* AI recipe modal */
+    .recipe-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 11000; display: none; align-items: center; justify-content: center;
+      padding: 20px; backdrop-filter: blur(4px);
+    }
+    .recipe-modal-overlay.open { display: flex; }
+    .recipe-modal-box {
+      background: linear-gradient(145deg, #fff8f0, #fff);
+      border-radius: 20px; width: 100%; max-width: 540px;
+      padding: 32px; max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    /* AI badge */
+    .ai-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, #7B2FF7, #F72585);
+      color: #fff; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: var(--radius-pill);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    /* AI Floating button */
+    .btn-ai-recipe {
+      flex: none; padding: 10px 14px; border: none;
+      background: linear-gradient(135deg, #7B2FF7, #F72585);
+      color: #fff; border-radius: var(--radius-sm);
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s; min-height: 44px; white-space: nowrap;
+    }
+    .btn-ai-recipe:hover { opacity: 0.88; }
 
     /* Products Section */
     .products-section { max-width: 1280px; margin: 0 auto; padding: 48px 24px; }
@@ -491,32 +584,58 @@
     <a href="#products" onclick="filterByCategory('cakes', true); toggleMobileDrawer(); return false;">Sweets &amp; Cakes</a>
   </div>
 
-  <!-- Hero Section -->
+  <!-- Cinematic Hero Section -->
   <header class="hero">
+    <!-- Cinematic background video (autoplay, muted, loop) -->
+    <video class="hero-video-bg" autoplay muted loop playsinline poster="https://res.cloudinary.com/d4lxspus/image/upload/hero-poster.jpg">
+      <source src="https://videos.pexels.com/video-files/5865043/5865043-uhd_2560_1440_24fps.mp4" type="video/mp4">
+      <source src="https://videos.pexels.com/video-files/3296266/3296266-uhd_2560_1440_25fps.mp4" type="video/mp4">
+    </video>
+    <!-- Dark gradient overlay for readability -->
+    <div class="hero-overlay"></div>
+
     <div class="hero-inner">
       <div class="hero-text">
-        <span class="eyebrow">Pure &amp; Authentic</span>
-        <h1 id="hero-headline">Fresh Dairy, Authentic Spices</h1>
-        <p id="hero-subheadline">Farm-fresh dairy delivered to your doorstep. Handpicked spices from the finest farms of India.</p>
-        
+        <span class="eyebrow">🌿 Pure &amp; Authentic · FSSAI Certified</span>
+        <h1 id="hero-headline">Fresh Dairy &amp;<br>Authentic Spices</h1>
+        <p id="hero-subheadline">Farm-fresh A2 ghee, hand-churned. Spices sourced from Erode &amp; Kerala farms. Delivered to Thane &amp; Mulund doorstep.</p>
+
         <!-- Live Countdown Timer -->
-        <div class="timer-box" style="margin-top: 16px; background: rgba(212, 82, 10, 0.1); border: 1px solid var(--primary); padding: 12px; border-radius: var(--radius-sm); max-width: 320px; display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 20px;">⚡</span>
+        <div style="margin-bottom: 28px; background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.5); padding: 12px 16px; border-radius: var(--radius-sm); max-width: 340px; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">⚡</span>
           <div>
-            <div style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Flash Offer: 10% OFF code FRESH10</div>
-            <div id="countdown-timer" style="font-family: monospace; font-size: 16px; font-weight: 700; color: #1A1A1A;">00h 00m 00s</div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px;">Flash Offer — 10% OFF with code FRESH10</div>
+            <div id="countdown-timer" style="font-family: monospace; font-size: 18px; font-weight: 700; color: #fff;">00h 00m 00s</div>
           </div>
         </div>
 
-        <div class="hero-buttons" style="margin-top: 24px;">
-          <button class="btn-primary" onclick="filterByCategory('dairy', true)">Shop Dairy</button>
-          <button class="btn-secondary" onclick="filterByCategory('spices', true)">Shop Spices</button>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="filterByCategory('dairy', true)">🥛 Shop Dairy</button>
+          <button class="btn-secondary" onclick="filterByCategory('spices', true)">🌶️ Shop Spices</button>
+        </div>
+
+        <!-- Trust stats strip -->
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-num">10K+</div><div class="hero-stat-lbl">Happy Families</div></div>
+          <div class="hero-stat"><div class="hero-stat-num">4.9★</div><div class="hero-stat-lbl">Average Rating</div></div>
+          <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-lbl">Natural &amp; Pure</div></div>
         </div>
       </div>
-      <div class="hero-images">
-        <img class="img-large" src="https://t4.ftcdn.net/jpg/13/15/19/43/360_F_1315194377_Ro8c5tjMXYc3oEXUJ6zgyeIENDkdQyJX.jpg" alt="A2 Ghee">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM3UCTqqG6vIXSwZFScLSPp5JPbWuMhEkwCg&s" alt="Fresh Paneer">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s" alt="Pure Spices">
+
+      <!-- Right panel: floating product highlights -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.25);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:center;">
+          <img src="https://t4.ftcdn.net/jpg/13/15/19/43/360_F_1315194377_Ro8c5tjMXYc3oEXUJ6zgyeIENDkdQyJX.jpg" alt="A2 Ghee" style="width:72px;height:72px;border-radius:12px;object-fit:cover;">
+          <div><div style="font-size:11px;color:rgba(255,255,255,0.65);margin-bottom:2px;">⭐ Best Seller</div><div style="font-weight:700;color:#fff;font-size:15px;">Pure A2 Desi Ghee</div><div style="color:var(--accent);font-weight:700;margin-top:4px;">₹450 <span style="text-decoration:line-through;font-size:12px;opacity:0.7;">₹520</span></div></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.25);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:center;">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM3UCTqqG6vIXSwZFScLSPp5JPbWuMhEkwCg&s" alt="Fresh Paneer" style="width:72px;height:72px;border-radius:12px;object-fit:cover;">
+          <div><div style="font-size:11px;color:rgba(255,255,255,0.65);margin-bottom:2px;">🥛 Farm Fresh</div><div style="font-weight:700;color:#fff;font-size:15px;">Fresh Paneer</div><div style="color:var(--accent);font-weight:700;margin-top:4px;">₹180 <span style="text-decoration:line-through;font-size:12px;opacity:0.7;">₹200</span></div></div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.25);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:center;">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s" alt="Pure Spices" style="width:72px;height:72px;border-radius:12px;object-fit:cover;">
+          <div><div style="font-size:11px;color:rgba(255,255,255,0.65);margin-bottom:2px;">🌿 Erode Farms</div><div style="font-weight:700;color:#fff;font-size:15px;">Turmeric Powder</div><div style="color:var(--accent);font-weight:700;margin-top:4px;">₹120 <span style="text-decoration:line-through;font-size:12px;opacity:0.7;">₹150</span></div></div>
+        </div>
       </div>
     </div>
   </header>
@@ -539,7 +658,8 @@
     <!-- Search bar -->
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="search-input" placeholder="Search ghee, paneer, turmeric, kalakand..." oninput="searchProducts()">
+      <input type="text" id="search-input" placeholder="Search ghee, paneer, turmeric... or ask naturally: 'spicy for biryani'" oninput="searchProducts()">
+      <div class="search-ai-label">✨ AI Search</div>
     </div>
 
     <!-- Category Tabs -->
@@ -594,7 +714,7 @@
   <!-- Pincode Section -->
   <div class="pincode-section">
     <h2>📍 Check Delivery Availability</h2>
-    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we service your area in Thane, Maharashtra</p>
+    <p style="color: var(--text-muted); margin-top: 4px;">Enter your pincode to check if we deliver in Thane, Mulund (Mumbai) &amp; nearby areas</p>
     <div class="pincode-form">
       <input class="pincode-input" id="pincode-input" type="text" maxlength="6" placeholder="Enter 6-digit Pincode">
       <button class="pin-btn" onclick="checkPincode()">Check</button>
@@ -750,15 +870,22 @@
       </div>
       <div class="form-group">
         <label>Payment Method</label>
-        <div class="payment-options">
-          <div class="payment-option selected" data-method="razorpay" onclick="selectPayment('razorpay')">
+        <div class="payment-options" style="flex-wrap:wrap;">
+          <div class="payment-option selected" data-method="razorpay" onclick="selectPayment('razorpay')" style="min-width:120px;">
             <span class="icon">💳</span>
-            <span class="label">Online (Razorpay)</span>
+            <span class="label">Razorpay<br><span style="font-size:10px;opacity:0.7;">UPI/Card/NetBanking</span></span>
           </div>
-          <div class="payment-option" data-method="cod" onclick="selectPayment('cod')">
+          <div class="payment-option" data-method="upilink" onclick="selectPayment('upilink')" style="min-width:120px;">
+            <span class="icon">📲</span>
+            <span class="label">UPI Link<br><span style="font-size:10px;opacity:0.7;">Pay @darshan580</span></span>
+          </div>
+          <div class="payment-option" data-method="cod" onclick="selectPayment('cod')" style="min-width:120px;">
             <span class="icon">💵</span>
-            <span class="label">Cash on Delivery (COD)</span>
+            <span class="label">COD<br><span style="font-size:10px;opacity:0.7;">Cash on Delivery</span></span>
           </div>
+        </div>
+        <div id="upilink-note" style="display:none;margin-top:8px;padding:10px;background:#f0e8ff;border:1px solid #c9a8ff;border-radius:8px;font-size:12px;color:#5a1fa0;">
+          📲 After placing order, you'll be redirected to Razorpay UPI link to complete payment to <strong>@darshan580</strong>
         </div>
       </div>
       <button class="btn-place-order" id="place-order-btn" onclick="placeOrder()">Place Order</button>
@@ -799,10 +926,16 @@
     // Supported delivery pincodes
     const PINCODES_OK = [
       "400601", "400602", "400603", "400604", "400605", "400606", "400607", "400608", "400609", "400610",
-      "400612", "400615", "400701", "400708", "401105", "401107"
+      "400612", "400615", "400701", "400708", "401105", "401107",
+      "400080", "400081", "400082"  // ✅ Mulund West/East — Mumbai Suburban district
     ];
-    const DELIVERY_DISTRICTS = ['thane'];
+    const DELIVERY_DISTRICTS = ['thane', 'mumbai suburban', 'mumbai'];  // ✅ covers Mulund's official district
     const DELIVERY_STATE = 'maharashtra';
+
+    // AI & Cloudinary config (fetched from /api/config on app init)
+    let GEMINI_API_KEY = '';  // loaded from /api/config → GEMINI_API_KEY env var
+    let CLOUDINARY_CLOUD = 'd4lxspus';
+    let CLOUDINARY_PRESET = 'Project';
     const pincodeLocationCache = {};
 
     // Testimonials List
@@ -840,6 +973,9 @@
           const configData = await res.json();
           RAZORPAY_KEY = configData.razorpayKeyId;
           OWNER_WHATSAPP = configData.ownerWhatsapp;
+          if (configData.geminiApiKey) GEMINI_API_KEY = configData.geminiApiKey;
+          if (configData.cloudinaryCloudName) CLOUDINARY_CLOUD = configData.cloudinaryCloudName;
+          if (configData.cloudinaryUploadPreset) CLOUDINARY_PRESET = configData.cloudinaryUploadPreset;
           // Update whatsapp float link dynamically
           const floatWaBtn = document.querySelector('.float-wa');
           if (floatWaBtn) {
@@ -851,9 +987,35 @@
       }
 
       startCountdownTimer();
+      applyDynamicHomepage();
       await loadSiteSettings();
       await loadProducts();
       updateCartBadge();
+      setupVideoObserver();
+    }
+
+    // ─── DYNAMIC HOMEPAGE (time-of-day AI) ────────────────────────
+    function applyDynamicHomepage() {
+      const hour = new Date().getHours();
+      const month = new Date().getMonth() + 1; // 1-12
+      const headline = document.getElementById('hero-headline');
+      const subheadline = document.getElementById('hero-subheadline');
+      // Festival/season detection
+      const isDiwali = month === 10 || month === 11;
+      const isSummer = month >= 4 && month <= 6;
+      if (isDiwali) {
+        if (headline) headline.textContent = '✨ Diwali Gifting Made Pure';
+        if (subheadline) subheadline.textContent = 'Send premium spice hampers & A2 ghee to loved ones this festive season. Free delivery on gift combos above ₹499.';
+      } else if (hour >= 5 && hour < 11) {
+        if (headline) headline.textContent = 'Start Your Morning Right 🌅';
+        if (subheadline) subheadline.textContent = 'Fresh A2 ghee for your morning rotis & chai. Farm-to-kitchen dairy, delivered fresh every morning.';
+      } else if (hour >= 17 && hour < 21) {
+        if (headline) headline.textContent = 'Evening Cooking, Pure Flavours 🍛';
+        if (subheadline) subheadline.textContent = 'Get your dal tadka perfect with our handpicked spices. Order now — same day delivery in Thane & Mulund.';
+      } else if (isSummer) {
+        if (headline) headline.textContent = 'Beat the Heat with Pure Dairy 🥛';
+        if (subheadline) subheadline.textContent = 'Fresh lassi-grade paneer, cooling chaas, and natural A2 ghee — pure goodness for summer days.';
+      }
     }
 
     // Live Offer Countdown Timer
@@ -951,19 +1113,21 @@
     }
 
     // ─── RENDER CATALOG ───────────────────────────────────────────
-    function renderProducts() {
-      let filtered = [...PRODUCTS];
-      if (activeCategory !== 'all') {
-        filtered = filtered.filter(p => normalizeCategory(p.category) === activeCategory);
-      }
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        filtered = filtered.filter(p =>
-          p.name?.toLowerCase().includes(q) ||
-          p.name_hindi?.includes(searchQuery) ||
-          p.description?.toLowerCase().includes(q) ||
-          normalizeCategory(p.category).includes(q)
-        );
+    function renderProducts(overrideList) {
+      let filtered = overrideList ? [...overrideList] : [...PRODUCTS];
+      if (!overrideList) {
+        if (activeCategory !== 'all') {
+          filtered = filtered.filter(p => normalizeCategory(p.category) === activeCategory);
+        }
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          filtered = filtered.filter(p =>
+            p.name?.toLowerCase().includes(q) ||
+            p.name_hindi?.includes(searchQuery) ||
+            p.description?.toLowerCase().includes(q) ||
+            normalizeCategory(p.category).includes(q)
+          );
+        }
       }
       products = filtered;
 
@@ -987,7 +1151,8 @@
         const ratingVal = parseFloat(p.rating || 4.5);
         const stars    = '★'.repeat(Math.floor(ratingVal)) + (ratingVal % 1 >= 0.5 ? '½' : '');
         const imgUrl   = p.image_url || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name);
-        
+        const hasVideo = p.video_url && p.video_url.trim();
+
         return `
         <div class="product-card" id="card-${p.id}">
           <div class="badges">
@@ -995,8 +1160,12 @@
             <span>${discount > 0 ? `<span class="badge-discount">${discount}% OFF</span>` : ''}</span>
           </div>
           ${p.is_new ? '<div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:9;"><span class="badge-new">✨ New</span></div>' : ''}
-          <img class="product-image" src="${imgUrl}" alt="${p.name}" loading="lazy" onclick="showProductDetails('${p.id}')"
-               onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(p.name)}'">
+          <div class="product-media-wrap" onclick="showProductDetails('${p.id}')">
+            <img class="product-image" src="${imgUrl}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(p.name)}'">
+            ${hasVideo ? `<video class="product-video" src="${p.video_url}" muted loop playsinline preload="none" data-product-video></video>` : ''}
+            ${hasVideo ? '<div style="position:absolute;bottom:8px;right:8px;z-index:5;background:rgba(0,0,0,0.55);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;">▶ VIDEO</div>' : ''}
+          </div>
           <div class="product-body">
             ${p.name_hindi ? `<div class="product-name-hindi hindi" onclick="showProductDetails('${p.id}')">${p.name_hindi}</div>` : ''}
             <div class="product-name" onclick="showProductDetails('${p.id}')">${p.name}</div>
@@ -1047,7 +1216,8 @@
       }
     }
 
-    // Search query filtering
+    // AI Smart Search with Gemini semantic understanding
+    let aiSearchTimeout = null;
     function searchProducts() {
       const searchInput = document.getElementById('search-input');
       searchQuery = searchInput ? searchInput.value.trim() : '';
@@ -1055,7 +1225,45 @@
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.cat === 'all');
       });
-      renderProducts();
+
+      // If natural language query (>3 words or non-keyword), use AI
+      const wordCount = searchQuery.split(' ').filter(w => w.length > 0).length;
+      const aiSearchBadge = document.getElementById('ai-search-badge');
+      if (searchQuery.length > 3 && wordCount >= 2) {
+        if (aiSearchBadge) aiSearchBadge.style.display = 'inline-flex';
+        clearTimeout(aiSearchTimeout);
+        aiSearchTimeout = setTimeout(() => aiSmartSearch(searchQuery), 600);
+      } else {
+        if (aiSearchBadge) aiSearchBadge.style.display = 'none';
+        renderProducts();
+      }
+    }
+
+    async function aiSmartSearch(query) {
+      try {
+        const productNames = PRODUCTS.map((p, i) => `${i}: ${p.name} (${normalizeCategory(p.category)})`).join(', ');
+        const prompt = `You are a helpful Indian grocery search assistant. User searched: "${query}". From these products: [${productNames}]. Return ONLY a JSON array of product indices (numbers) that match the query. Be generous — include anything remotely related. Example: [0, 2, 4]. Return empty array [] if nothing matches.`;
+
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        if (!resp.ok) throw new Error('AI search failed');
+        const data = await resp.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+        const jsonMatch = text.match(/\[.*?\]/s);
+        if (jsonMatch) {
+          const indices = JSON.parse(jsonMatch[0]);
+          const matched = indices.map(i => PRODUCTS[i]).filter(Boolean);
+          renderProducts(matched.length > 0 ? matched : null);
+        } else {
+          renderProducts();
+        }
+      } catch(e) {
+        console.error('AI search error:', e);
+        renderProducts(); // fallback to normal
+      }
     }
 
     // Tab counts update
@@ -1083,9 +1291,15 @@
       const stars = '★'.repeat(Math.floor(ratingVal)) + (ratingVal % 1 >= 0.5 ? '½' : '');
       const imgUrl = p.image_url || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name);
       
+      const hasVideo = p.video_url && p.video_url.trim();
       const content = `
-        <div style="text-align: center;">
-          <img src="${imgUrl}" alt="${p.name}" style="max-height: 220px; border-radius: var(--radius); object-fit: cover; box-shadow: var(--shadow-sm); width: 100%;">
+        <div style="text-align: center; position:relative;">
+          ${hasVideo ? `
+            <video src="${p.video_url}" autoplay muted loop playsinline
+              style="width:100%;max-height:220px;border-radius:var(--radius);object-fit:cover;box-shadow:var(--shadow-sm);"></video>
+          ` : `
+            <img src="${imgUrl}" alt="${p.name}" style="max-height: 220px; border-radius: var(--radius); object-fit: cover; box-shadow: var(--shadow-sm); width: 100%;">
+          `}
         </div>
         <div>
           ${p.name_hindi ? `<div class="hindi" style="font-size: 14px; color: var(--text-muted); font-weight: 500">${p.name_hindi}</div>` : ''}
@@ -1102,11 +1316,12 @@
           </div>
           <p style="margin-top: 16px; font-size: 14px; color: #4A4A4A; line-height: 1.5;">${p.description || 'Authentic pure product sourced from premium fields. Sourced natural, chemical-free and packed under clean hygienic standards.'}</p>
         </div>
-        <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap:wrap;">
           <button class="btn-checkout" style="flex: 1" onclick="toggleCart('${p.id}'); document.getElementById('product-detail-modal').classList.remove('open');">
             ${cart.some(c => c.id === p.id) ? 'Remove From Cart' : '🛒 Add to Cart'}
           </button>
-          <button class="btn-wa" onclick="waOrder('${p.id}')">💬 Ask on WA</button>
+          <button class="btn-ai-recipe" onclick="showAIRecipe('${p.id}', '${p.name.replace(/'/g, "'")}')" title="AI Recipe Suggestion">🍳 AI Recipe</button>
+          <button class="btn-wa" onclick="waOrder('${p.id}')">💬 WA</button>
         </div>
       `;
 
@@ -1298,6 +1513,8 @@
       document.querySelectorAll('.payment-option').forEach(el => {
         el.classList.toggle('selected', el.dataset.method === method);
       });
+      const upiNote = document.getElementById('upilink-note');
+      if (upiNote) upiNote.style.display = method === 'upilink' ? 'block' : 'none';
     }
 
     async function placeOrder() {
@@ -1345,6 +1562,14 @@
       if (paymentMethod === 'cod') {
         btn.textContent = 'Placing Order...';
         await saveOrder(orderData, 'COD');
+      } else if (paymentMethod === 'upilink') {
+        btn.textContent = 'Processing...';
+        orderData.payment_method = 'upilink';
+        orderData.payment_status = 'pending';
+        await saveOrder(orderData, 'UPI-Link');
+        // Redirect to Razorpay.me with pre-filled amount
+        const rzpAmount = Math.round(orderData.total * 100); // in paise
+        window.open(`https://razorpay.me/@darshan580?amount=${encodeURIComponent(orderData.total)}`, '_blank');
       } else {
         btn.textContent = 'Opening Payment...';
         await initiateRazorpay(orderData);
@@ -1462,6 +1687,86 @@
         method === 'whatsapp' ? 'Order sent on WhatsApp 💬' :
         'Online Payment Verified ✅';
       modal.classList.add('open');
+      // Show AI recommendations after order
+      showAIRecommendations();
+    }
+
+    // ─── AI RECIPE GENERATOR ────────────────────────────────────────
+    async function showAIRecipe(productId, productName) {
+      const overlay = document.getElementById('recipe-modal-overlay');
+      const content = document.getElementById('recipe-modal-content');
+      if (!overlay || !content) return;
+      content.innerHTML = `<div style="text-align:center;padding:32px;"><div style="font-size:48px;margin-bottom:12px;">🍳</div><p>Generating AI recipe for <strong>${productName}</strong>...</p><div style="margin-top:16px;font-size:12px;color:var(--text-muted);">Powered by Google Gemini ✨</div></div>`;
+      overlay.classList.add('open');
+
+      try {
+        const prompt = `You are an expert Indian chef. Create a simple, authentic Indian recipe using "${productName}" as the main ingredient or key spice. Format your response as HTML with these sections: <h3>Recipe Name</h3>, <p><strong>Ingredients:</strong></p><ul>...</ul>, <p><strong>Method:</strong></p><ol>...</ol>, <p><strong>Pro Tip:</strong> ...</p>. Keep it concise, practical, and delicious. Add relevant emojis.`;
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        if (!resp.ok) throw new Error('AI recipe failed');
+        const data = await resp.json();
+        const recipeHtml = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Recipe generation failed.';
+        content.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+            <span style="font-size:28px;">🍳</span>
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);">AI Recipe for</div>
+              <div style="font-weight:700;font-size:16px;color:var(--primary);">${productName}</div>
+            </div>
+            <span class="ai-badge" style="margin-left:auto;">✨ Gemini AI</span>
+          </div>
+          <div style="font-size:14px;line-height:1.7;color:#333;">${recipeHtml}</div>
+          <div style="margin-top:20px;padding:12px;background:#FFF0E8;border-radius:var(--radius-sm);font-size:12px;">
+            🛒 <strong>Want to make this?</strong> All ingredients available in our store! <a href="#products" onclick="document.getElementById('recipe-modal-overlay').classList.remove('open');" style="color:var(--primary);font-weight:600;">Shop Now →</a>
+          </div>`;
+      } catch(e) {
+        content.innerHTML = `<div style="text-align:center;padding:24px;"><p style="color:#E53935;">❌ Could not generate recipe. Please check your connection.</p><p style="font-size:12px;color:var(--text-muted);margin-top:8px;">Try WhatsApp for recipe suggestions: <a href="https://wa.me/${OWNER_WHATSAPP}" style="color:var(--primary);">Chat with us</a></p></div>`;
+      }
+    }
+
+    // ─── AI RECOMMENDATIONS ────────────────────────────────────────
+    async function showAIRecommendations() {
+      if (cart.length === 0 || PRODUCTS.length === 0) return;
+      try {
+        const cartNames = cart.map(c => c.name).join(', ');
+        const allNames = PRODUCTS.map((p, i) => `${i}:${p.name}`).join(', ');
+        const prompt = `Customer bought: ${cartNames}. From [${allNames}], suggest 2-3 complementary Indian grocery products they might also like. Return ONLY a JSON array of indices like [1,4,7]. No explanation.`;
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+        const jsonMatch = text.match(/\[.*?\]/s);
+        if (!jsonMatch) return;
+        const indices = JSON.parse(jsonMatch[0]);
+        const recs = indices.map(i => PRODUCTS[i]).filter(p => p && !cart.some(c => c.id === p.id));
+        if (recs.length === 0) return;
+        // Show recommendation strip at top of product grid
+        const recHtml = `
+          <div id="ai-recs-strip" style="background:linear-gradient(135deg,#fff0e8,#fff8f0);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;grid-column:1/-1;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+              <span class="ai-badge">✨ AI Picks</span>
+              <span style="font-weight:600;font-size:14px;">Customers who bought ${cart[0].name} also love:</span>
+            </div>
+            <div style="display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;">
+              ${recs.map(p => `
+                <div onclick="showProductDetails('${p.id}')" style="min-width:140px;cursor:pointer;background:#fff;border-radius:var(--radius-sm);padding:10px;box-shadow:var(--shadow-sm);text-align:center;">
+                  <img src="${p.image_url}" alt="${p.name}" style="width:80px;height:60px;object-fit:cover;border-radius:6px;">
+                  <div style="font-size:12px;font-weight:600;margin-top:6px;">${p.name}</div>
+                  <div style="font-size:13px;color:var(--primary);font-weight:700;">₹${p.price}</div>
+                </div>`).join('')}
+            </div>
+          </div>`;
+        const existing = document.getElementById('ai-recs-strip');
+        if (existing) existing.remove();
+        const grid = document.getElementById('product-grid');
+        if (grid) grid.insertAdjacentHTML('afterbegin', recHtml);
+      } catch(e) { /* silent fail */ }
     }
 
     function handleCheckoutPincodeInput() {
@@ -1511,27 +1816,27 @@
 
         if (status) {
           status.textContent = ok
-            ? `Delivery available in ${placeText}.`
-            : `Sorry, delivery is available only in Thane, Maharashtra. Detected: ${placeText}.`;
+            ? `✅ Delivery available in ${placeText}.`
+            : `❌ Sorry, delivery available only in Thane & Mulund (Mumbai), Maharashtra. Detected: ${placeText}.`;
           status.style.color = ok ? 'var(--secondary)' : '#E53935';
         }
 
         return {
           ok,
-          message: ok ? 'Delivery available.' : `Sorry, we currently accept orders only for Thane, Maharashtra. Detected pincode location: ${placeText}.`
+          message: ok ? 'Delivery available.' : `Sorry, we currently deliver only in Thane & Mulund (Mumbai), Maharashtra. Detected pincode location: ${placeText}.`
         };
       } catch (e) {
         console.error(e);
         const fallbackOk = PINCODES_OK.includes(pin);
         if (status) {
           status.textContent = fallbackOk
-            ? 'Delivery available for this service pincode.'
-            : 'Could not verify this pincode. Please use a Thane, Maharashtra pincode.';
+            ? '✅ Delivery available for this pincode.'
+            : '⚠️ Could not verify pincode. Please use a Thane or Mulund (Mumbai) pincode.';
           status.style.color = fallbackOk ? 'var(--secondary)' : '#E53935';
         }
         return {
           ok: fallbackOk,
-          message: fallbackOk ? 'Delivery available.' : 'Could not verify this pincode. Please enter a valid Thane, Maharashtra pincode.'
+          message: fallbackOk ? 'Delivery available.' : 'Could not verify this pincode. Please enter a valid Thane or Mulund (Mumbai) pincode.'
         };
       }
     }
@@ -1551,14 +1856,17 @@
       }
 
       if (PINCODES_OK.includes(pin)) {
-        result.textContent = `✅ Delivery available to Thane, Maharashtra Area ${pin}! Sourced fresh, arriving soon.`;
+        const isMulund = ['400080','400081','400082'].includes(pin);
+        const areaName = isMulund ? 'Mulund, Mumbai' : 'Thane, Maharashtra';
+        result.textContent = `✅ Delivery available to ${areaName} (${pin})! Fresh order, arriving soon.`;
         result.className = 'pin-result ok';
-        
-        // Show real embedded Google Map centered at Thane Pincode
+
+        // Show Google Map
         mapSection.style.display = 'block';
-        gMap.src = `https://maps.google.com/maps?q=Thane%20Maharashtra%20${pin}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        const mapQuery = isMulund ? `Mulund%20Mumbai%20${pin}` : `Thane%20Maharashtra%20${pin}`;
+        gMap.src = `https://maps.google.com/maps?q=${mapQuery}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
       } else {
-        result.textContent = `❌ Delivery is currently not available for pincode ${pin}. We deliver only inside Thane, Maharashtra.`;
+        result.textContent = `❌ Pincode ${pin} not serviceable yet. We deliver in Thane & Mulund (Mumbai), Maharashtra.`;
         result.className = 'pin-result no';
         mapSection.style.display = 'none';
       }
@@ -1592,7 +1900,7 @@
     const CHATBOT_RESPONSES = {
       'ghee':    'Our Pure Desi Ghee is ₹450 for 500ml — slow-churned A2 cow milk ghee. Authentic aroma and golden texture! 🫙',
       'paneer':  'Fresh Paneer made daily from rich cow milk, completely chemical-free! 200g for ₹180. 🥛',
-      'delivery':'We offer free home delivery on orders above ₹499! For smaller orders, it is ₹40 flat. We deliver only in Thane, Maharashtra. 🚚',
+      'delivery':'We offer free home delivery on orders above ₹499! For smaller orders, ₹40 flat. We deliver in Thane & Mulund (Mumbai), Maharashtra. 🚚',
       'return':  'We offer a 7-day hassle-free return policy. If you are not satisfied, we will refund you, no questions asked! 🔄',
       'payment': 'You can pay online via Razorpay (UPI, cards, net banking) or choose Cash on Delivery (COD)! 💳',
       'combo':   'Check out our Combo Starter Pack (₹599) and Festival Gift Hamper (₹1199) for amazing discounts! 🎁',
@@ -1805,6 +2113,24 @@
       }
     }
 
+    // ─── VIDEO INTERSECTION OBSERVER (mobile scroll-to-play) ─────
+    function setupVideoObserver() {
+      if (!('IntersectionObserver' in window)) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const vid = entry.target;
+          if (entry.isIntersecting) {
+            vid.play().catch(() => {});
+          } else {
+            vid.pause();
+            vid.currentTime = 0;
+          }
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('[data-product-video]').forEach(vid => obs.observe(vid));
+    }
+
     // ─── STATS ANIMATIONS ─────────────────────────────────────────
     function setupStatsObserver() {
       const statsElements = document.querySelectorAll('.stat-number');
@@ -1838,5 +2164,30 @@
     // Bootstrapping the site
     document.addEventListener('DOMContentLoaded', initApp);
   </script>
+
+  <!-- AI Recipe Modal -->
+  <div class="recipe-modal-overlay" id="recipe-modal-overlay">
+    <div class="recipe-modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-weight:700;font-size:18px;">🍳 AI Recipe Suggestion</span>
+        <button onclick="document.getElementById('recipe-modal-overlay').classList.remove('open')" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-muted);">✕</button>
+      </div>
+      <div id="recipe-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- AI Smart Search Badge (shown above search when active) -->
+  <style>
+    #ai-search-badge { display:none; margin-left:8px; vertical-align:middle; }
+    .search-wrap { position:relative; }
+    .search-ai-label {
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      display:none; align-items:center; gap:4px;
+      background:linear-gradient(135deg,#7B2FF7,#F72585);
+      color:#fff; font-size:10px; font-weight:700;
+      padding:3px 8px; border-radius:var(--radius-pill);
+    }
+    .search-wrap:focus-within .search-ai-label { display:flex; }
+  </style>
 </body>
 </html>

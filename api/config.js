@@ -15,6 +15,10 @@ module.exports = async function handler(req, res) {
 
   return res.status(200).json({
     razorpayKeyId: process.env.RAZORPAY_KEY_ID || settings.razorpay_key || 'rzp_test_51I0O96U8Z397p',
-    ownerWhatsapp
+    ownerWhatsapp,
+    // AI & Upload config — MUST set GEMINI_API_KEY as Vercel env var
+    geminiApiKey: process.env.GEMINI_API_KEY || '',
+    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'd4lxspus',
+    cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET || 'Project'
   });
 };
