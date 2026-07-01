@@ -252,5 +252,59 @@
     "status": "placed",
     "notes": "",
     "created_at": "2026-06-28T13:17:44.853Z"
+  },
+  {
+    "id": "ORD-Q13GZBNJV",
+    "customer_name": "Shrikanth",
+    "customer_phone": "9895880805",
+    "customer_address": "Mulund",
+    "delivery_address": "Mulund",
+    "customer_pincode": "400604",
+    "items": [
+      {
+        "id": "dairy-curd-400",
+        "name": "Fresh Homemade Curd",
+        "price": 55,
+        "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS3R4fG5c4m8bVJ1C41Twbx1y5TmixWljmGj1iD0DjbRcqhrXNCLGBsEYCzEU7A",
+        "weight": "400g",
+        "qty": 1
+      },
+      {
+        "id": "dairy-butter-500",
+        "name": "Butter",
+        "price": 285,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLqv1qHfvI5IHXmB-bot6GUub2g7CO1gLjDrjlDIDbzA&s=10",
+        "weight": "500g",
+        "qty": 1
+      },
+      {
+        "id": "dairy-khoya-250",
+        "name": "Fresh Mawa Khoya",
+        "price": 180,
+        "image_url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTR4QeRZzpuU-o4DIj9Yb219ys9veWhvkg33iFzIKLzzcY6j5K1738T_91njyHJ",
+        "weight": "250g",
+        "qty": 1
+      },
+      {
+        "id": "dairy-lassi-1l",
+        "name": "Sweet Punjabi Lassi",
+        "price": 90,
+        "image_url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRbWmQNVq9phXYlxKyORnz15hSCyx32Q9R9KGa9ZrY522U578wQJ9DpE_KoyWtC",
+        "weight": "1L",
+        "qty": 1
+      }
+    ],
+    "subtotal": 610,
+    "delivery_charge": 0,
+    "total": 610,
+    "total_amount": 610,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "",
+    "created_at": "2026-07-01T16:45:50.170Z"
   }
 ]
