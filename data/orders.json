@@ -306,5 +306,35 @@
     "status": "placed",
     "notes": "",
     "created_at": "2026-07-01T16:45:50.170Z"
+  },
+  {
+    "id": "ORD-U3S7V6DVU",
+    "customer_name": "Anurag Pandey",
+    "customer_phone": "9892360874",
+    "customer_address": "Mulund",
+    "delivery_address": "Mulund",
+    "customer_pincode": "400604",
+    "items": [
+      {
+        "id": "dairy-ghee-500",
+        "name": "Pure Desi Cow Ghee",
+        "price": 499,
+        "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTTRxhRsqcATqoFr3iBbRW_PZVkqOCMSqjO5KWUU07TR_1SnFLDa_PEoyL_Su3y",
+        "weight": "500ml",
+        "qty": 1
+      }
+    ],
+    "subtotal": 499,
+    "delivery_charge": 0,
+    "total": 499,
+    "total_amount": 499,
+    "payment_method": "cod",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "",
+    "created_at": "2026-07-02T14:50:11.083Z"
   }
 ]
