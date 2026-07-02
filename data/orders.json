@@ -443,9 +443,10 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
-    "order_status": "placed",
-    "status": "placed",
+    "order_status": "shipped",
+    "status": "shipped",
     "notes": "Coupon: FRESH10 (-₹317)",
-    "created_at": "2026-07-02T15:58:21.251Z"
+    "created_at": "2026-07-02T15:58:21.251Z",
+    "updated_at": "2026-07-02T15:59:17.915Z"
   }
 ]
