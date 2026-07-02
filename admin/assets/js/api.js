@@ -141,6 +141,12 @@ class AdminAPI {
     }
   }
 
+  async deleteProduct(id) {
+    return await this.fetch(`/api/products?id=${id}`, {
+      method: 'DELETE'
+    });
+  }
+
   async getSettings() {
     return await this.fetch('/api/settings');
   }

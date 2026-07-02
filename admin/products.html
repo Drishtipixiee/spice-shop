@@ -291,9 +291,14 @@
           Copy for WhatsApp/Instagram</button>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveProduct()">💾 Save Product</button>
+    <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <button id="btnDeleteProd" class="btn btn-outline" style="border-color: #E53935; color: #E53935; display: none; padding: 10px 16px;" onclick="deleteCurrentProduct()">🗑️ Delete Product</button>
+      </div>
+      <div>
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveProduct()">💾 Save Product</button>
+      </div>
     </div>
   </div>
 
@@ -461,6 +466,7 @@
         document.getElementById('pBestseller').checked = p.is_bestseller || false;
         document.getElementById('pNew').checked = p.is_new || false;
         updateVideoPreview();
+        document.getElementById('btnDeleteProd').style.display = 'inline-block';
       } else {
         document.getElementById('pId').value = "";
         document.getElementById('pName').value = "";
@@ -473,6 +479,7 @@
         document.getElementById('pVideo').value = "";
         document.getElementById('pBestseller').checked = false;
         document.getElementById('pNew').checked = false;
+        document.getElementById('btnDeleteProd').style.display = 'none';
       }
 
       updatePreview();
