@@ -491,5 +491,21 @@
     "review_count": 711,
     "in_stock": true,
     "created_at": "2026-06-26T10:43:00Z"
+  },
+  {
+    "id": "hhf2gds3e",
+    "name": "Kashmiri Turmeric Powder",
+    "name_hindi": "काशमीरी हलदी",
+    "category": "combos",
+    "price": 120,
+    "mrp": 150,
+    "image_url": "https://via.placeholder.com/400x300?text=Kashmiri%20Turmeric%20Powder",
+    "video_url": null,
+    "description": "Kashmiri turmeric powder, sourced from the finest regions of Kashmir, adds a vibrant yellow hue and earthy flavor to your curries. Perfect for traditional and Ayurvedic cooking.",
+    "weight": "100g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-02T00:09:28.827Z"
   }
 ]
