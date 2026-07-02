@@ -3107,11 +3107,11 @@
           </div>
         </div>
 
-        <div class="hero-ctas">
-          <button class="btn-hero-primary" onclick="filterByCategory('dairy',true)" style="background: var(--saffron); box-shadow: 0 6px 15px rgba(232, 96, 10, 0.4); border: none;">Shop Dairy</button>
-          <button class="btn-hero-secondary" onclick="filterByCategory('spices',true)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;">Shop Spices</button>
+        <div class="hero-ctas" style="position: relative; z-index: 10;">
+          <button class="btn-hero-primary" onclick="filterByCategory('dairy',true)" style="background: var(--saffron); box-shadow: 0 6px 15px rgba(232, 96, 10, 0.4); border: none; position: relative; z-index: 10;">Shop Dairy</button>
+          <button class="btn-hero-secondary" onclick="filterByCategory('spices',true)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; position: relative; z-index: 10;">Shop Spices</button>
           <button class="btn-hero-secondary" onclick="toggleAIPanel()"
-            style="border: 1px solid rgba(124,58,237,0.5); background: rgba(124,58,237,0.15); color: #fff;">AI Assistant</button>
+            style="border: 1px solid rgba(124,58,237,0.5); background: rgba(124,58,237,0.15); color: #fff; position: relative; z-index: 10;">AI Assistant</button>
         </div>
 
         <div class="hero-stats">
@@ -4639,8 +4639,8 @@
         card.className = 'swipe-card';
         card.dataset.id = p.id;
         card.style.zIndex = 100 - offset;
-        card.style.transform = `scale(${1 - offset * 0.05}) translateY(${offset * 15}px)`;
-        if(offset > 0) card.style.opacity = 1 - (offset * 0.2);
+        card.style.transform = `scale(${1 - offset * 0.05}) translateY(-${offset * 20}px)`;
+        // Fixed: removed opacity so background hides cards behind it
         
         card.innerHTML = `
           <div class="swipe-stamp like">YES!</div>

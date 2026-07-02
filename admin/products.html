@@ -642,7 +642,7 @@ Make prices realistic for Indian market (₹50-₹1500 range). Include mix of be
 
         const products = JSON.parse(jsonMatch[0]).map(p => ({
           ...p,
-          image_url: `https://image.pollinations.ai/prompt/${encodeURIComponent(p.name + ' Indian grocery professional photography --width 400 --height 300')}`
+          image_url: `https://image.pollinations.ai/prompt/${encodeURIComponent(p.name + ' Indian grocery product photography')}?width=400&height=300&nologo=true`
         }));
 
         resultDiv.innerHTML = `
