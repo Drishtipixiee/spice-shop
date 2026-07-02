@@ -619,5 +619,21 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-02T00:09:41.462Z"
+  },
+  {
+    "id": "n5x9atd0r",
+    "name": "Organic Haldi",
+    "name_hindi": "अर्गेनिक हल्दी",
+    "category": "combos",
+    "price": 120,
+    "mrp": 160,
+    "image_url": "https://via.placeholder.com/400x300?text=Organic%20Haldi",
+    "video_url": null,
+    "description": "100% organic turmeric powder, sourced directly from farmers. Rich in antioxidants and anti-inflammatory properties.",
+    "weight": "200g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-02T00:10:51.716Z"
   }
 ]
