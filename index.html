@@ -174,10 +174,33 @@
     #particle-canvas{
       position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none
     }
-    .hero-video-bg{
-      position:absolute;inset:0;width:100%;height:100%;
-      object-fit:cover;z-index:0;opacity:0.55;
+    /* ─── CINEMATIC HERO BACKGROUND ─── */
+    .hero-cinematic-bg{
+      position:absolute;inset:0;z-index:0;
+      background:#060200;overflow:hidden;
     }
+    .hero-light{
+      position:absolute;border-radius:50%;
+      pointer-events:none;filter:blur(90px);
+    }
+    .hero-light-1{
+      width:80vw;height:80vh;top:-30%;left:-20%;
+      background:radial-gradient(circle,rgba(52,22,0,0.94) 0%,transparent 65%);
+      animation:hero-drift-1 15s ease-in-out infinite;
+    }
+    .hero-light-2{
+      width:55vw;height:55vh;top:10%;right:-10%;
+      background:radial-gradient(circle,rgba(232,96,10,0.12) 0%,transparent 65%);
+      animation:hero-drift-2 11s ease-in-out infinite;
+    }
+    .hero-light-3{
+      width:45vw;height:45vh;bottom:-15%;left:25%;
+      background:radial-gradient(circle,rgba(245,166,35,0.08) 0%,transparent 65%);
+      animation:hero-drift-3 18s ease-in-out infinite;
+    }
+    @keyframes hero-drift-1{0%,100%{transform:translate(0,0)}50%{transform:translate(4%,6%)}}
+    @keyframes hero-drift-2{0%,100%{transform:translate(0,0)}50%{transform:translate(-5%,3%)}}
+    @keyframes hero-drift-3{0%,100%{transform:translate(0,0)}33%{transform:translate(3%,-4%)}66%{transform:translate(-3%,2%)}}
     .hero-gradient{
       position:absolute;inset:0;z-index:2;
       background:linear-gradient(
@@ -344,10 +367,11 @@
       gap:24px;flex-wrap:wrap
     }
     .trust-item{
-      display:flex;align-items:center;gap:10px;
-      color:rgba(255,255,255,0.85);font-size:13px;font-weight:500
+      display:flex;align-items:center;gap:8px;
+      color:rgba(255,255,255,0.82);font-size:11px;font-weight:600;
+      text-transform:uppercase;letter-spacing:0.4px
     }
-    .trust-item span:first-child{font-size:22px}
+    .trust-item svg{flex-shrink:0;opacity:0.9}
 
     /* ─── AI ASSISTANT STRIP (on main site) ─── */
     .ai-strip{
@@ -406,7 +430,7 @@
     .section-sub{font-size:16px;color:var(--muted);margin-top:10px;line-height:1.6}
 
     /* ─── PRODUCTS SECTION ─── */
-    .products-section{max-width:1280px;margin:0 auto;padding:56px 24px}
+    .products-section{max-width:1280px;margin:0 auto;padding:88px 24px}
     #product-grid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
@@ -627,7 +651,7 @@
       background:linear-gradient(135deg,#fff9f3,#fff0e0);
       border-top:1px solid var(--border);
       border-bottom:1px solid var(--border);
-      padding:56px 24px
+      padding:88px 24px
     }
     .pincode-inner{max-width:640px;margin:0 auto;text-align:center}
     .pin-form{
@@ -658,7 +682,7 @@
 
     /* ─── TESTIMONIALS ─── */
     .testi-section{
-      max-width:1280px;margin:0 auto;padding:56px 24px
+      max-width:1280px;margin:0 auto;padding:88px 24px
     }
     .testi-grid{
       display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px
@@ -685,7 +709,7 @@
     /* ─── STATS ─── */
     .stats-section{
       background:linear-gradient(135deg,#0F0A06,#3D1A00);
-      padding:56px 24px
+      padding:88px 24px
     }
     .stats-grid{
       max-width:1280px;margin:0 auto;
@@ -705,7 +729,7 @@
     /* ─── TRACK ORDER ─── */
     .track-section{
       background:#fff;border-top:1px solid var(--border);
-      padding:56px 24px
+      padding:88px 24px
     }
     .track-inner{max-width:640px;margin:0 auto;text-align:center}
     .track-form{display:flex;gap:12px;margin-top:24px;max-width:480px;margin:24px auto}
@@ -1020,10 +1044,42 @@
     .stagger.visible > *:nth-child(4){opacity:1;transform:translateY(0);transition-delay:0.3s}
 
     /* ─── RESPONSIVE ─── */
+    /* ─── SKELETON LOADERS ─── */
+    .skeleton-card{background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.05);overflow:hidden;display:flex;flex-direction:column}
+    .skel-img{width:100%;height:200px;background:#f0f0f0;position:relative;overflow:hidden}
+    .skel-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+    .skel-line{height:11px;background:#f0f0f0;border-radius:6px;position:relative;overflow:hidden}
+    .skel-line.short{width:55%}
+    .skel-line.price{width:38%;height:18px}
+    .skel-actions{padding:0 16px 16px;display:flex;gap:8px}
+    .skel-btn{flex:1;height:42px;background:#f0f0f0;border-radius:10px;position:relative;overflow:hidden}
+    .skel-wa{width:44px;height:42px;background:#f0f0f0;border-radius:10px;flex-shrink:0;position:relative;overflow:hidden}
+    .skel-img::after,.skel-line::after,.skel-btn::after,.skel-wa::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.72) 50%,transparent 100%);transform:translateX(-100%);animation:shimmer 1.6s ease-in-out infinite}
+    @keyframes shimmer{to{transform:translateX(200%)}}
+
+    /* ─── PRODUCT LOOP (HOMEPAGE MARQUEE) ─── */
+    .product-loop-section{overflow:hidden;padding:28px 0;background:#fff;border-bottom:1px solid rgba(0,0,0,0.06)}
+    .product-loop-label{text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--muted);margin-bottom:18px}
+    .product-loop-track{display:flex;gap:18px;animation:loop-scroll 36s linear infinite;width:max-content}
+    .product-loop-track:hover{animation-play-state:paused}
+    @keyframes loop-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .loop-card{flex-shrink:0;width:168px;background:#fff;border-radius:14px;border:1px solid rgba(0,0,0,0.07);overflow:hidden;cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease,border-color 0.2s ease;user-select:none}
+    .loop-card:hover{transform:translateY(-5px);box-shadow:0 12px 28px rgba(232,96,10,0.14);border-color:rgba(232,96,10,0.2)}
+    .loop-card img{width:100%;height:130px;object-fit:cover;display:block;background:#f8f0e8}
+    .loop-card-body{padding:10px 12px 12px}
+    .loop-card-name{font-size:12px;font-weight:600;color:#1a0a00;line-height:1.3;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .loop-card-price{font-size:14px;font-weight:800;color:var(--saffron)}
+
+    /* ─── UNIFORM MICRO-INTERACTIONS ─── */
+    .tab-btn:hover:not(.active){border-color:rgba(232,96,10,0.3);color:var(--saffron);transform:translateY(-1px)}
+    .testi-card{transition:all 0.2s ease}
+    .footer-links a{transition:color 0.2s ease}
+
     @media(max-width:600px){
       .hero-h1{font-size:36px}
       .ai-features-row{padding:0 16px 36px}
       .track-form{flex-direction:column}
+      .product-loop-section{padding:20px 0}
     }
   </style>
 </head>
@@ -1032,8 +1088,8 @@
 <!-- ══ ANNOUNCEMENT BAR ══════════════════════════════════════ -->
 <div class="announce">
   <div class="announce-track" id="announcement-marquee">
-    <span>🌿 <b>FRESH10</b> — 10% off your first order &nbsp;·&nbsp; 🚚 Free delivery on orders above <b>₹499</b> &nbsp;·&nbsp; 🥛 100% A2 Desi Cow Ghee &nbsp;·&nbsp; ⭐ 4.9★ rated by 10,000+ families &nbsp;·&nbsp; 📦 Same-day delivery in Thane &amp; Mulund &nbsp;·&nbsp;</span>
-    <span>🌿 <b>FRESH10</b> — 10% off your first order &nbsp;·&nbsp; 🚚 Free delivery on orders above <b>₹499</b> &nbsp;·&nbsp; 🥛 100% A2 Desi Cow Ghee &nbsp;·&nbsp; ⭐ 4.9★ rated by 10,000+ families &nbsp;·&nbsp; 📦 Same-day delivery in Thane &amp; Mulund &nbsp;·&nbsp;</span>
+    <span><b>FRESH10</b> — 10% off your first order ·  Free delivery above <b>₹499</b> ·  100% A2 Desi Cow Ghee ·  4.9★ rated by 10,000+ families ·  Same-day delivery in Thane &amp; Mulund · </span>
+    <span><b>FRESH10</b> — 10% off your first order ·  Free delivery above <b>₹499</b> ·  100% A2 Desi Cow Ghee ·  4.9★ rated by 10,000+ families ·  Same-day delivery in Thane &amp; Mulund · </span>
   </div>
 </div>
 
@@ -1041,21 +1097,22 @@
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
-      <div class="nav-logo-icon">🌶️</div>
+      <div class="nav-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
       <span>Canaan Farms</span>
     </a>
     <div class="nav-links">
-      <a href="#products" onclick="filterByCategory('dairy',true);return false">🥛 Dairy</a>
-      <a href="#products" onclick="filterByCategory('spices',true);return false">🌶️ Spices</a>
-      <a href="#products" onclick="filterByCategory('combos',true);return false">🎁 Combos</a>
-      <a href="#products" onclick="filterByCategory('cakes',true);return false">🍰 Sweets</a>
-      <a href="#pincode">📍 Delivery Areas</a>
-      <a href="#track">📦 Track Order</a>
+      <a href="#products" onclick="filterByCategory('dairy',true);return false">Dairy</a>
+      <a href="#products" onclick="filterByCategory('spices',true);return false">Spices</a>
+      <a href="#products" onclick="filterByCategory('combos',true);return false">Combos</a>
+      <a href="#products" onclick="filterByCategory('cakes',true);return false">Sweets</a>
+      <a href="#pincode">Delivery Areas</a>
+      <a href="#track">Track Order</a>
     </div>
     <div class="nav-actions">
       <button class="btn-nav-ai" onclick="toggleAIPanel()">✨ AI Assistant</button>
       <button class="nav-cart-btn" onclick="openCart()">
-        🛒 Cart
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Cart
         <span class="cart-badge" id="cart-badge" style="display:none">0</span>
       </button>
     </div>
@@ -1067,55 +1124,54 @@
 <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
 <div class="mobile-drawer" id="mobile-drawer">
   <button class="drawer-close" onclick="toggleDrawer()">✕</button>
-  <a href="#products" onclick="filterByCategory('all',true);toggleDrawer();return false">🏪 All Products</a>
-  <a href="#products" onclick="filterByCategory('dairy',true);toggleDrawer();return false">🥛 Dairy</a>
-  <a href="#products" onclick="filterByCategory('spices',true);toggleDrawer();return false">🌶️ Spices</a>
-  <a href="#products" onclick="filterByCategory('combos',true);toggleDrawer();return false">🎁 Combos</a>
-  <a href="#pincode" onclick="toggleDrawer()">📍 Delivery Areas</a>
-  <a href="#track" onclick="toggleDrawer()">📦 Track Order</a>
-  <a href="/admin/" style="color:var(--saffron);font-weight:700;">⚙️ Admin</a>
+  <a href="#products" onclick="filterByCategory('all',true);toggleDrawer();return false">All Products</a>
+  <a href="#products" onclick="filterByCategory('dairy',true);toggleDrawer();return false">Dairy</a>
+  <a href="#products" onclick="filterByCategory('spices',true);toggleDrawer();return false">Spices</a>
+  <a href="#products" onclick="filterByCategory('combos',true);toggleDrawer();return false">Combos</a>
+  <a href="#pincode" onclick="toggleDrawer()">Delivery Areas</a>
+  <a href="#track" onclick="toggleDrawer()">Track Order</a>
+  <a href="/admin/" style="color:var(--saffron);font-weight:700;">Admin Panel</a>
 </div>
 
 <!-- ══ CINEMATIC HERO ═════════════════════════════════════════ -->
 <section class="hero">
+  <div class="hero-cinematic-bg">
+    <div class="hero-light hero-light-1"></div>
+    <div class="hero-light hero-light-2"></div>
+    <div class="hero-light hero-light-3"></div>
+  </div>
   <canvas id="particle-canvas"></canvas>
-  <video class="hero-video-bg" autoplay muted loop playsinline>
-    <source src="https://videos.pexels.com/video-files/16044309/16044309-hd_1920_1080_30fps.mp4" type="video/mp4">
-    <source src="https://videos.pexels.com/video-files/16044309/16044309-sd_640_360_30fps.mp4" type="video/mp4">
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-pouring-hot-ghee-sauce-42358-large.mp4" type="video/mp4">
-  </video>
   <div class="hero-gradient"></div>
 
   <div class="hero-inner display-3d-container">
     <div class="hero-left display-3d-element">
       <div class="eyebrow">
         <div class="eyebrow-dot"></div>
-        🌿 FSSAI Certified · A2 Milk · Farm to Doorstep
+        FSSAI Certified · A2 Milk · Farm to Doorstep
       </div>
       <h1 class="hero-h1" id="hero-headline">
-        Pure Dairy &amp;<br><em>Authentic Spices</em><br>Delivered Fresh
+        Pure Dairy &<br><em>Authentic Spices</em><br>Delivered Fresh
       </h1>
       <p class="hero-sub" id="hero-subheadline">
-        Hand-churned A2 ghee, farm-fresh paneer &amp; handpicked spices from Erode &amp; Kerala farms. Chemical-free, pure, delivered to Thane &amp; Mulund doorstep.
+        Hand-churned A2 ghee, farm-fresh paneer & handpicked spices from Erode & Kerala farms. Chemical-free, pure, delivered to Thane & Mulund doorstep.
       </p>
 
       <div class="flash-box">
-        <span>⚡</span>
         <div>
-          <div class="flash-label">Flash Sale — Use code FRESH10 for 10% OFF</div>
+          <div class="flash-label">Limited time offer — code FRESH10</div>
           <div id="countdown-timer">00h 00m 00s</div>
         </div>
       </div>
 
       <div class="hero-ctas">
-        <button class="btn-hero-primary" onclick="filterByCategory('dairy',true)">🥛 Shop Dairy</button>
-        <button class="btn-hero-secondary" onclick="filterByCategory('spices',true)">🌶️ Shop Spices</button>
-        <button class="btn-hero-secondary" onclick="toggleAIPanel()" style="border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.15);">✨ AI Assistant</button>
+        <button class="btn-hero-primary btn-3d" onclick="filterByCategory('dairy',true)">Shop Dairy</button>
+        <button class="btn-hero-secondary" onclick="filterByCategory('spices',true)">Shop Spices</button>
+        <button class="btn-hero-secondary" onclick="toggleAIPanel()" style="border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.15);">AI Assistant</button>
       </div>
 
       <div class="hero-stats">
         <div class="hero-stat"><div class="hero-stat-num">10K+</div><div class="hero-stat-lbl">Happy Families</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">4.9★</div><div class="hero-stat-lbl">Rating</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">4.9</div><div class="hero-stat-lbl">Rating</div></div>
         <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-lbl">Natural</div></div>
         <div class="hero-stat"><div class="hero-stat-num">0</div><div class="hero-stat-lbl">Chemicals</div></div>
       </div>
@@ -1125,7 +1181,7 @@
       <div class="hero-card display-3d-element">
         <img src="https://t4.ftcdn.net/jpg/13/15/19/43/360_F_1315194377_Ro8c5tjMXYc3oEXUJ6zgyeIENDkdQyJX.jpg" alt="A2 Ghee">
         <div>
-          <div class="hero-card-tag">⭐ Best Seller</div>
+          <div class="hero-card-tag">Best Seller</div>
           <div class="hero-card-name">Pure A2 Desi Ghee</div>
           <div class="hero-card-price">₹450 <span class="hero-card-old">₹520</span></div>
         </div>
@@ -1133,7 +1189,7 @@
       <div class="hero-card">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM3UCTqqG6vIXSwZFScLSPp5JPbWuMhEkwCg&s" alt="Fresh Paneer">
         <div>
-          <div class="hero-card-tag">🥛 Farm Fresh</div>
+          <div class="hero-card-tag">Farm Fresh</div>
           <div class="hero-card-name">Homemade Paneer</div>
           <div class="hero-card-price">₹180 <span class="hero-card-old">₹200</span></div>
         </div>
@@ -1141,7 +1197,7 @@
       <div class="hero-card">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL6Uxmew-bK-5-fzBJQhtih7mKysKD0NsOvw&s" alt="Turmeric">
         <div>
-          <div class="hero-card-tag">🌿 Erode Farms</div>
+          <div class="hero-card-tag">Erode Farms</div>
           <div class="hero-card-name">Turmeric Powder</div>
           <div class="hero-card-price">₹120 <span class="hero-card-old">₹150</span></div>
         </div>
@@ -1158,19 +1214,43 @@
 <!-- ══ TRUST STRIP ════════════════════════════════════════════ -->
 <div class="trust-strip">
   <div class="trust-inner">
-    <div class="trust-item"><span>✅</span><span>FSSAI Certified</span></div>
-    <div class="trust-item"><span>🌿</span><span>100% Natural</span></div>
-    <div class="trust-item"><span>🚚</span><span>Same-Day Delivery</span></div>
-    <div class="trust-item"><span>🥛</span><span>A2 Cow Milk</span></div>
-    <div class="trust-item"><span>🔒</span><span>Secure Payments</span></div>
-    <div class="trust-item"><span>🔄</span><span>7-Day Returns</span></div>
+    <div class="trust-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>FSSAI Certified</span>
+    </div>
+    <div class="trust-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10"/></svg>
+      <span>100% Natural</span>
+    </div>
+    <div class="trust-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span>Same-Day Delivery</span>
+    </div>
+    <div class="trust-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+      <span>A2 Cow Milk</span>
+    </div>
+    <div class="trust-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Secure Payments</span>
+    </div>
+    <div class="trust-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.53"/></svg>
+      <span>7-Day Returns</span>
+    </div>
   </div>
+</div>
+
+<!-- ══ PRODUCT LOOP ════════════════════════════════════════════════════ -->
+<div class="product-loop-section" id="product-loop-section" style="display:none">
+  <div class="product-loop-label">Featured Products</div>
+  <div class="product-loop-track" id="product-loop-track"></div>
 </div>
 
 <!-- ══ AI ASSISTANT STRIP ════════════════════════════════════ -->
 <div class="ai-strip">
   <div class="ai-strip-inner">
-    <div class="ai-strip-icon">🤖</div>
+    <div class="ai-strip-icon">AI</div>
     <div class="ai-strip-text">
       <h3>AI-Powered Shopping Assistant</h3>
       <p>Ask anything — recipes, ingredients, health tips, order tracking</p>
@@ -1188,7 +1268,7 @@
 <!-- ══ PRODUCTS SECTION ══════════════════════════════════════ -->
 <section class="products-section" id="products">
   <div class="section-header fade-up">
-    <div class="section-eyebrow">🛒 Our Products</div>
+    <div class="section-eyebrow">Our Products</div>
     <h2 class="section-h2">Shop Pure &amp; Authentic</h2>
     <p class="section-sub">Everything sourced directly from farms. No middlemen, no additives.</p>
   </div>
@@ -1218,30 +1298,37 @@
   <!-- Search + Tabs -->
   <div class="search-section fade-up">
     <div class="search-wrap">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
       <input type="text" id="search-input" placeholder="Search or ask: 'spices for biryani', 'best ghee'..." oninput="searchProducts()">
       <div class="search-ai-label">✨ AI Search</div>
     </div>
   </div>
 
   <div class="cat-tabs stagger" id="cat-tabs">
-    <button class="tab-btn active" data-cat="all" onclick="filterByCategory('all')">All Products <span class="tab-count" id="tab-count-all">0</span></button>
-    <button class="tab-btn" data-cat="dairy" onclick="filterByCategory('dairy')">🥛 Dairy <span class="tab-count" id="tab-count-dairy">0</span></button>
-    <button class="tab-btn" data-cat="spices" onclick="filterByCategory('spices')">🌶️ Spices <span class="tab-count" id="tab-count-spices">0</span></button>
-    <button class="tab-btn" data-cat="combos" onclick="filterByCategory('combos')">🎁 Combos <span class="tab-count" id="tab-count-combos">0</span></button>
-    <button class="tab-btn" data-cat="cakes" onclick="filterByCategory('cakes')">🍰 Sweets <span class="tab-count" id="tab-count-cakes">0</span></button>
+    <button class="tab-btn active" data-cat="all" onclick="filterByCategory('all')">All <span class="tab-count" id="tab-count-all">0</span></button>
+    <button class="tab-btn" data-cat="dairy" onclick="filterByCategory('dairy')">Dairy <span class="tab-count" id="tab-count-dairy">0</span></button>
+    <button class="tab-btn" data-cat="spices" onclick="filterByCategory('spices')">Spices <span class="tab-count" id="tab-count-spices">0</span></button>
+    <button class="tab-btn" data-cat="combos" onclick="filterByCategory('combos')">Combos <span class="tab-count" id="tab-count-combos">0</span></button>
+    <button class="tab-btn" data-cat="cakes" onclick="filterByCategory('cakes')">Sweets <span class="tab-count" id="tab-count-cakes">0</span></button>
   </div>
 
   <div id="product-count" style="font-size:13px;color:var(--muted);margin-bottom:16px;text-align:center"></div>
   <div id="product-grid">
-    <div class="empty-state"><span class="emoji">⏳</span><h3>Loading products...</h3></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
+    <div class="skeleton-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div><div class="skel-line price"></div></div><div class="skel-actions"><div class="skel-btn"></div><div class="skel-wa"></div></div></div>
   </div>
 </section>
 
 <!-- ══ PINCODE SECTION ════════════════════════════════════════ -->
 <section class="pincode-section" id="pincode">
   <div class="pincode-inner fade-up">
-    <div class="section-eyebrow">📍 Delivery Checker</div>
+    <div class="section-eyebrow">Delivery Checker</div>
     <h2 class="section-h2">Do We Deliver to You?</h2>
     <p style="margin-top:10px;color:var(--muted);font-size:15px">Enter your pincode to check delivery availability in Thane, Mulund (Mumbai) &amp; nearby areas</p>
     <div class="pin-form">
@@ -1280,7 +1367,7 @@
 <!-- ══ TESTIMONIALS ═══════════════════════════════════════════ -->
 <section class="testi-section">
   <div class="section-header fade-up">
-    <div class="section-eyebrow">💬 Customer Reviews</div>
+    <div class="section-eyebrow">Customer Reviews</div>
     <h2 class="section-h2">What Our Families Say</h2>
   </div>
   <div class="testi-grid stagger">
@@ -1314,7 +1401,7 @@
 <!-- ══ ORDER TRACKER ═════════════════════════════════════════ -->
 <section class="track-section" id="track">
   <div class="track-inner fade-up">
-    <div class="section-eyebrow">📦 Order Tracker</div>
+    <div class="section-eyebrow">Order Tracker</div>
     <h2 class="section-h2">Track Your Order</h2>
     <p style="margin-top:10px;color:var(--muted)">Enter your Order ID to get live status</p>
     <div class="track-form">
@@ -1329,36 +1416,36 @@
 <footer class="footer">
   <div class="footer-inner">
     <div>
-      <div class="footer-brand">🌶️ Canaan Farms</div>
+      <div class="footer-brand">Canaan Farms</div>
       <p class="footer-desc">Farm-fresh A2 dairy products and authentic Indian spices, sourced directly from our partner farms. FSSAI certified, chemical-free, delivering pure goodness to Thane &amp; Mulund since 2018.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-        <a href="https://wa.me/919892360874" style="color:var(--gold);font-weight:600;font-size:13px">💬 WhatsApp</a>
-        <a href="mailto:canaanfarms@gmail.com" style="color:var(--gold);font-weight:600;font-size:13px">📧 Email</a>
-        <a href="/admin/" style="color:var(--gold);font-weight:600;font-size:13px">⚙️ Admin</a>
+        <a href="https://wa.me/919892360874" style="color:var(--gold);font-weight:600;font-size:13px">WhatsApp</a>
+        <a href="mailto:canaanfarms@gmail.com" style="color:var(--gold);font-weight:600;font-size:13px">Email</a>
+        <a href="/admin/" style="color:var(--gold);font-weight:600;font-size:13px">Admin</a>
       </div>
     </div>
     <div>
       <div class="footer-h">Quick Links</div>
       <div class="footer-links">
-        <a href="#products" onclick="filterByCategory('dairy',true);return false">🥛 Dairy Products</a>
-        <a href="#products" onclick="filterByCategory('spices',true);return false">🌶️ Spices</a>
-        <a href="#products" onclick="filterByCategory('combos',true);return false">🎁 Gift Combos</a>
-        <a href="#pincode">📍 Delivery Areas</a>
-        <a href="#track">📦 Track Order</a>
+        <a href="#products" onclick="filterByCategory('dairy',true);return false">Dairy Products</a>
+        <a href="#products" onclick="filterByCategory('spices',true);return false">Spices</a>
+        <a href="#products" onclick="filterByCategory('combos',true);return false">Gift Combos</a>
+        <a href="#pincode">Delivery Areas</a>
+        <a href="#track">Track Order</a>
       </div>
     </div>
     <div>
       <div class="footer-h">Contact</div>
       <div class="footer-links">
-        <a>📱 +91 98923 60874</a>
-        <a>📍 Thane, Maharashtra</a>
-        <a>🕐 Mon-Sun, 7AM–9PM</a>
-        <a href="https://wa.me/919892360874">💬 WhatsApp Order</a>
+        <a>+91 98923 60874</a>
+        <a>Thane, Maharashtra</a>
+        <a>Mon–Sun, 7 AM – 9 PM</a>
+        <a href="https://wa.me/919892360874">WhatsApp Order</a>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
-    © 2025 Canaan Farms · FSSAI License · Made with ❤️ in Thane
+    © 2025 Canaan Farms · FSSAI Licensed · Made with care in Thane
     <span style="margin-left:16px">
       <a href="/admin/" style="color:rgba(255,255,255,0.3);font-size:12px">Admin ↗</a>
     </span>
@@ -1367,7 +1454,8 @@
 
 <!-- ══ FLOATING BUTTONS ═══════════════════════════════════════ -->
 <a href="https://wa.me/919892360874?text=Hi!%20I'm%20interested%20in%20ordering%20fresh%20spices%20and%20dairy." class="float-wa" id="float-wa">
-  <span>💬</span><span>Order on WhatsApp</span>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.5 2C6.262 2 2 6.262 2 11.5c0 1.636.418 3.17 1.147 4.506L2 22l6.166-1.122A9.45 9.45 0 0 0 11.5 21c5.238 0 9.5-4.262 9.5-9.5S16.738 2 11.5 2z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+  <span>Order on WhatsApp</span>
 </a>
 <button class="float-ai" onclick="toggleAIPanel()" title="AI Assistant">✨</button>
 <button class="float-chat" onclick="toggleChat()" title="Chatbot">💬</button>
@@ -1415,7 +1503,7 @@
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
 <div class="cart-sidebar" id="cart-sidebar">
   <div class="cart-header">
-    <h3>🛒 Your Cart</h3>
+    <h3>Your Cart</h3>
     <button class="cart-close" onclick="closeCart()">✕</button>
   </div>
   <div style="padding:12px 16px 0">
@@ -1446,7 +1534,7 @@
 <div class="modal-overlay" id="address-modal">
   <div class="modal-box">
     <button class="btn-back" onclick="document.getElementById('address-modal').classList.remove('open');openCart()">← Back to Cart</button>
-    <div class="modal-title">📦 Delivery Details</div>
+    <div class="modal-title">Delivery Details</div>
     <div class="form-group">
       <label>Full Name *</label>
       <input type="text" id="cust-name" placeholder="Your full name">
@@ -1484,7 +1572,7 @@
         📲 After placing order, you'll be redirected to pay via Razorpay UPI link to <strong>@darshan580</strong>
       </div>
     </div>
-    <button class="btn-place-order" id="place-order-btn" onclick="placeOrder()">Place Order 🛒</button>
+    <button class="btn-place-order" id="place-order-btn" onclick="placeOrder()">Place Order →</button>
   </div>
 </div>
 
@@ -1589,13 +1677,13 @@ function applyDynamicHomepage() {
   const hour = new Date().getHours(), month = new Date().getMonth() + 1;
   const h = document.getElementById('hero-headline'), s = document.getElementById('hero-subheadline');
   if (month === 10 || month === 11) {
-    if(h) h.innerHTML = `Diwali Gifting<br><em>Made Pure</em> ✨`;
+    if(h) h.innerHTML = `Diwali Gifting<br><em>Made Pure</em>`;
     if(s) s.textContent = 'Send premium spice hampers & A2 ghee to loved ones this festive season. Free delivery on combos above ₹499.';
   } else if (hour >= 5 && hour < 11) {
-    if(h) h.innerHTML = `Start Your Morning<br><em>Right</em> 🌅`;
+    if(h) h.innerHTML = `Start Your Morning<br><em>the Right Way</em>`;
     if(s) s.textContent = 'Fresh A2 ghee for your morning rotis & chai. Farm-to-kitchen dairy, delivered fresh every morning.';
   } else if (hour >= 17 && hour < 21) {
-    if(h) h.innerHTML = `Evening Cooking,<br><em>Pure Flavours</em> 🍛`;
+    if(h) h.innerHTML = `Evening Cooking,<br><em>Pure Flavours</em>`;
     if(s) s.textContent = 'Get your dal tadka perfect with our handpicked spices. Order now — same-day delivery in Thane & Mulund.';
   }
 }
@@ -1655,8 +1743,27 @@ async function loadSiteSettings() {
   } catch(e) {}
 }
 
+// ─── SKELETON HELPER ─────────────────────────────────────────
+function generateSkeletons(n) {
+  return Array.from({length: n}, () => `
+    <div class="skeleton-card">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skel-line"></div>
+        <div class="skel-line short"></div>
+        <div class="skel-line price"></div>
+      </div>
+      <div class="skel-actions">
+        <div class="skel-btn"></div>
+        <div class="skel-wa"></div>
+      </div>
+    </div>`).join('');
+}
+
 // ─── PRODUCTS ────────────────────────────────────────────────
 async function loadProducts() {
+  const grid = document.getElementById('product-grid');
+  if (grid) grid.innerHTML = generateSkeletons(8);
   try {
     const res = await fetch('/api/products');
     PRODUCTS = res.ok ? await res.json() : DEFAULT_PRODUCTS;
@@ -1667,6 +1774,7 @@ async function loadProducts() {
   updateTabCounts();
   renderProducts();
   setupStatsObserver();
+  initProductLoop();
 }
 
 function normalizeCategory(c) {
@@ -1715,21 +1823,21 @@ function renderProducts(overrideList) {
     const disc = p.mrp > p.price ? Math.round((1 - p.price/p.mrp)*100) : 0;
     const inCart = cart.some(c => c.id === p.id);
     const stars = '★'.repeat(Math.floor(p.rating||4.5)) + (((p.rating||4.5)%1) >= 0.5 ? '½' : '');
-    const img = p.image_url || `https://via.placeholder.com/400x300?text=${encodeURIComponent(p.name)}`;
+    const img = p.image_url || `https://placehold.co/400x300?text=${encodeURIComponent(p.name)}`;
     const hasVid = p.video_url && p.video_url.trim();
     return `
     <div class="product-card" id="card-${p.id}">
       <div class="prod-badges">
-        ${p.is_bestseller ? '<span class="badge-bs">⭐ Best Seller</span>' : ''}
+        ${p.is_bestseller ? '<span class="badge-bs">Best Seller</span>' : ''}
         ${disc > 0 ? `<span class="badge-off" style="margin-left:auto">${disc}% OFF</span>` : ''}
       </div>
-      ${p.is_new ? '<div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:9"><span class="badge-new">✨ New</span></div>' : ''}
+      ${p.is_new ? '<div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:9"><span class="badge-new">New</span></div>' : ''}
       <div class="prod-media" onclick="showProductDetails('${p.id}')">
-        <img src="${img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(p.name)}'">
+        <img src="${img}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300'">
         ${hasVid ? `<video src="${p.video_url}" muted loop playsinline preload="none" data-product-video></video>` : ''}
         ${hasVid ? '<div class="vid-badge">▶ VIDEO</div>' : ''}
         <div class="prod-quick-add" onclick="event.stopPropagation();toggleCart('${p.id}')">
-          ${inCart ? '✓ Remove from Cart' : '+ Quick Add to Cart'}
+          ${inCart ? 'Remove' : 'Quick Add'}
         </div>
       </div>
       <div class="prod-body">
@@ -1745,9 +1853,9 @@ function renderProducts(overrideList) {
       </div>
       <div class="prod-actions">
         <button class="btn-cart ${inCart?'in-cart':''}" onclick="toggleCart('${p.id}')">
-          ${inCart ? '✓ Added' : '🛒 Add to Cart'}
+          ${inCart ? 'Added' : 'Add to Cart'}
         </button>
-        <button class="btn-wa" onclick="waOrder('${p.id}')" title="Order on WhatsApp">💬</button>
+        <button class="btn-wa" onclick="waOrder('${p.id}')" title="Order on WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.5 2C6.262 2 2 6.262 2 11.5c0 1.636.418 3.17 1.147 4.506L2 22l6.166-1.122A9.45 9.45 0 0 0 11.5 21c5.238 0 9.5-4.262 9.5-9.5S16.738 2 11.5 2z" fill-rule="evenodd" clip-rule="evenodd"/></svg></button>
       </div>
     </div>`;
   }).join('');
@@ -2296,33 +2404,100 @@ function setupStatsObserver() {
   els.forEach(el=>obs.observe(el));
 }
 
-// ─── PARTICLES (Hero background effect) ───────────────────────
+// ─── PARTICLES (Cinematic ghee-pour effect) ──────────────────
 function initParticles() {
-  const canvas=document.getElementById('particle-canvas');
-  if(!canvas) return;
-  const ctx=canvas.getContext('2d');
-  let w=canvas.width=window.innerWidth, h=canvas.height=window.innerHeight;
-  window.addEventListener('resize',()=>{w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;});
-  const particles=Array.from({length:60},()=>({
-    x:Math.random()*w, y:Math.random()*h,
-    r:Math.random()*2+0.5,
-    vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3,
-    a:Math.random()*0.4+0.1
+  const canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }, { passive: true });
+
+  // Ambient drifting dust
+  const floaters = Array.from({length: 35}, () => ({
+    x: Math.random() * w, y: Math.random() * h,
+    r: Math.random() * 1.2 + 0.4,
+    vx: (Math.random() - 0.5) * 0.18,
+    vy: (Math.random() - 0.5) * 0.18,
+    a: Math.random() * 0.18 + 0.03
   }));
+
+  // Ghee pour streams — slow golden liquid trails falling from top
+  const streams = Array.from({length: 5}, (_, i) => ({
+    x: w * (0.12 + i * 0.18),
+    y: -100 - Math.random() * 250,
+    vy: Math.random() * 0.32 + 0.1,
+    opacity: Math.random() * 0.16 + 0.04,
+    length: Math.random() * 150 + 80,
+    width: Math.random() * 2.2 + 0.8,
+    phase: Math.random() * Math.PI * 2
+  }));
+
+  let frame = 0;
   function draw() {
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0)p.x=w; if(p.x>w)p.x=0;
-      if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+    ctx.clearRect(0, 0, w, h);
+    frame++;
+
+    // Ghee pour streams
+    streams.forEach(s => {
+      s.y += s.vy;
+      if (s.y > h + s.length) {
+        s.y = -s.length - Math.random() * 300;
+        s.opacity = Math.random() * 0.16 + 0.04;
+        s.vy = Math.random() * 0.32 + 0.1;
+        s.x = w * (0.08 + Math.random() * 0.84);
+      }
+      const wobble = Math.sin(frame * 0.007 + s.phase) * 5;
+      const grad = ctx.createLinearGradient(s.x, s.y, s.x + wobble, s.y + s.length);
+      grad.addColorStop(0, `rgba(245,166,35,0)`);
+      grad.addColorStop(0.25, `rgba(245,166,35,${s.opacity})`);
+      grad.addColorStop(0.72, `rgba(232,96,10,${s.opacity * 0.7})`);
+      grad.addColorStop(1, `rgba(200,80,0,0)`);
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(245,166,35,${p.a})`;
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = s.width;
+      ctx.lineCap = 'round';
+      ctx.moveTo(s.x, s.y);
+      ctx.bezierCurveTo(
+        s.x + wobble * 0.4, s.y + s.length * 0.33,
+        s.x + wobble, s.y + s.length * 0.67,
+        s.x + wobble, s.y + s.length
+      );
+      ctx.stroke();
+    });
+
+    // Ambient particles
+    floaters.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(245,166,35,${p.a})`;
       ctx.fill();
     });
     requestAnimationFrame(draw);
   }
   draw();
+}
+
+// ─── PRODUCT LOOP ─────────────────────────────────────────────
+function initProductLoop() {
+  const section = document.getElementById('product-loop-section');
+  const track = document.getElementById('product-loop-track');
+  if (!section || !track || !PRODUCTS.length) return;
+  section.style.display = 'block';
+  const allCards = [...PRODUCTS, ...PRODUCTS].map(p => {
+    const img = p.image_url || `https://placehold.co/168x130?text=${encodeURIComponent(p.name)}`;
+    return `<div class="loop-card" onclick="showProductDetails('${p.id}')">
+      <img src="${img}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/168x130'">
+      <div class="loop-card-body">
+        <div class="loop-card-name">${p.name}</div>
+        <div class="loop-card-price">₹${p.price}</div>
+      </div>
+    </div>`;
+  }).join('');
+  track.innerHTML = allCards;
 }
 
 // ─── COUPON ───────────────────────────────────────────────────
