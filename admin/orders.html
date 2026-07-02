@@ -28,7 +28,7 @@
 <main class="main-wrapper">
   <header class="topbar">
     <div class="topbar-search">
-      🔍 <input type="text" placeholder="Search by Order ID or Name...">
+      🔍 <input type="text" id="searchOrders" placeholder="Search by Order ID, Name, or Phone..." onkeyup="filterOrders(this.value)">
     </div>
     <div class="topbar-right">
       <div class="admin-profile">
@@ -107,7 +107,7 @@ async function loadOrders() {
           <td>
             <strong>${o.customer_name}</strong><br>
             <span style="font-size:0.8rem;color:var(--text-muted)">📞 ${o.customer_phone}</span><br>
-            <span style="font-size:0.8rem;color:var(--text-muted)">${o.delivery_address}</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);display:block;white-space:normal;word-break:break-word;max-width:250px;">${o.delivery_address || o.customer_address}, ${o.customer_pincode || ''}</span>
           </td>
           <td>
             <strong>${formatMoney(o.total_amount)}</strong><br>
@@ -131,6 +131,16 @@ async function loadOrders() {
       </tr>
     `;
   }
+}
+
+function filterOrders(query) {
+  const q = query.toLowerCase();
+  const rows = document.querySelectorAll('#ordersTable tr');
+  rows.forEach(row => {
+    if (row.querySelector('.loader-wrapper')) return; // skip loader
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(q) ? '' : 'none';
+  });
 }
 
 async function updateStatus(id, st) {
