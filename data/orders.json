@@ -22,11 +22,11 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
-    "order_status": "delivered",
-    "status": "delivered",
+    "order_status": "shipped",
+    "status": "shipped",
     "notes": "",
     "created_at": "2026-06-28T11:29:57.719Z",
-    "updated_at": "2026-07-02T15:11:43.383Z"
+    "updated_at": "2026-06-28T11:45:54.185Z"
   },
   {
     "id": "ORD-YNBB98XBN",
@@ -61,11 +61,11 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
-    "order_status": "delivered",
-    "status": "delivered",
+    "order_status": "shipped",
+    "status": "shipped",
     "notes": "Coupon applied: FRESH10 (-₹26)",
     "created_at": "2026-06-28T11:33:36.355Z",
-    "updated_at": "2026-07-02T15:11:34.435Z"
+    "updated_at": "2026-06-29T07:59:06.888Z"
   },
   {
     "id": "ORD-K6IZ7F8JL",
@@ -92,11 +92,11 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
-    "order_status": "delivered",
-    "status": "delivered",
+    "order_status": "shipped",
+    "status": "shipped",
     "notes": "",
     "created_at": "2026-06-28T11:38:41.703Z",
-    "updated_at": "2026-07-02T15:11:40.067Z"
+    "updated_at": "2026-06-29T07:59:10.539Z"
   },
   {
     "id": "ORD-UCE6T1J42",
@@ -152,11 +152,10 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
-    "order_status": "shipped",
-    "status": "shipped",
+    "order_status": "placed",
+    "status": "placed",
     "notes": "",
-    "created_at": "2026-06-28T11:58:00.021Z",
-    "updated_at": "2026-07-02T15:11:45.887Z"
+    "created_at": "2026-06-28T11:58:00.021Z"
   },
   {
     "id": "ORD-YGIMX0W97",
@@ -333,9 +332,10 @@
     "payment_status": "pending",
     "razorpay_order_id": null,
     "razorpay_payment_id": null,
-    "order_status": "placed",
-    "status": "placed",
+    "order_status": "shipped",
+    "status": "shipped",
     "notes": "",
-    "created_at": "2026-07-02T14:50:11.083Z"
+    "created_at": "2026-07-02T14:50:11.083Z",
+    "updated_at": "2026-07-02T15:11:49.030Z"
   }
 ]
