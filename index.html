@@ -2886,7 +2886,7 @@
     .product-loop-section {
       position: relative;
       overflow: hidden;
-      height: 550px;
+      height: 780px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -2894,8 +2894,8 @@
       padding-top: 30px;
     }
     .product-loop-label {
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 32px;
+      font-weight: 900;
       color: var(--saffron);
       margin-bottom: 20px;
       text-transform: uppercase;
@@ -2903,17 +2903,18 @@
     }
     #swipe-container {
       position: relative;
-      width: 320px;
-      height: 420px;
-      perspective: 1000px;
+      width: 450px;
+      height: 600px;
+      perspective: 1200px;
     }
     .swipe-card {
       position: absolute;
       width: 100%;
       height: 100%;
       background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      border-radius: 32px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -2930,8 +2931,10 @@
     }
     .swipe-card img {
       width: 100%;
-      height: 260px;
-      object-fit: cover;
+      height: 380px;
+      object-fit: contain;
+      background: #fafafa;
+      padding: 20px;
       pointer-events: none;
       border-bottom: 3px solid rgba(232, 96, 10, 0.1);
     }
@@ -2945,23 +2948,23 @@
       justify-content: center;
     }
     .swipe-card-name {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 12px;
       color: var(--text);
     }
     .swipe-card-price {
-      font-size: 26px;
+      font-size: 34px;
       color: var(--saffron);
       font-weight: 900;
     }
     .swipe-stamp {
       position: absolute;
-      top: 40px;
-      padding: 10px 20px;
-      border: 5px solid;
-      border-radius: 12px;
-      font-size: 38px;
+      top: 50px;
+      padding: 12px 28px;
+      border: 6px solid;
+      border-radius: 16px;
+      font-size: 46px;
       font-weight: 900;
       text-transform: uppercase;
       opacity: 0;
@@ -2982,22 +2985,26 @@
     }
     .swipe-actions {
       display: flex;
-      gap: 20px;
+      gap: 30px;
       justify-content: center;
-      margin-top: 15px;
+      margin-top: 25px;
     }
     .swipe-btn {
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 36px;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .swipe-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
     }
     .swipe-btn:active {
       transform: scale(0.9);
