@@ -699,5 +699,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-02T00:10:57.329Z"
+  },
+  {
+    "id": "sfo1l176n",
+    "name": "Baidyanath Turmeric Powder",
+    "name_hindi": "बैडयनाथ हल्दी पाउडर",
+    "category": "combos",
+    "price": 279,
+    "mrp": 329,
+    "image_url": "https://via.placeholder.com/400x300?text=Baidyanath%20Turmeric%20Powder",
+    "video_url": null,
+    "description": "Baidyanath's turmeric powder is made from high-quality turmeric, rich in antioxidants and anti-inflammatory properties.",
+    "weight": "200g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-02T00:10:58.804Z"
   }
 ]
