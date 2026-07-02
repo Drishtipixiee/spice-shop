@@ -523,5 +523,37 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-02T00:09:32.849Z"
+  },
+  {
+    "id": "34hz0e9pz",
+    "name": "Nagpur Turmeric Powder",
+    "name_hindi": "नागपुर हलदी",
+    "category": "combos",
+    "price": 90,
+    "mrp": 120,
+    "image_url": "https://via.placeholder.com/400x300?text=Nagpur%20Turmeric%20Powder",
+    "video_url": null,
+    "description": "Nagpur turmeric powder, known for its earthy flavor and golden color, is a popular choice for North Indian cuisine. Packed with antioxidants.",
+    "weight": "200g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-02T00:09:34.257Z"
+  },
+  {
+    "id": "ojq89e4jr",
+    "name": "Ayurvedic Haldi Powder Blend",
+    "name_hindi": "आयुर्वेदिक हलदी पाउडर ब्लेंड",
+    "category": "combos",
+    "price": 450,
+    "mrp": 550,
+    "image_url": "https://via.placeholder.com/400x300?text=Ayurvedic%20Haldi%20Powder%20Blend",
+    "video_url": null,
+    "description": "A blend of high-quality turmeric powder with other Ayurvedic herbs, carefully crafted to promote overall well-being and digestion. Supports joint health.",
+    "weight": "50g",
+    "is_bestseller": false,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-02T00:09:35.006Z"
   }
 ]
