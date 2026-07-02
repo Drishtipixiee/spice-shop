@@ -827,5 +827,21 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-02T17:24:20.576Z"
+  },
+  {
+    "id": "gi5hwr8or",
+    "name": "Dussehra Celebration Box",
+    "name_hindi": "दसहरा महोत्सव बॉक्स",
+    "category": "combos",
+    "price": 350,
+    "mrp": 475,
+    "image_url": "https://image.pollinations.ai/prompt/Dussehra%20Celebration%20Box%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Mark the triumph of good over evil with our Dussehra celebration box, containing traditional sweets and decorative items",
+    "weight": "400g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-02T17:24:22.104Z"
   }
 ]
