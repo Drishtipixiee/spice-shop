@@ -123,7 +123,7 @@
         </div>
         <button type="button" onclick="aiGenerateDescription()" id="ai-desc-btn"
           style="padding:8px 18px;background:linear-gradient(135deg,#7B2FF7,#F72585);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;">
-          ✨ Generate SEO Description + Hindi Name
+          ✨ Generate SEO Description, Hindi Name + Photo
         </button>
         <div id="ai-desc-status" style="margin-top:8px;font-size:12px;color:#8b5cf6;display:none;"></div>
       </div>
@@ -576,13 +576,19 @@ Return ONLY valid JSON in this exact format (no markdown, no extra text):
           document.getElementById('hindi-ai-badge').style.display = 'inline';
         }
 
-        statusEl.textContent = '✅ Description & Hindi name generated successfully!';
+        // Photo Generation
+        const photoUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(name + ' Indian grocery product photography')}?width=400&height=300&nologo=true`;
+        document.getElementById('pImg').value = photoUrl;
+        document.getElementById('pImgPreview').src = photoUrl;
+        document.getElementById('previewContainer').style.display = 'block';
+
+        statusEl.textContent = '✅ Description, Hindi name & Photo generated successfully!';
         statusEl.style.color = '#2E7D32';
-        btn.textContent = '✨ Regenerate';
+        btn.textContent = '✨ Regenerate All';
       } catch (e) {
         statusEl.textContent = `❌ AI Error: ${e.message}. Check your Gemini API key.`;
         statusEl.style.color = '#E53935';
-        btn.textContent = '✨ Generate SEO Description + Hindi Name';
+        btn.textContent = '✨ Generate SEO Description, Hindi Name + Photo';
       } finally {
         btn.disabled = false;
       }
@@ -706,14 +712,14 @@ Make prices realistic for Indian market (₹50-₹1500 range). Include mix of be
         try {
           await api.saveProduct(null, {
             ...p,
-            image_url: 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name),
+            image_url: p.image_url || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(p.name),
             video_url: null
           });
           success++;
         } catch (e) { console.error('Failed to save:', p.name, e); }
       }
 
-      alert(`✅ Published ${success}/${products.length} products to your store! Go update their images now.`);
+      alert(`✅ Published ${success}/${products.length} products to your store with AI generated photos!`);
       resultDiv.style.display = 'none';
       loadProducts();
     }
