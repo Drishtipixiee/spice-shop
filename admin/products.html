@@ -527,6 +527,20 @@
       }
     }
 
+    async function deleteCurrentProduct() {
+      const id = document.getElementById('pId').value;
+      if (!id) return;
+      if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+      
+      try {
+        await api.deleteProduct(id);
+        closeModal();
+        loadProducts();
+      } catch (e) {
+        alert('Failed to delete product: ' + e.message);
+      }
+    }
+
     // ─── AI DESCRIPTION GENERATOR ───────────────────────────────────
     async function aiGenerateDescription() {
       const name = document.getElementById('pName').value.trim();

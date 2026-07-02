@@ -4478,15 +4478,37 @@
       'track': 'Enter your Order ID in the "Track Order" section to see live status! 📦',
       'admin': 'Admin panel is at /admin/ — use the password set by the owner. ⚙️',
     };
-    function sendChat() {
+    async function sendChat() {
       const inp = document.getElementById('chat-input');
       const msg = inp.value.trim(); if (!msg) return; inp.value = '';
       const msgs = document.getElementById('chat-messages');
       msgs.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+      
       const q = msg.toLowerCase();
-      let reply = 'I\'m not sure about that! 😊 Try WhatsApp for instant help: <a href="https://wa.me/' + OWNER_WHATSAPP + '" style="color:var(--saffron);font-weight:700">Chat with us →</a>';
+      let reply = null;
       for (const [key, res] of Object.entries(CHAT_RESPONSES)) { if (q.includes(key)) { reply = res; break; } }
-      setTimeout(() => { msgs.innerHTML += `<div class="chat-msg bot">${reply}</div>`; msgs.scrollTop = msgs.scrollHeight; }, 500);
+      
+      msgs.innerHTML += `<div id="chat-loading" class="chat-msg bot" style="opacity: 0.7;">⏳ Typing...</div>`;
+      msgs.scrollTop = msgs.scrollHeight;
+
+      if (!reply) {
+         if (!GROQ_API_KEY) {
+            reply = 'I\'m not sure about that! 😊 Try WhatsApp for instant help: <a href="https://wa.me/' + OWNER_WHATSAPP + '" style="color:var(--saffron);font-weight:700">Chat with us →</a>';
+         } else {
+            try {
+               const prodContext = PRODUCTS.slice(0, 20).map(p => `${p.name} (₹${p.price})`).join(', ');
+               const prompt = `You are "SpiceBot", a helpful, friendly AI assistant for "Canaan Farms" store in Thane, Mumbai. Products: ${prodContext}. Answer the user's question concisely in 1-2 sentences. Query: "${msg}"`;
+               reply = await callGemini(prompt);
+            } catch (e) {
+               reply = 'I am having trouble connecting right now! 😔 Please try WhatsApp.';
+            }
+         }
+      }
+      
+      const loader = document.getElementById('chat-loading');
+      if(loader) loader.remove();
+      
+      msgs.innerHTML += `<div class="chat-msg bot">${reply}</div>`; 
       msgs.scrollTop = msgs.scrollHeight;
     }
 
