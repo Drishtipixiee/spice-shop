@@ -763,5 +763,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-02T17:24:14.635Z"
+  },
+  {
+    "id": "q2akhk5ko",
+    "name": "Holi Celebration Hamper",
+    "name_hindi": "होली महोत्सव हैम्पर",
+    "category": "combos",
+    "price": 450,
+    "mrp": 625,
+    "image_url": "https://image.pollinations.ai/prompt/Holi%20Celebration%20Hamper%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Add a splash of vibrant colours to your Holi celebrations with our special hamper containing gujiyas and festive treats",
+    "weight": "500g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-02T17:24:16.380Z"
   }
 ]
