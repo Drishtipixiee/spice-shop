@@ -1,4 +1,4 @@
-const CACHE_NAME = 'canaan-farms-v3';
+const CACHE_NAME = 'canaan-farms-v1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -6,17 +6,12 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
-  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
         return cache.addAll(urlsToCache);
       })
   );
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil(clients.claim());
 });
 
 self.addEventListener('fetch', event => {
