@@ -1,0 +1,16 @@
+{
+  "name": "Canaan Farms",
+  "short_name": "Canaan Farms",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FFF9F3",
+  "theme_color": "#E8600A",
+  "description": "Pure Dairy & Authentic Spices Delivered Fresh",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

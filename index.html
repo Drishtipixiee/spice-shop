@@ -7,6 +7,10 @@
   <title>Canaan Farms — Pure Dairy & Authentic Spices | Thane & Mulund</title>
   <meta name="description"
     content="Farm-fresh A2 Desi Ghee, hand-churned dairy & authentic spices. FSSAI certified. Free delivery in Thane & Mulund, Mumbai.">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#E8600A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap"
@@ -975,13 +979,19 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 14px
       }
+      .products-section { padding-bottom: 80px; }
     }
 
     @media(max-width:420px) {
       #product-grid {
-        grid-template-columns: 1fr;
-        gap: 14px
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px
       }
+      .prod-media { height: 140px; }
+      .prod-name { font-size: 13px; }
+      .prod-price { font-size: 14px; }
+      .prod-weight { font-size: 10px; padding: 2px 6px; }
+      .products-section { padding: 60px 12px 90px 12px; }
     }
 
     /* ─── PRODUCT CARD (3D HOVER) ─── */
@@ -3019,6 +3029,45 @@
       color: #10B981;
       border: 2px solid #10B981;
     }
+    /* ─── MOBILE BOTTOM NAV ─── */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #f3f4f6;
+      z-index: 9999;
+      padding: 8px 16px;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    }
+    .mobile-bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      gap: 4px;
+      text-decoration: none;
+    }
+    .mobile-bottom-nav a.active {
+      color: var(--saffron);
+    }
+    .mobile-bottom-nav a svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+    @media(max-width:768px) {
+      .mobile-bottom-nav { display: flex; }
+      .header { padding: 12px 16px; }
+      .hero { min-height: unset; padding: 100px 16px 40px; }
+    }
   </style>
 </head>
 
@@ -3727,6 +3776,26 @@
         onclick="document.getElementById('product-detail-modal').classList.remove('open')">✕</button>
       <div id="product-detail-content"></div>
     </div>
+  </div>
+
+  <!-- ══ MOBILE BOTTOM NAV ═══════════════════════════════════════ -->
+  <div class="mobile-bottom-nav">
+    <a href="#" class="active" onclick="window.scrollTo(0,0)">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </a>
+    <a href="#products">
+      <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-4v7h2.5v8H21V2h-5z"/></svg>
+      Categories
+    </a>
+    <a href="#track">
+      <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      Track
+    </a>
+    <a href="javascript:void(0)" onclick="toggleDrawer()">
+      <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      Cart
+    </a>
   </div>
 
   <!-- ══ AI RECIPE MODAL ════════════════════════════════════════ -->
@@ -4751,6 +4820,13 @@
 
     // ─── BOOT ─────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed: ', err));
+      });
+    }
   </script>
 </body>
 

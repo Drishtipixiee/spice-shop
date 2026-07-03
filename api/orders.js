@@ -37,6 +37,12 @@ module.exports = async function handler(req, res) {
     let orders = await readData('orders.json') || [];
 
     if (req.method === 'GET') {
+      const { id } = req.query || {};
+      if (id) {
+        const order = orders.find(o => o.id === id);
+        if (order) return res.status(200).json(order);
+        return res.status(404).json({ error: 'Order not found' });
+      }
       return res.status(200).json(orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
     }
 
