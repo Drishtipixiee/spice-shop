@@ -779,5 +779,37 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-05T16:46:45.554Z"
+  },
+  {
+    "id": "pupax4575",
+    "name": "Shan Lal Mirch",
+    "name_hindi": "शान लाल मिरची",
+    "category": "combos",
+    "price": 80,
+    "mrp": 100,
+    "image_url": "https://image.pollinations.ai/prompt/Shan%20Lal%20Mirch%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Shan Lal Mirch is a classic blend of spices that adds a rich flavor to your dishes. Affordable and easy to use.",
+    "weight": "100g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-05T16:46:47.054Z"
+  },
+  {
+    "id": "3bkbcfke8",
+    "name": "Madras Red Chili",
+    "name_hindi": "माद्रासी लाल मिरची",
+    "category": "combos",
+    "price": 220,
+    "mrp": 250,
+    "image_url": "https://image.pollinations.ai/prompt/Madras%20Red%20Chili%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Madras Red Chili is a carefully crafted blend of spices that adds a rich and complex flavor to your dishes.",
+    "weight": "300g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-05T16:46:47.759Z"
   }
 ]
