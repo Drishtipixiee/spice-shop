@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Canaan Farms — Pure Dairy &amp; Authentic Spices | Thane &amp; Mulund</title>
+  <title>Ezra Farms — Pure Dairy &amp; Authentic Spices | Thane &amp; Mulund</title>
   <meta name="description" content="Farm-fresh A2 Desi Ghee, hand-churned dairy &amp; authentic spices. FSSAI certified. Free delivery in Thane &amp; Mulund, Mumbai.">
-  <meta name="keywords" content="A2 ghee, paneer, turmeric, spices, dairy, Thane, Mulund, Mumbai, Canaan Farms, organic">
+  <meta name="keywords" content="A2 ghee, paneer, turmeric, spices, dairy, Thane, Mulund, Mumbai, Ezra Farms, organic">
   <meta name="theme-color" content="#E8600A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Canaan Farms">
-  <meta property="og:title" content="Canaan Farms — Pure Dairy &amp; Authentic Spices">
+  <meta name="apple-mobile-web-app-title" content="Ezra Farms">
+  <meta property="og:title" content="Ezra Farms — Pure Dairy &amp; Authentic Spices">
   <meta property="og:description" content="Farm-fresh A2 Desi Ghee, hand-churned dairy &amp; authentic spices. Free delivery in Thane &amp; Mulund.">
   <meta property="og:type" content="website">
-  <link rel="manifest" href="/public/manifest.json">
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    // Force unregister old service workers to break cache and apply new UI immediately
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        for(let r of regs) {
+          r.unregister();
+        }
+      });
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1623,7 +1633,7 @@
       <!-- Logo -->
       <a href="#" class="header-logo">
         <div class="header-logo-icon">🌶️</div>
-        <span>Canaan Farms</span>
+        <span>Ezra Farms</span>
       </a>
 
       <!-- Search -->
@@ -1853,7 +1863,7 @@
   <footer class="footer">
     <div class="footer-grid">
       <div>
-        <div class="footer-brand-name">🌶️ Canaan Farms</div>
+        <div class="footer-brand-name">🌶️ Ezra Farms</div>
         <p class="footer-desc">Farm-fresh A2 dairy products and authentic Indian spices, sourced directly from our partner farms. FSSAI certified, chemical-free, delivering pure goodness to Thane &amp; Mulund since 2018.</p>
         <div class="footer-badges">
           <span class="footer-badge">FSSAI Licensed</span>
@@ -1862,7 +1872,7 @@
         </div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
           <a href="https://wa.me/919892360874" style="color:var(--accent);font-weight:700;font-size:13px">WhatsApp</a>
-          <a href="mailto:canaanfarms@gmail.com" style="color:var(--accent);font-weight:700;font-size:13px">Email</a>
+          <a href="mailto:ezrafarms@gmail.com" style="color:var(--accent);font-weight:700;font-size:13px">Email</a>
           <a href="/admin/" style="color:var(--accent);font-weight:700;font-size:13px">Admin</a>
         </div>
       </div>
@@ -1887,7 +1897,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      © 2025 Canaan Farms · FSSAI Licensed · Made with ❤️ in Thane
+      © 2025 Ezra Farms · FSSAI Licensed · Made with ❤️ in Thane
       <span style="margin-left:12px"><a href="/admin/" style="color:rgba(255,255,255,0.3);font-size:11px">Admin ↗</a></span>
     </div>
   </footer>
@@ -1906,11 +1916,11 @@
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         Home
       </a>
-      <a href="#products" class="mobile-nav-item" id="nav-shop" onclick="setActiveNav('nav-shop');return false">
+      <a href="#products" class="mobile-nav-item" id="nav-shop" onclick="scrollToSection('nav-shop', 'products');return false">
         <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-4v7h2.5v8H21V2h-5z"/></svg>
         Shop
       </a>
-      <a href="#track" class="mobile-nav-item" id="nav-track" onclick="setActiveNav('nav-track');return false">
+      <a href="#track" class="mobile-nav-item" id="nav-track" onclick="scrollToSection('nav-track', 'track');return false">
         <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
         Track
       </a>
@@ -2454,18 +2464,43 @@
       } else { btn.textContent='Opening Payment...'; await initiateRazorpay(orderData); }
     }
 
+    function saveOrderToLocalCache(id, orderData) {
+      try {
+        const cache = JSON.parse(localStorage.getItem('localOrders') || '{}');
+        cache[id] = {
+          ...orderData,
+          id: id,
+          created_at: new Date().toISOString()
+        };
+        localStorage.setItem('localOrders', JSON.stringify(cache));
+      } catch(e) {
+        console.warn('Local cache save failed:', e);
+      }
+    }
+
+    function getOrderFromLocalCache(id) {
+      try {
+        const cache = JSON.parse(localStorage.getItem('localOrders') || '{}');
+        return cache[id] || null;
+      } catch(e) {
+        return null;
+      }
+    }
+
     async function saveOrder(od, method) {
       const btn = document.getElementById('place-order-btn');
       try {
         const res = await fetch('/api/orders', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(od) });
         const data = await res.json();
         if (!res.ok || !data.success) throw new Error(data.error||'Failed');
+        saveOrderToLocalCache(data.orderId, od);
         notifyOwnerWhatsApp(od, data.orderId, method);
         document.getElementById('address-modal').classList.remove('open');
         showOrderSuccess(data.orderId, method.toLowerCase(), od.total);
         clearCart();
       } catch(e) {
         const fid = `WA-${Date.now().toString().slice(-8)}`;
+        saveOrderToLocalCache(fid, od);
         notifyOwnerWhatsApp(od, fid, `${method} - WhatsApp`);
         document.getElementById('address-modal').classList.remove('open');
         showOrderSuccess(fid, 'whatsapp', od.total);
@@ -2478,7 +2513,7 @@
       try {
         const res = await fetch('/api/create-order', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({amount:od.total, currency:'INR'}) });
         const rzp = await res.json(); if (!res.ok||rzp.error) throw new Error(rzp.error);
-        const options = { key:RAZORPAY_KEY, amount:od.total*100, currency:'INR', name:'🌶️ Canaan Farms', description:`Order for ${od.items.length} item(s)`, order_id:rzp.orderId, prefill:{name:od.customer_name, contact:od.customer_phone}, theme:{color:'#E8600A'}, handler: async r => { od.razorpay_payment_id=r.razorpay_payment_id; od.payment_status='paid'; await saveOrder(od,'Razorpay'); }, modal:{ondismiss:()=>{ btn.disabled=false; btn.textContent='Place Order 🛒'; }} };
+        const options = { key:RAZORPAY_KEY, amount:od.total*100, currency:'INR', name:'🌶️ Ezra Farms', description:`Order for ${od.items.length} item(s)`, order_id:rzp.orderId, prefill:{name:od.customer_name, contact:od.customer_phone}, theme:{color:'#E8600A'}, handler: async r => { od.razorpay_payment_id=r.razorpay_payment_id; od.payment_status='paid'; await saveOrder(od,'Razorpay'); }, modal:{ondismiss:()=>{ btn.disabled=false; btn.textContent='Place Order 🛒'; }} };
         new window.Razorpay(options).open();
       } catch(e) { alert('Payment failed. Try COD or WhatsApp order.'); btn.disabled=false; btn.textContent='Place Order 🛒'; }
     }
@@ -2565,24 +2600,101 @@
       const orderId = inp.value.trim().toUpperCase();
       if (!orderId) { result.innerHTML='<p style="color:var(--red)">Please enter an Order ID.</p>'; return; }
       result.innerHTML='<p style="color:var(--text-muted)">⏳ Looking up your order…</p>';
+      
+      let order = null;
       try {
         const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`);
-        if (!res.ok) throw new Error('Not found');
-        const order = await res.json();
-        const statusMap = { placed:'🟡 Order Placed', confirmed:'🔵 Confirmed', processing:'🟠 Processing', out_for_delivery:'🚚 Out for Delivery', delivered:'✅ Delivered', cancelled:'❌ Cancelled' };
-        const statusLabel = statusMap[order.order_status] || order.order_status;
-        result.innerHTML = `<div style="background:#f8f8f8;border:1px solid var(--border-light);border-radius:var(--r-sm);padding:16px;text-align:left">
-<div style="font-size:15px;font-weight:700;margin-bottom:8px">${statusLabel}</div>
-<div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
-  <div>📋 Order ID: <strong>${order.id||orderId}</strong></div>
-  <div>👤 Name: ${order.customer_name||'—'}</div>
-  <div>💰 Total: ₹${order.total||'—'}</div>
-  <div>💳 Payment: ${order.payment_method||'—'} · ${order.payment_status||'—'}</div>
-  <div>📅 Placed: ${order.created_at ? new Date(order.created_at).toLocaleString('en-IN') : '—'}</div>
-</div></div>`;
+        if (res.ok) {
+          order = await res.json();
+        }
       } catch(e) {
-        result.innerHTML='<p style="color:var(--red)">❌ Order not found. Please check the Order ID and try again.</p>';
+        console.warn('Backend order lookup failed, checking local cache...');
       }
+
+      if (!order) {
+        order = getOrderFromLocalCache(orderId);
+      }
+
+      if (!order) {
+        result.innerHTML='<p style="color:var(--red)">❌ Order not found. Please check the Order ID and try again.</p>';
+        return;
+      }
+
+      const status = order.order_status || order.status || 'placed';
+      
+      const isPlaced = true;
+      const isConfirmed = ['confirmed', 'processing', 'out_for_delivery', 'delivered'].includes(status);
+      const isProcessing = ['processing', 'out_for_delivery', 'delivered'].includes(status);
+      const isOut = ['out_for_delivery', 'delivered'].includes(status);
+      const isDelivered = status === 'delivered';
+      const isCancelled = status === 'cancelled';
+
+      const statusMap = {
+        placed: '🟡 Order Placed',
+        confirmed: '🔵 Confirmed',
+        processing: '🟠 Processing & Packing',
+        out_for_delivery: '🚚 Out for Delivery',
+        delivered: '✅ Delivered 🎉',
+        cancelled: '❌ Cancelled'
+      };
+
+      const statusLabel = statusMap[status] || status;
+
+      result.innerHTML = `
+        <div style="background:#f8f8f8;border:1px solid var(--border-light);border-radius:var(--r-sm);padding:20px;text-align:left;box-shadow:var(--shadow);">
+          <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+            <span>${statusLabel}</span>
+            <span style="font-size:11px;background:var(--primary-light);color:var(--primary);padding:3px 8px;border-radius:2px;">${order.payment_method?.toUpperCase() || 'COD'}</span>
+          </div>
+
+          <!-- Vertical Timeline Stepper -->
+          <div style="margin:24px 0 24px 10px; display:flex; flex-direction:column; gap:20px; border-left: 2px dashed #D5D9D9; padding-left: 20px; position:relative;">
+            
+            <!-- Step 1: Placed -->
+            <div style="position:relative;">
+              <div style="position:absolute; left:-29px; top:2px; width:16px; height:16px; border-radius:50%; background:${isCancelled ? 'var(--red)' : 'var(--green)'}; border:4px solid #fff; box-shadow:0 0 0 2px ${isCancelled ? 'var(--red)' : 'var(--green)'};"></div>
+              <div style="font-size:13.5px; font-weight:700; color:var(--text)">Order Placed</div>
+              <div style="font-size:11.5px; color:var(--text-secondary)">We received your order request.</div>
+            </div>
+
+            <!-- Step 2: Confirmed -->
+            <div style="position:relative;">
+              <div style="position:absolute; left:-29px; top:2px; width:16px; height:16px; border-radius:50%; background:${isConfirmed ? 'var(--green)' : '#D5D9D9'}; border:4px solid #fff; box-shadow:0 0 0 2px ${isConfirmed ? 'var(--green)' : '#D5D9D9'};"></div>
+              <div style="font-size:13.5px; font-weight:700; color:${isConfirmed ? 'var(--text)' : 'var(--text-muted)'}">Confirmed</div>
+              <div style="font-size:11.5px; color:var(--text-muted)">Accepted by shop owner.</div>
+            </div>
+
+            <!-- Step 3: Processing -->
+            <div style="position:relative;">
+              <div style="position:absolute; left:-29px; top:2px; width:16px; height:16px; border-radius:50%; background:${isProcessing ? 'var(--green)' : '#D5D9D9'}; border:4px solid #fff; box-shadow:0 0 0 2px ${isProcessing ? 'var(--green)' : '#D5D9D9'};"></div>
+              <div style="font-size:13.5px; font-weight:700; color:${isProcessing ? 'var(--text)' : 'var(--text-muted)'}">Processing &amp; Packing</div>
+              <div style="font-size:11.5px; color:var(--text-muted)">Items prepared &amp; packed fresh.</div>
+            </div>
+
+            <!-- Step 4: Out for Delivery -->
+            <div style="position:relative;">
+              <div style="position:absolute; left:-29px; top:2px; width:16px; height:16px; border-radius:50%; background:${isOut ? 'var(--green)' : '#D5D9D9'}; border:4px solid #fff; box-shadow:0 0 0 2px ${isOut ? 'var(--green)' : '#D5D9D9'};"></div>
+              <div style="font-size:13.5px; font-weight:700; color:${isOut ? 'var(--text)' : 'var(--text-muted)'}">Out for Delivery</div>
+              <div style="font-size:11.5px; color:var(--text-muted)">Our dispatch partner is on the way to you.</div>
+            </div>
+
+            <!-- Step 5: Delivered -->
+            <div style="position:relative;">
+              <div style="position:absolute; left:-29px; top:2px; width:16px; height:16px; border-radius:50%; background:${isDelivered ? 'var(--green)' : '#D5D9D9'}; border:4px solid #fff; box-shadow:0 0 0 2px ${isDelivered ? 'var(--green)' : '#D5D9D9'};"></div>
+              <div style="font-size:13.5px; font-weight:700; color:${isDelivered ? 'var(--text)' : 'var(--text-muted)'}">Delivered 🎉</div>
+              <div style="font-size:11.5px; color:var(--text-muted)">Shipment handed over successfully.</div>
+            </div>
+
+          </div>
+
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.7;border-top:1px solid var(--border-light);padding-top:12px;">
+            <div>📋 Order ID: <strong>${order.id||orderId}</strong></div>
+            <div>👤 Customer: ${order.customer_name||'—'}</div>
+            <div>💰 Bill Amount: <strong>₹${order.total||order.total_amount||'—'}</strong></div>
+            <div>📅 Placed At: ${order.created_at ? new Date(order.created_at).toLocaleString('en-IN') : '—'}</div>
+          </div>
+        </div>
+      `;
     }
 
     // ─── AI FUNCTIONS ─────────────────────────────────────────────
@@ -2705,13 +2817,20 @@
       const el = document.getElementById(id);
       if (el) el.classList.add('active');
     }
+    function scrollToSection(navId, sectionId) {
+      setActiveNav(navId);
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
     function scrollToTop() { window.scrollTo({ top:0, behavior:'smooth' }); }
 
     // ─── PWA / INSTALL ────────────────────────────────────────────
     let deferredPrompt = null;
     function initPWA() {
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/public/sw.js').catch(()=>{});
+        navigator.serviceWorker.register('/sw.js').catch(()=>{});
       }
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
