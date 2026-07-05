@@ -843,5 +843,21 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-05T16:46:50.940Z"
+  },
+  {
+    "id": "3207srssu",
+    "name": "Dharampal Red Chili",
+    "name_hindi": "धारमपाल लाल मिरची",
+    "category": "combos",
+    "price": 95,
+    "mrp": 115,
+    "image_url": "https://image.pollinations.ai/prompt/Dharampal%20Red%20Chili%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Dharampal Red Chili is a classic blend of spices that adds a rich flavor to your dishes. Affordable and easy to use.",
+    "weight": "200g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-05T16:46:52.218Z"
   }
 ]
