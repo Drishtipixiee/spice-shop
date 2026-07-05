@@ -763,5 +763,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-05T16:46:44.082Z"
+  },
+  {
+    "id": "hzrj5cn88",
+    "name": "Patel Brothers Lal Mirch",
+    "name_hindi": "पतेल ब्रदर्स लाल मिरची",
+    "category": "combos",
+    "price": 110,
+    "mrp": 135,
+    "image_url": "https://image.pollinations.ai/prompt/Patel%20Brothers%20Lal%20Mirch%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Patel Brothers Lal Mirch is a rich and flavorful blend of spices. Perfect for making authentic Indian dishes.",
+    "weight": "200g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-05T16:46:45.554Z"
   }
 ]
