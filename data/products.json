@@ -811,5 +811,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-05T17:10:24.578Z"
+  },
+  {
+    "id": "dr2p7zmw0",
+    "name": "Desh Bhakt Red Chili Powder",
+    "name_hindi": "देश भक्त लाल मिर्च पाउडर ",
+    "category": "combos",
+    "price": 80,
+    "mrp": 100,
+    "image_url": "https://image.pollinations.ai/prompt/Desh%20Bhakt%20Red%20Chili%20Powder%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Spice up your life with Desh Bhakt Red Chili Powder. Made from high-quality, sustainably sourced ingredients, this powder is perfect for health-conscious consumers.",
+    "weight": "50g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-05T17:10:26.787Z"
   }
 ]
