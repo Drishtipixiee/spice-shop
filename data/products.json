@@ -827,5 +827,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-05T16:46:49.148Z"
+  },
+  {
+    "id": "uwpzhyj30",
+    "name": "Sriram's Hot Red Chili",
+    "name_hindi": "श्रीराम का हॉट लाल मिरची",
+    "category": "combos",
+    "price": 165,
+    "mrp": 190,
+    "image_url": "https://image.pollinations.ai/prompt/Sriram's%20Hot%20Red%20Chili%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Sriram's Hot Red Chili is a carefully crafted blend of spices that adds a rich and complex flavor to your dishes.",
+    "weight": "250g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-05T16:46:50.940Z"
   }
 ]
