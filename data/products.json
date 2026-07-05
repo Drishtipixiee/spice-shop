@@ -575,13 +575,13 @@
   {
     "id": "b6rnnzaqj",
     "name": "Organic Haldi Capsules",
-    "name_hindi": "शुद्ध हल्दी कैप्सूल",
+    "name_hindi": "शुद्ध हलदी कैप्सूल",
     "category": "combos",
     "price": 1200,
     "mrp": 1400,
     "image_url": "https://image.pollinations.ai/prompt/Organic%20Haldi%20Capsules%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
     "video_url": null,
-    "description": "Experience the unparalleled goodness of our Organic Haldi Capsules, made from premium turmeric sourced from the pristine lands of India. This potent blend of curcuminoids is carefully encapsulated to retain its potency and purity. Reap the benefits of turmeric, with a hassle-free and convenient dosage. Pesticide-free, non-GMO, and sustainably sourced.",
+    "description": "Introducing our Organic Haldi Capsules, made from 100% pure and organic turmeric, sourced from the lush fields of India. Packed with antioxidants and curcumin, these capsules promote digestive health and immunity. Trust our USDA-certified organic capsules for a natural and holistic well-being.",
     "weight": "50g",
     "is_bestseller": false,
     "is_new": false,
@@ -699,5 +699,21 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-02T00:11:00.828Z"
+  },
+  {
+    "id": "fl05yfxzf",
+    "name": "Savitha Red Chili",
+    "name_hindi": "सविता लाल मिरची",
+    "category": "combos",
+    "price": 120,
+    "mrp": 150,
+    "image_url": "https://image.pollinations.ai/prompt/Savitha%20Red%20Chili%20Indian%20grocery%20product%20photography?width=400&height=300&nologo=true",
+    "video_url": null,
+    "description": "Savitha Red Chili is a blend of rich, fiery, and aromatic spices. This premium red chili is perfect for Indian kitchen recipes.",
+    "weight": "200g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-05T16:46:40.429Z"
   }
 ]
