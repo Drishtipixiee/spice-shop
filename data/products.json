@@ -733,7 +733,7 @@
     "created_at": "2026-07-05T17:10:33.135Z"
   },
   {
-    "id": "ff2upijzm",
+    "id": "0i7gisilk",
     "name": "test pay",
     "name_hindi": "न्स्",
     "category": "spices",
@@ -746,10 +746,10 @@
     "is_bestseller": false,
     "is_new": false,
     "in_stock": true,
-    "created_at": "2026-07-06T22:17:37.984Z"
+    "created_at": "2026-07-06T22:17:43.724Z"
   },
   {
-    "id": "gj2pi7nxv",
+    "id": "5vqr54saf",
     "name": "test pay",
     "name_hindi": "न्स्",
     "category": "spices",
@@ -762,6 +762,6 @@
     "is_bestseller": false,
     "is_new": false,
     "in_stock": true,
-    "created_at": "2026-07-06T22:17:42.786Z"
+    "created_at": "2026-07-06T22:17:44.353Z"
   }
 ]
