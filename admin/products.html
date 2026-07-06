@@ -297,7 +297,7 @@
       </div>
       <div>
         <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveProduct()">💾 Save Product</button>
+        <button id="btnSaveProd" class="btn btn-primary" onclick="saveProduct()">💾 Save Product</button>
       </div>
     </div>
   </div>
@@ -490,7 +490,10 @@
         <td><strike style="color:var(--text-muted)">${formatMoney(p.mrp || p.price)}</strike></td>
         <td>${hasVideo ? '<span style="color:#1a6fa0;font-weight:600;font-size:12px;">🎬 Has Video</span>' : '<span style="color:var(--text-muted);font-size:12px;">No video</span>'}</td>
         <td>
-          <button class="btn btn-sm btn-outline" onclick="openModal('${p.id}')">Edit</button>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-sm btn-outline" onclick="openModal('${p.id}')">Edit</button>
+            <button class="btn btn-sm btn-outline" style="border-color: #E53935; color: #E53935;" onclick="deleteProductFromTable('${p.id}')">🗑️ Delete</button>
+          </div>
         </td>
       </tr>
     `;
@@ -586,6 +589,11 @@
       if (!payload.image_url) { alert("Product photo (upload or link) is required."); return; }
       if (isNaN(payload.price) || payload.price <= 0) { alert("Please enter a valid selling price."); return; }
 
+      const saveBtn = document.getElementById('btnSaveProd');
+      saveBtn.disabled = true;
+      const origText = saveBtn.innerHTML;
+      saveBtn.innerHTML = '⏳ Saving...';
+
       try {
         await api.saveProduct(idStr || null, payload);
         // Generate social caption via AI
@@ -594,6 +602,9 @@
         loadProducts();
       } catch (e) {
         alert("Failed to save product: " + e.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = origText;
       }
     }
 
@@ -610,6 +621,19 @@
         alert('Failed to delete product: ' + e.message);
       }
     }
+
+    async function deleteProductFromTable(id) {
+      if (!id) return;
+      if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) return;
+      
+      try {
+        await api.deleteProduct(id);
+        loadProducts();
+      } catch (e) {
+        alert('Failed to delete product: ' + e.message);
+      }
+    }
+
 
     // ─── AI DESCRIPTION GENERATOR ───────────────────────────────────
     async function aiGenerateDescription() {

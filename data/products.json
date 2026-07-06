@@ -747,21 +747,5 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-06T22:17:43.724Z"
-  },
-  {
-    "id": "5vqr54saf",
-    "name": "test pay",
-    "name_hindi": "न्स्",
-    "category": "spices",
-    "price": 1,
-    "mrp": 1,
-    "image_url": "https://image.pollinations.ai/prompt/test%20pay%20authentic%20Indian%20spice%20in%20small%20clay%20or%20wooden%20bowl%20beautifully%20lit%20on%20rustic%20wooden%20table%20food%20photography?width=512&height=512&nologo=true&seed=532354&model=flux",
-    "video_url": null,
-    "description": "Payasam ka swad aur khushboo ko badhane ke liye 'test pay' ki aavashyakta hoti hai. Yeh garmi ke dinon Mein thande paani ko garm banana ke liye istemaal kiya jaata hai. Hamari high-quality 'test pay' pure aur shuddh tareeke se pradan ki jati hai.",
-    "weight": "1 pc",
-    "is_bestseller": false,
-    "is_new": false,
-    "in_stock": true,
-    "created_at": "2026-07-06T22:17:44.353Z"
   }
 ]

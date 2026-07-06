@@ -5,9 +5,12 @@ const MAHARASHTRA_SERVICE_PINCODES = new Set([
   '400601', '400602', '400603', '400604', '400605', '400606', '400607', '400608', '400609', '400610',
   '400612', '400615', '400701', '400708', '401105', '401107',
   // Mulund service pincodes
-  '400080', '400081', '400082'
+  '400080', '400081', '400082',
+  // Testing and customer-specific pincodes (Nallasopara / Palghar)
+  '401209', '401404'
 ]);
 const SERVICE_DISTRICTS = new Set(['thane']);
+
 
 function isServiceablePincode(pincode) {
   const pin = String(pincode || '');
