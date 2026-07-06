@@ -337,5 +337,75 @@
     "notes": "",
     "created_at": "2026-07-02T14:50:11.083Z",
     "updated_at": "2026-07-02T15:11:53.684Z"
+  },
+  {
+    "id": "ORD-BPGGN96T6",
+    "customer_name": "Anurag Pandey",
+    "customer_phone": "9892360874",
+    "customer_address": "Mulund west",
+    "delivery_address": "Mulund west",
+    "customer_pincode": "400080",
+    "items": [
+      {
+        "id": "dairy-ghee-500",
+        "name": "Pure Desi Cow Ghee",
+        "price": 499,
+        "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTTRxhRsqcATqoFr3iBbRW_PZVkqOCMSqjO5KWUU07TR_1SnFLDa_PEoyL_Su3y",
+        "weight": "500ml",
+        "qty": 1
+      },
+      {
+        "id": "dairy-paneer-200",
+        "name": "Fresh Malai Paneer",
+        "price": 95,
+        "image_url": "https://img.freepik.com/premium-photo/paneer-isolated-white-background_759447-1790.jpg",
+        "weight": "200g",
+        "qty": 1
+      },
+      {
+        "id": "dairy-curd-400",
+        "name": "Fresh Homemade Curd",
+        "price": 55,
+        "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS3R4fG5c4m8bVJ1C41Twbx1y5TmixWljmGj1iD0DjbRcqhrXNCLGBsEYCzEU7A",
+        "weight": "400g",
+        "qty": 1
+      },
+      {
+        "id": "dairy-butter-500",
+        "name": "Butter",
+        "price": 285,
+        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLqv1qHfvI5IHXmB-bot6GUub2g7CO1gLjDrjlDIDbzA&s=10",
+        "weight": "500g",
+        "qty": 1
+      },
+      {
+        "id": "dairy-khoya-250",
+        "name": "Fresh Mawa Khoya",
+        "price": 180,
+        "image_url": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTR4QeRZzpuU-o4DIj9Yb219ys9veWhvkg33iFzIKLzzcY6j5K1738T_91njyHJ",
+        "weight": "250g",
+        "qty": 1
+      },
+      {
+        "id": "spice-garam-masala-100",
+        "name": "Garam Masala",
+        "price": 95,
+        "image_url": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSzCup2TL4mbbNHz9gFnHLoZTqgcPXeKVr1qzya3YpTA-xp2Z7ToLZBG2f46Yhy",
+        "weight": "100g",
+        "qty": 1
+      }
+    ],
+    "subtotal": 1209,
+    "delivery_charge": 0,
+    "total": 1209,
+    "total_amount": 1209,
+    "payment_method": "upilink",
+    "payment_status": "pending",
+    "razorpay_order_id": null,
+    "razorpay_payment_id": null,
+    "order_status": "placed",
+    "status": "placed",
+    "notes": "",
+    "created_at": "2026-07-06T04:36:06.059Z"
   }
 ]
