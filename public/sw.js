@@ -1,5 +1,5 @@
-// Canaan Farms Service Worker — v4
-const CACHE_NAME = 'canaan-farms-v4';
+// Ezra Farms Service Worker — v5
+const CACHE_NAME = 'ezra-farms-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
