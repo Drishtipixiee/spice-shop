@@ -312,6 +312,38 @@
     const CAT_MAP = { '1': 'spices', '2': 'dairy', '3': 'combos', '4': 'cakes' };
     const CAT_NAMES = { '1': 'Spices', '2': 'Dairy', '3': 'Combos', '4': 'Cakes' };
 
+    function generateAIImageUrl(name, category, weight) {
+      const seed = Math.floor(Math.random() * 1000000);
+      let basePrompt = '';
+      
+      const cat = String(category || '').toLowerCase();
+      const lowerName = String(name || '').toLowerCase();
+      
+      if (cat.includes('combo') || cat.includes('hamper') || lowerName.includes('combo') || lowerName.includes('hamper') || lowerName.includes('gift')) {
+        basePrompt = `${name} premium Indian gift hamper basket containing spice jars and honey jars decorated nicely clean white studio background commercial e-commerce product photography`;
+      } else if (cat.includes('dairy') || lowerName.includes('ghee') || lowerName.includes('paneer') || lowerName.includes('milk') || lowerName.includes('curd')) {
+        if (lowerName.includes('ghee')) {
+          basePrompt = `premium glass jar of golden pure hand-churned A2 desi ghee with wooden spoon rustic table clean backdrop food photography commercial style`;
+        } else if (lowerName.includes('paneer')) {
+          basePrompt = `fresh white malai paneer cheese cubes block on wooden board garnished food product shot high quality photography`;
+        } else {
+          basePrompt = `${name} dairy milk food product close up studio shot professional pack photography`;
+        }
+      } else if (cat.includes('spice') || lowerName.includes('masala') || lowerName.includes('powder') || lowerName.includes('chili') || lowerName.includes('turmeric')) {
+        basePrompt = `${name} organic Indian spice powder in glass jar rustic background bright soft lighting food photography advertising style`;
+      } else if (cat.includes('cake') || cat.includes('sweet') || lowerName.includes('kalakand') || lowerName.includes('ladoo') || lowerName.includes('barfi')) {
+        basePrompt = `${name} traditional Indian sweet cake desert on ceramic plate appetizing close up commercial food photography`;
+      } else {
+        basePrompt = `${name} organic Indian grocery item clean studio background professional product photography bright lighting`;
+      }
+      
+      if (weight && weight !== '1 pc') {
+        basePrompt += ` ${weight} package`;
+      }
+      
+      return `https://image.pollinations.ai/prompt/${encodeURIComponent(basePrompt)}?width=400&height=300&nologo=true&seed=${seed}`;
+    }
+
     let allProducts = [];
 
     // Load config (Groq key etc.) from backend
@@ -598,7 +630,7 @@ Return ONLY valid JSON in this exact format (no markdown, no extra text):
         }
 
         // Photo Generation
-        const photoUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(name + ' Indian grocery product photography')}?width=400&height=300&nologo=true`;
+        const photoUrl = generateAIImageUrl(name, catName, document.getElementById('pWeight').value.trim());
         document.getElementById('pImg').value = photoUrl;
         document.getElementById('pImgPreview').src = photoUrl;
         document.getElementById('previewContainer').style.display = 'block';
@@ -669,7 +701,7 @@ Make prices realistic for Indian market (₹50-₹1500 range). Include mix of be
 
         const products = JSON.parse(jsonMatch[0]).map(p => ({
           ...p,
-          image_url: `https://image.pollinations.ai/prompt/${encodeURIComponent(p.name + ' Indian grocery product photography')}?width=400&height=300&nologo=true`
+          image_url: generateAIImageUrl(p.name, p.category, p.weight)
         }));
 
         resultDiv.innerHTML = `
