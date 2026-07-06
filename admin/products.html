@@ -314,34 +314,72 @@
 
     function generateAIImageUrl(name, category, weight) {
       const seed = Math.floor(Math.random() * 1000000);
-      let basePrompt = '';
-      
       const cat = String(category || '').toLowerCase();
-      const lowerName = String(name || '').toLowerCase();
-      
-      if (cat.includes('combo') || cat.includes('hamper') || lowerName.includes('combo') || lowerName.includes('hamper') || lowerName.includes('gift')) {
-        basePrompt = `${name} premium Indian gift hamper basket containing spice jars and honey jars decorated nicely clean white studio background commercial e-commerce product photography`;
-      } else if (cat.includes('dairy') || lowerName.includes('ghee') || lowerName.includes('paneer') || lowerName.includes('milk') || lowerName.includes('curd')) {
-        if (lowerName.includes('ghee')) {
-          basePrompt = `premium glass jar of golden pure hand-churned A2 desi ghee with wooden spoon rustic table clean backdrop food photography commercial style`;
-        } else if (lowerName.includes('paneer')) {
-          basePrompt = `fresh white malai paneer cheese cubes block on wooden board garnished food product shot high quality photography`;
-        } else {
-          basePrompt = `${name} dairy milk food product close up studio shot professional pack photography`;
-        }
-      } else if (cat.includes('spice') || lowerName.includes('masala') || lowerName.includes('powder') || lowerName.includes('chili') || lowerName.includes('turmeric')) {
-        basePrompt = `${name} organic Indian spice powder in glass jar rustic background bright soft lighting food photography advertising style`;
-      } else if (cat.includes('cake') || cat.includes('sweet') || lowerName.includes('kalakand') || lowerName.includes('ladoo') || lowerName.includes('barfi')) {
-        basePrompt = `${name} traditional Indian sweet cake desert on ceramic plate appetizing close up commercial food photography`;
+      const n = String(name || '').toLowerCase();
+      let basePrompt = '';
+
+      // Product-specific precise prompts for accurate Indian product images
+      if (n.includes('black salt') || n.includes('kala namak')) {
+        basePrompt = `kala namak black salt crystals pinkish-purple granules in a wooden bowl scattered on white marble Indian spice food photography professional`;
+      } else if (n.includes('rock salt') || n.includes('sendha namak') || n.includes('sindhav')) {
+        basePrompt = `sendha namak himalayan rock salt large pink crystal chunks in clay bowl on wooden board Indian spice photography`;
+      } else if (n.includes('turmeric') || n.includes('haldi')) {
+        basePrompt = `haldi turmeric powder bright golden yellow in wooden spoon and white ceramic bowl with raw turmeric root beside it Indian spice photography professional`;
+      } else if (n.includes('red chili') || n.includes('red chilli') || n.includes('lal mirch')) {
+        basePrompt = `lal mirch red chilli powder vibrant deep red in stone mortar with dried red chilies Indian spice advertising photography`;
+      } else if (n.includes('coriander') || n.includes('dhania')) {
+        basePrompt = `dhania coriander powder light green-brown in clay bowl with coriander seeds scattered Indian spice product photography`;
+      } else if (n.includes('cumin') || n.includes('jeera')) {
+        basePrompt = `jeera cumin seeds and powder in wooden spoon and small bowl warm brown Indian spice food photography`;
+      } else if (n.includes('black pepper') || n.includes('kali mirch')) {
+        basePrompt = `kali mirch black peppercorns whole and ground on wooden surface with stone grinder Indian spice close-up photography`;
+      } else if (n.includes('cardamom') || n.includes('elaichi')) {
+        basePrompt = `green elaichi cardamom pods on white marble with few open pods showing seeds Indian spice luxury food photography`;
+      } else if (n.includes('cinnamon') || n.includes('dalchini')) {
+        basePrompt = `dalchini cinnamon sticks bark rolled neatly in bundle on wooden board with cinnamon powder Indian spice photography`;
+      } else if (n.includes('clove') || n.includes('laung')) {
+        basePrompt = `laung whole cloves dark brown on white marble with some clove powder Indian spice beautiful product shot`;
+      } else if (n.includes('fenugreek') || n.includes('methi')) {
+        basePrompt = `methi fenugreek seeds on wooden board warm amber colors Indian spice food photography`;
+      } else if (n.includes('mustard') || n.includes('sarson') || n.includes(' rai ')) {
+        basePrompt = `sarson mustard seeds small black or yellow in ceramic bowl on rustic background Indian spice photography`;
+      } else if (n.includes('asafoetida') || n.includes('hing')) {
+        basePrompt = `hing asafoetida yellowish resin in small brass container Indian spice photography artistic`;
+      } else if (n.includes('amchur') || n.includes('dry mango') || n.includes('mango powder')) {
+        basePrompt = `amchur dry mango powder beige-tan in wooden bowl with sliced dried mango Indian spice product photography`;
+      } else if (n.includes('garam masala')) {
+        basePrompt = `garam masala blend aromatic Indian spice mix brown with whole spices star anise clove cardamom arranged beautifully food photography`;
+      } else if (n.includes('biryani') || n.includes('pulao')) {
+        basePrompt = `biryani masala spice blend in open spice tin with saffron and whole spices colorful Indian food photography`;
+      } else if (n.includes('chaat masala')) {
+        basePrompt = `chaat masala tangy spice blend dark brown in ceramic bowl Indian food photography`;
+      } else if (n.includes('sambar') || n.includes('rasam')) {
+        basePrompt = `sambar powder dark reddish-brown in small clay bowl with curry leaves and dried red chilies South Indian spice photography`;
+      } else if (n.includes('ghee')) {
+        basePrompt = `premium A2 desi cow ghee golden liquid in clear glass jar on wooden background with green leaves rustic bokeh food photography`;
+      } else if (n.includes('paneer')) {
+        basePrompt = `fresh homemade paneer cottage cheese white soft block on wooden cutting board with green herb garnish Indian dairy food photography`;
+      } else if (n.includes('curd') || n.includes('dahi') || n.includes('yogurt')) {
+        basePrompt = `fresh creamy dahi curd in clay matka earthen pot with steel spoon Indian dairy food photography close up`;
+      } else if (n.includes('butter') || n.includes('makhan')) {
+        basePrompt = `fresh white homemade Indian makhan butter in clay pot with golden light Indian dairy food photography`;
+      } else if (n.includes('milk')) {
+        basePrompt = `fresh A2 cow milk in glass bottle with cow in green farm background Indian dairy advertising photography`;
+      } else if (n.includes('honey')) {
+        basePrompt = `pure raw honey amber golden color dripping from wooden dipper into glass jar wildflower honey farm food photography`;
+      } else if (cat.includes('combo') || cat.includes('hamper') || n.includes('combo') || n.includes('hamper') || n.includes('gift') || n.includes('pack')) {
+        basePrompt = `premium Indian grocery gift hamper wooden basket with small jars of spices ghee honey handmade products decorated jute ribbon on white background commercial photography`;
+      } else if (cat.includes('sweet') || n.includes('ladoo') || n.includes('barfi') || n.includes('halwa') || n.includes('kalakand')) {
+        basePrompt = `${name} traditional Indian mithai sweet on silver plate garnished with saffron and nuts beautiful food photography festival packaging`;
+      } else if (cat.includes('spice') || cat.includes('masala')) {
+        basePrompt = `${name} authentic Indian spice in small clay or wooden bowl beautifully lit on rustic wooden table food photography`;
+      } else if (cat.includes('dairy')) {
+        basePrompt = `${name} fresh Indian dairy product in traditional packaging clean white background commercial food photography`;
       } else {
-        basePrompt = `${name} organic Indian grocery item clean studio background professional product photography bright lighting`;
+        basePrompt = `${name} authentic Indian organic product in clean packaging on white background professional product photography bright lighting`;
       }
-      
-      if (weight && weight !== '1 pc') {
-        basePrompt += ` ${weight} package`;
-      }
-      
-      return `https://image.pollinations.ai/prompt/${encodeURIComponent(basePrompt)}?width=400&height=300&nologo=true&seed=${seed}`;
+
+      return `https://image.pollinations.ai/prompt/${encodeURIComponent(basePrompt)}?width=512&height=512&nologo=true&seed=${seed}&model=flux`;
     }
 
     let allProducts = [];
@@ -586,36 +624,77 @@
       btn.disabled = true;
       btn.textContent = '⏳ Generating...';
       statusEl.style.display = 'block';
-      statusEl.textContent = '🤖 Generating SEO description + Hindi name with Gemini AI...';
+      statusEl.textContent = '🤖 Generating SEO description + Hindi name...';
 
       try {
-        const prompt = `You are an expert Indian food copywriter for an e-commerce store. Generate for product: "${name}" (Category: ${catName}).
+        // Hindi hint dictionary for accurate traditional names
+        const hindiHints = {
+          'black salt': 'काला नमक', 'kala namak': 'काला नमक',
+          'rock salt': 'सेंधा नमक', 'sendha': 'सेंधा नमक',
+          'turmeric': 'हल्दी पाउडर', 'haldi': 'हल्दी पाउडर',
+          'red chili': 'लाल मिर्च पाउडर', 'red chilli': 'लाल मिर्च पाउडर', 'lal mirch': 'लाल मिर्च पाउडर',
+          'coriander': 'धनिया पाउडर', 'dhania': 'धनिया पाउडर',
+          'cumin': 'जीरा', 'jeera': 'जीरा',
+          'black pepper': 'काली मिर्च', 'kali mirch': 'काली मिर्च',
+          'cardamom': 'इलाइची', 'elaichi': 'इलाइची',
+          'cinnamon': 'दालचीनी', 'dalchini': 'दालचीनी',
+          'clove': 'लौंग', 'laung': 'लौंग',
+          'fenugreek': 'मेथी', 'methi': 'मेथी',
+          'mustard': 'सरसों', 'asafoetida': 'हींग', 'hing': 'हींग',
+          'amchur': 'अमचूर', 'dry mango': 'अमचूर', 'mango powder': 'अमचूर',
+          'garam masala': 'गरम मसाला', 'biryani masala': 'बिरयानी मसाला',
+          'chaat masala': 'चाट मसाला', 'sambar': 'सांभर मसाला',
+          'ghee': 'देसी घी', 'paneer': 'पनीर',
+          'curd': 'दही', 'dahi': 'दही', 'yogurt': 'दही',
+          'butter': 'मक्खन', 'milk': 'दूध', 'honey': 'शहद',
+          'ladoo': 'लड्डू', 'barfi': 'बर्फी', 'halwa': 'हलवा', 'kalakand': 'कलाकंद'
+        };
+        const lname = name.toLowerCase();
+        let hindiHint = '';
+        for (const [key, val] of Object.entries(hindiHints)) {
+          if (lname.includes(key)) { hindiHint = val; break; }
+        }
+        const hintInstruction = hindiHint
+          ? `CRITICAL: The correct traditional Hindi market name for "${name}" is "${hindiHint}". Use this EXACTLY for hindi_name.`
+          : `Use the traditional Hindi name used in Indian markets (like हल्दी, जीरा, etc.) — NOT a word-by-word transliteration.`;
 
-Return ONLY valid JSON in this exact format (no markdown, no extra text):
+        const prompt = `You are an expert Indian food copywriter and Hindi translator for an Indian e-commerce spice & dairy store.
+
+${hintInstruction}
+
+Generate for: "${name}" (Category: ${catName})
+
+Return ONLY valid JSON (no markdown, no extra text):
 {
-  "description": "SEO-friendly 2-3 sentence English description mentioning key benefits, purity, origin. Under 120 words.",
-  "hindi_name": "Authentic Hindi name for ${name} in Devanagari script only"
+  "description": "2-3 sentence SEO description for Indian customers: mention key benefits, purity, traditional usage, origin. Max 100 words.",
+  "hindi_name": "Correct traditional Hindi name in Devanagari script as used in Indian markets"
 }`;
 
+        let aiText = '';
+
+        // Try Groq first
         const groqKey = localStorage.getItem('admin_groq_key') || ('gsk_' + 'KzLx85nL5bvdDiTHVAoHWGdyb3FY9l1hfBt2yylcW8viXCxCNyql');
-        const resp = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${groqKey}`
-          },
-          body: JSON.stringify({
-            model: 'llama-3.1-8b-instant',
-            messages: [{ role: 'user', content: prompt }]
-          })
-        });
+        try {
+          const resp = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
+            body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: prompt }] })
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            aiText = data?.choices?.[0]?.message?.content || '';
+          }
+        } catch(e) { /* fallback */ }
 
-        if (!resp.ok) throw new Error(`AI API error: ${resp.status}`);
-        const data = await resp.json();
-        const text = data?.choices?.[0]?.message?.content || '';
+        // Fallback to Pollinations text AI if Groq failed
+        if (!aiText) {
+          const polResp = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt + ' Return only raw JSON.')}`);
+          if (polResp.ok) aiText = await polResp.text();
+        }
 
-        // Parse JSON from AI response
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!aiText) throw new Error('All AI providers failed');
+
+        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
         if (!jsonMatch) throw new Error('AI returned unexpected format');
 
         const parsed = JSON.parse(jsonMatch[0]);

@@ -2594,11 +2594,12 @@
         showOrderSuccess(data.orderId, method.toLowerCase(), od.total);
         clearCart();
       } catch(e) {
-        const fid = `WA-${Date.now().toString().slice(-8)}`;
+        // Always use ORD- prefix so tracking works even in fallback
+        const fid = `ORD-${Date.now().toString(36).toUpperCase().slice(-8)}`;
         saveOrderToLocalCache(fid, od);
-        notifyOwnerWhatsApp(od, fid, `${method} - WhatsApp`);
+        notifyOwnerWhatsApp(od, fid, method);
         document.getElementById('address-modal').classList.remove('open');
-        showOrderSuccess(fid, 'whatsapp', od.total);
+        showOrderSuccess(fid, method.toLowerCase(), od.total);
         clearCart();
       } finally { btn.disabled=false; btn.textContent='Place Order 🛒'; }
     }
@@ -2617,16 +2618,28 @@
       const items = order.items.map(i => `- ${i.name} × ${i.qty} = ₹${i.price*i.qty}`).join('\n');
       const msg = encodeURIComponent(`🛒 *NEW ORDER!*\nOrder ID: ${orderId}\nPayment: ${method}\n\n👤 ${order.customer_name}\n📞 ${order.customer_phone}\n📍 ${order.customer_address}\n📮 ${order.customer_pincode}\n\n📦 Items:\n${items}\n\n💰 Subtotal: ₹${order.subtotal}\n🚚 Delivery: ₹${order.delivery_charge}\n💵 *TOTAL: ₹${order.total}*`);
       const url = `https://wa.me/${OWNER_WHATSAPP}?text=${msg}`;
-      const w = window.open(url,'_blank');
-      if (!w) window.location.href = url;
+      // For GPay/UPI orders — delay WhatsApp open so success screen shows first cleanly
+      const isGpay = (method || '').toLowerCase().includes('gpay') || (method || '').toLowerCase().includes('upi');
+      if (isGpay) {
+        setTimeout(() => { const w = window.open(url,'_blank'); if (!w) window.location.href = url; }, 1500);
+      } else {
+        const w = window.open(url,'_blank'); if (!w) window.location.href = url;
+      }
     }
+
 
     function showOrderSuccess(id, method, total) {
       document.getElementById('success-order-id').textContent = `Order ID: ${id.toUpperCase()}`;
       document.querySelector('.success-total').textContent = `₹${total}`;
-      document.querySelector('.success-method').textContent = method==='cod' ? 'Cash on Delivery 💵' : method==='whatsapp' ? 'Sent to WhatsApp 💬' : 'Online Payment ✅';
+      const m = (method||'').toLowerCase();
+      const methodLabel = m.includes('gpay') || m.includes('upi')
+        ? 'GPay / UPI ✅ — Owner notified on WhatsApp'
+        : m === 'cod' ? 'Cash on Delivery 💵'
+        : 'Order Confirmed ✅';
+      document.querySelector('.success-method').textContent = methodLabel;
       document.getElementById('success-modal').classList.add('open');
     }
+
 
     // ─── WHATSAPP ORDER ───────────────────────────────────────────
     function waOrder(id) {
@@ -2793,15 +2806,37 @@
     }
 
     // ─── AI FUNCTIONS ─────────────────────────────────────────────
+    // Uses Pollinations AI (free, no API key needed) with Groq as fallback
     async function callGroq(prompt) {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method:'POST',
-        headers:{ 'Authorization':`Bearer ${GROQ_API_KEY}`, 'Content-Type':'application/json' },
-        body: JSON.stringify({ model:'llama3-8b-8192', messages:[{role:'system',content:'You are a helpful assistant for an Indian grocery store selling dairy and spices.'},{role:'user',content:prompt}], max_tokens:600, temperature:0.7 })
-      });
-      if (!res.ok) throw new Error('Groq API error');
-      const data = await res.json();
-      return data.choices?.[0]?.message?.content || '';
+      const systemPrompt = 'You are a helpful, friendly AI assistant for Ezra Farms — an Indian dairy and spices store in Thane & Mulund, Mumbai. You know Indian cuisine, spices, dairy products deeply. Always respond in English with helpful, concise answers under 100 words.';
+      const fullPrompt = `${systemPrompt}\n\nUser: ${prompt}`;
+      
+      // Try Pollinations AI first (free, no key needed)
+      try {
+        const encodedPrompt = encodeURIComponent(fullPrompt);
+        const res = await fetch(`https://text.pollinations.ai/${encodedPrompt}`, { method: 'GET' });
+        if (res.ok) {
+          const text = await res.text();
+          if (text && text.length > 10) return text;
+        }
+      } catch(e) { /* fallback */ }
+
+      // Fallback: try Groq if API key is set
+      if (GROQ_API_KEY && GROQ_API_KEY.length > 20) {
+        try {
+          const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method:'POST',
+            headers:{ 'Authorization':`Bearer ${GROQ_API_KEY}`, 'Content-Type':'application/json' },
+            body: JSON.stringify({ model:'llama3-8b-8192', messages:[{role:'system',content:systemPrompt},{role:'user',content:prompt}], max_tokens:300, temperature:0.7 })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            return data.choices?.[0]?.message?.content || '';
+          }
+        } catch(e) { /* silent */ }
+      }
+
+      throw new Error('AI unavailable');
     }
 
     function toggleAIPanel() {
