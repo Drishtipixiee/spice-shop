@@ -811,5 +811,21 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-07T12:25:54.611Z"
+  },
+  {
+    "id": "dyfuilgxi",
+    "name": "Tikka Masala Combo Pack",
+    "name_hindi": "टीका मसाला कम्बल पैक",
+    "category": "combos",
+    "price": 185,
+    "mrp": 250,
+    "image_url": "https://image.pollinations.ai/prompt/premium%20Indian%20grocery%20gift%20hamper%20wooden%20basket%20with%20small%20jars%20of%20spices%20ghee%20honey%20handmade%20products%20decorated%20jute%20ribbon%20on%20white%20background%20commercial%20photography?width=512&height=512&nologo=true&seed=967765&model=flux",
+    "video_url": null,
+    "description": "Get the authentic taste of Indian street food with our premium tikka masala combo pack. Perfect for grilled or roasted meats.",
+    "weight": "300g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-07T12:26:01.062Z"
   }
 ]
