@@ -795,5 +795,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-07T12:25:51.840Z"
+  },
+  {
+    "id": "r2iky828w",
+    "name": "Biryani Masala Combo",
+    "name_hindi": "बिरयानी मसाला कम्बल",
+    "category": "combos",
+    "price": 115,
+    "mrp": 150,
+    "image_url": "https://image.pollinations.ai/prompt/biryani%20masala%20spice%20blend%20in%20open%20spice%20tin%20with%20saffron%20and%20whole%20spices%20colorful%20Indian%20food%20photography?width=512&height=512&nologo=true&seed=453025&model=flux",
+    "video_url": null,
+    "description": "Prepare mouth-watering biryani at home with our exclusive biryani masala combo. Includes a blend of spices perfect for any type of biryani.",
+    "weight": "120g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-07T12:25:54.611Z"
   }
 ]
