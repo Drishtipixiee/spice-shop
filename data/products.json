@@ -779,5 +779,21 @@
     "is_new": true,
     "in_stock": true,
     "created_at": "2026-07-07T12:26:07.742Z"
+  },
+  {
+    "id": "1jpjvwrc7",
+    "name": "Jeera Masala Combo",
+    "name_hindi": "जीरा मसाला कम्बल",
+    "category": "combos",
+    "price": 70,
+    "mrp": 90,
+    "image_url": "https://image.pollinations.ai/prompt/jeera%20cumin%20seeds%20and%20powder%20in%20wooden%20spoon%20and%20small%20bowl%20warm%20brown%20Indian%20spice%20food%20photography?width=512&height=512&nologo=true&seed=831669&model=flux",
+    "video_url": null,
+    "description": "Create a flavorful and aromatic cup of cumin water with our specially curated jeera masala combo. Includes the essential spices for a delicious and comforting drink.",
+    "weight": "60g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-07T12:26:09.970Z"
   }
 ]
