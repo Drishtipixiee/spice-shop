@@ -827,5 +827,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-07T12:26:01.062Z"
+  },
+  {
+    "id": "zfu4efyhc",
+    "name": "Kadhai Masala Combo",
+    "name_hindi": "कढई मसाला कम्बल",
+    "category": "combos",
+    "price": 95,
+    "mrp": 120,
+    "image_url": "https://image.pollinations.ai/prompt/premium%20Indian%20grocery%20gift%20hamper%20wooden%20basket%20with%20small%20jars%20of%20spices%20ghee%20honey%20handmade%20products%20decorated%20jute%20ribbon%20on%20white%20background%20commercial%20photography?width=512&height=512&nologo=true&seed=222344&model=flux",
+    "video_url": null,
+    "description": "Create flavorful stir-fries at home with our specially curated kadhai masala combo. Includes a unique blend of spices for a delicious and aromatic dish.",
+    "weight": "100g",
+    "is_bestseller": false,
+    "is_new": true,
+    "in_stock": true,
+    "created_at": "2026-07-07T12:26:04.360Z"
   }
 ]
