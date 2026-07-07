@@ -747,5 +747,21 @@
     "is_new": false,
     "in_stock": true,
     "created_at": "2026-07-06T22:17:43.724Z"
+  },
+  {
+    "id": "cbeht3urx",
+    "name": "Samosa Masala Combo",
+    "name_hindi": "समोसा मसाला कम्बल",
+    "category": "combos",
+    "price": 95,
+    "mrp": 120,
+    "image_url": "https://image.pollinations.ai/prompt/premium%20Indian%20grocery%20gift%20hamper%20wooden%20basket%20with%20small%20jars%20of%20spices%20ghee%20honey%20handmade%20products%20decorated%20jute%20ribbon%20on%20white%20background%20commercial%20photography?width=512&height=512&nologo=true&seed=700794&model=flux",
+    "video_url": null,
+    "description": "Get the authentic taste of India with our premium samosa masala combo. It includes all the spices needed to make delicious samosas at home.",
+    "weight": "100g",
+    "is_bestseller": false,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-07T12:25:45.070Z"
   }
 ]
