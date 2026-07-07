@@ -813,19 +813,35 @@
     "created_at": "2026-07-07T12:25:54.611Z"
   },
   {
-    "id": "ciu3vys23",
-    "name": "Mattar Paneer Masala Combo",
-    "name_hindi": "मटर पनीर मसाला कम्बल",
+    "id": "dyfuilgxi",
+    "name": "Tikka Masala Combo Pack",
+    "name_hindi": "टीका मसाला कम्बल पैक",
     "category": "combos",
-    "price": 145,
-    "mrp": 200,
-    "image_url": "https://image.pollinations.ai/prompt/fresh%20homemade%20paneer%20cottage%20cheese%20white%20soft%20block%20on%20wooden%20cutting%20board%20with%20green%20herb%20garnish%20Indian%20dairy%20food%20photography?width=512&height=512&nologo=true&seed=714881&model=flux",
+    "price": 185,
+    "mrp": 250,
+    "image_url": "https://image.pollinations.ai/prompt/premium%20Indian%20grocery%20gift%20hamper%20wooden%20basket%20with%20small%20jars%20of%20spices%20ghee%20honey%20handmade%20products%20decorated%20jute%20ribbon%20on%20white%20background%20commercial%20photography?width=512&height=512&nologo=true&seed=967765&model=flux",
     "video_url": null,
-    "description": "Prepare mouth-watering Mattar Paneer at home with our exclusive masala combo. Includes a unique blend of spices for a delicious and creamy dish.",
-    "weight": "200g",
-    "is_bestseller": false,
-    "is_new": true,
+    "description": "Get the authentic taste of Indian street food with our premium tikka masala combo pack. Perfect for grilled or roasted meats.",
+    "weight": "300g",
+    "is_bestseller": true,
+    "is_new": false,
     "in_stock": true,
-    "created_at": "2026-07-07T12:26:12.314Z"
+    "created_at": "2026-07-07T12:26:01.062Z"
+  },
+  {
+    "id": "y2ct01n4q",
+    "name": "Rajma Masala Combo Pack",
+    "name_hindi": "राजमा मसाला कम्बल पैक",
+    "category": "combos",
+    "price": 125,
+    "mrp": 180,
+    "image_url": "https://image.pollinations.ai/prompt/premium%20Indian%20grocery%20gift%20hamper%20wooden%20basket%20with%20small%20jars%20of%20spices%20ghee%20honey%20handmade%20products%20decorated%20jute%20ribbon%20on%20white%20background%20commercial%20photography?width=512&height=512&nologo=true&seed=435233&model=flux",
+    "video_url": null,
+    "description": "Create a flavorful and aromatic Rajma Masala at home with our specially curated combo pack. Perfect for a delicious and comforting meal.",
+    "weight": "180g",
+    "is_bestseller": true,
+    "is_new": false,
+    "in_stock": true,
+    "created_at": "2026-07-07T12:26:19.105Z"
   }
 ]
