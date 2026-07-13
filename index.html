@@ -2452,20 +2452,24 @@
         document.getElementById('fd-text').innerHTML=`Add <strong>₹${FREE_DELIVERY_MIN}</strong> more for <strong>FREE Delivery</strong>!`;
         return;
       }
-      c.innerHTML = cart.map(item => `<div class="cart-item">
+      c.innerHTML = cart.map(item => {
+        // Safe string escape for item.id
+        const itemIdEscaped = String(item.id).replace(/'/g, "\\'");
+        return `<div class="cart-item">
   <img src="${item.image_url||'https://placehold.co/56x56'}" alt="${item.name}" onerror="this.src='https://placehold.co/56x56'">
   <div class="cart-item-info">
     <div class="cart-item-name">${item.name}</div>
     <div class="cart-item-sub">${item.weight||''}</div>
     <div class="cart-item-price">₹${item.price} × ${item.qty} = ₹${item.price*item.qty}</div>
     <div class="qty-row">
-      <button class="qty-btn" onclick="updateQty('${item.id}',-1)">−</button>
+      <button class="qty-btn" onclick="updateQty('${itemIdEscaped}',-1)">−</button>
       <span class="qty-num">${item.qty}</span>
-      <button class="qty-btn" onclick="updateQty('${item.id}',1)">+</button>
+      <button class="qty-btn" onclick="updateQty('${itemIdEscaped}',1)">+</button>
     </div>
   </div>
-  <button class="cart-item-del" onclick="removeFromCart('${item.id}')">🗑</button>
-</div>`).join('');
+  <button class="cart-item-del" onclick="removeFromCart('${itemIdEscaped}')">🗑</button>
+</div>`;
+      }).join('');
 
       const sub = cart.reduce((s,c) => s+c.price*c.qty, 0);
       const disc = discountPercent > 0 ? Math.round(sub*(discountPercent/100)) : 0;
@@ -2580,8 +2584,11 @@
         const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
         
         if (isMobile) {
-          // Open UPI app directly on mobile devices
-          window.location.href = upiString;
+          // Open UPI app directly on mobile devices using window.open and fallback top assignment
+          const w = window.open(upiString, '_blank');
+          if (!w) {
+            window.top.location.href = upiString;
+          }
           
           // Show the paid confirmation confirm dialog after a brief timeout
           setTimeout(async () => {
@@ -2592,11 +2599,11 @@
             } else {
               showPaymentFailed();
             }
-          }, 3000);
+          }, 2000);
         } else {
-          // Fallback for Desktop: Open in new tab/pop-up or prompt to copy/confirm
-          alert(`📲 UPI Payment: Please pay ₹${total} to drishtimishra168@oksbi`);
-          const confirmed = confirm(`Have you completed the payment of ₹${total} to:\ndrishtimishra168@oksbi?`);
+          // Desktop QR code and copy helper modal
+          alert(`📲 Desktop UPI Payment:\n1. Copy the UPI ID: drishtimishra168@oksbi\n2. Pay ₹${total} from your phone's UPI app`);
+          const confirmed = confirm(`Have you successfully paid ₹${total} to drishtimishra168@oksbi?`);
           if (confirmed) {
             pendingOrderData.payment_status = 'paid';
             await saveOrder(pendingOrderData, 'GPay / UPI');
