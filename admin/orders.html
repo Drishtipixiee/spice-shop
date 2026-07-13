@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orders — Ezra Farms Admin</title>
+<title>Orders — Rehoboth Admin</title>
 <link rel="stylesheet" href="/admin/assets/css/admin.css">
 </head>
 <body>
 
 <aside class="sidebar">
   <div class="sidebar-brand">
-    <span style="color:var(--text-main)">Ezra</span>Farms
+    <span style="color:var(--text-main)">Rehoboth</span> Admin
   </div>
   <div class="sidebar-menu">
     <div class="menu-label">Main Menu</div>
@@ -46,6 +46,7 @@
       <h1 class="page-title">Order Management</h1>
       <div class="page-actions">
         <button class="btn btn-outline" onclick="loadOrders()">🔄 Refresh</button>
+        <button class="btn btn-primary" onclick="syncLocalOrders()" title="Import orders placed on this browser that weren't synced to server">📱 Sync from Browser</button>
       </div>
     </div>
 
@@ -72,25 +73,91 @@
 
 <script type="module" src="/admin/assets/js/api.js"></script>
 <script>
+
+// ─── LOCAL ORDER HELPERS ─────────────────────────────────────────
+function getLocalOrders() {
+  try {
+    const cache = JSON.parse(localStorage.getItem('localOrders') || '{}');
+    return Object.values(cache).map(o => ({
+      ...o,
+      total_amount: o.total || o.total_amount || 0,
+      status: (o.order_status || o.status || 'placed').toUpperCase(),
+      payment_id: o.razorpay_payment_id || (o.payment_method === 'cod' ? 'COD' : 'UPI/Pending'),
+      _local: true
+    }));
+  } catch(e) { return []; }
+}
+
+async function syncLocalOrders() {
+  const localOrders = getLocalOrders();
+  if (localOrders.length === 0) {
+    alert('No local orders found in this browser.\nLocal orders are created when the API is unreachable.'); return;
+  }
+  
+  // Fetch existing server orders to avoid duplicates
+  let serverIds = new Set();
+  try {
+    const existing = await api.fetch('/api/orders');
+    if (Array.isArray(existing)) existing.forEach(o => serverIds.add(o.id));
+  } catch(e) {}
+  
+  const toSync = localOrders.filter(o => !serverIds.has(o.id));
+  if (toSync.length === 0) {
+    alert('✅ All local orders are already synced to server!'); loadOrders(); return;
+  }
+  
+  let synced = 0, failed = 0;
+  for (const order of toSync) {
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(order)
+      });
+      if (res.ok) synced++; else failed++;
+    } catch(e) { failed++; }
+  }
+  
+  alert(`✅ Sync complete!\nSynced: ${synced} orders\nFailed: ${failed} orders\n\nRefreshing list...`);
+  loadOrders();
+}
+
+// ─── LOAD ORDERS ─────────────────────────────────────────────────
 async function loadOrders() {
   const tbody = document.getElementById('ordersTable');
   tbody.innerHTML = '<tr><td colspan="5" class="loader-wrapper"><div class="spinner"></div>Loading...</td></tr>';
   
   try {
-    const orders = await api.getOrders();
-    if(orders.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No orders found.</td></tr>';
+    const serverOrders = await api.getOrders();
+    
+    // Merge with localStorage orders (shown in orange to indicate unsynced)
+    const localOrders = getLocalOrders();
+    const serverIds = new Set(serverOrders.map(o => o.id));
+    const unsynced = localOrders.filter(o => !serverIds.has(o.id));
+    
+    const orders = [...serverOrders, ...unsynced.map(o => ({...o, _unsynced: true}))];
+    orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
+    if (orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">No orders found.<br><small>If you see orders on the store, tap <strong>📱 Sync from Browser</strong> above.</small></td></tr>';
       return;
+    }
+    
+    if (unsynced.length > 0) {
+      console.info(`[Admin] Showing ${unsynced.length} unsynced local order(s) highlighted in orange. Click "Sync from Browser" to save them.`);
     }
 
     tbody.innerHTML = orders.map(o => {
       let badge = 'badge-pending';
       let actionBtn = '';
+      const isUnsynced = o._unsynced;
+      const rowStyle = isUnsynced ? 'background: #fff7ed; border-left: 3px solid #f97316;' : '';
+      const unsyncedTag = isUnsynced ? '<span style="font-size:10px;background:#fed7aa;color:#c2410c;padding:2px 6px;border-radius:99px;margin-left:4px">📱 Browser Only</span>' : '';
       
-      if(o.status==='PENDING' || o.status==='PLACED') {
+      if (o.status === 'PENDING' || o.status === 'PLACED') {
         badge = 'badge-pending';
         actionBtn = `<button class="btn btn-sm btn-primary" onclick="updateStatus('${o.id}', 'SHIPPED')">Mark Shipped</button>`;
-      } else if (o.status==='SHIPPED') {
+      } else if (o.status === 'SHIPPED') {
         badge = 'badge-shipped';
         actionBtn = `<button class="btn btn-sm btn-success" onclick="updateStatus('${o.id}', 'DELIVERED')">Mark Delivered</button>`;
       } else {
@@ -99,20 +166,20 @@ async function loadOrders() {
       }
 
       return `
-        <tr>
+        <tr style="${rowStyle}">
           <td>
-            <strong>#${o.id.toUpperCase()}</strong><br>
+            <strong>#${o.id.toUpperCase()}</strong>${unsyncedTag}<br>
             <span style="font-size:0.8rem;color:var(--text-muted)">${formatDate(o.created_at)}</span>
           </td>
           <td>
             <strong>${o.customer_name}</strong><br>
             <span style="font-size:0.8rem;color:var(--text-muted)">📞 ${o.customer_phone}</span><br>
-            <span style="font-size:0.8rem;color:var(--text-muted);display:block;white-space:normal;word-break:break-word;max-width:250px;">${o.delivery_address || o.customer_address}, ${o.customer_pincode || ''}</span>
+            <span style="font-size:0.8rem;color:var(--text-muted);display:block;white-space:normal;word-break:break-word;max-width:250px;">${o.delivery_address || o.customer_address || ''}, ${o.customer_pincode || ''}</span>
           </td>
           <td>
             <strong>${formatMoney(o.total_amount)}</strong><br>
-            <span style="font-size:0.8rem;color:var(--text-muted)">${o.payment_method}</span><br>
-            <span style="font-size:0.75rem;color:#adb5bd">${o.payment_id || 'Pending'}</span>
+            <span style="font-size:0.8rem;color:var(--text-muted)">${(o.payment_method || '').toUpperCase()}</span><br>
+            <span style="font-size:0.75rem;color:#adb5bd">${o.payment_id || (o.payment_status === 'paid' ? '✅ Paid' : 'Pending')}</span>
           </td>
           <td><span class="badge ${badge}">${o.status}</span></td>
           <td>${actionBtn}</td>
@@ -120,12 +187,33 @@ async function loadOrders() {
       `;
     }).join('');
   } catch (err) {
-    console.error("Error loading orders:", err);
+    console.error('Error loading orders:', err);
+    
+    // Even if API fails, show local orders
+    const localOrders = getLocalOrders();
+    if (localOrders.length > 0) {
+      tbody.innerHTML = `
+        <tr><td colspan="5" style="background:#fff7ed;padding:12px;text-align:center;color:#c2410c;font-weight:600;border-bottom:1px solid #fed7aa">
+          ⚠️ Server unreachable — showing ${localOrders.length} local browser order(s). <button class="btn btn-sm btn-outline" onclick="syncLocalOrders()" style="margin-left:8px">Sync Now</button>
+        </td></tr>
+        ${localOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(o => `
+          <tr style="background:#fff7ed;border-left:3px solid #f97316">
+            <td><strong>#${o.id.toUpperCase()}</strong> <span style="font-size:10px;background:#fed7aa;color:#c2410c;padding:2px 6px;border-radius:99px">📱 Browser Only</span><br><span style="font-size:0.8rem;color:var(--text-muted)">${formatDate(o.created_at)}</span></td>
+            <td><strong>${o.customer_name}</strong><br><span style="font-size:0.8rem;color:var(--text-muted)">📞 ${o.customer_phone}</span></td>
+            <td><strong>${formatMoney(o.total || o.total_amount)}</strong><br><span style="font-size:0.8rem;color:var(--text-muted)">${(o.payment_method || '').toUpperCase()}</span></td>
+            <td><span class="badge badge-pending">${(o.order_status || 'PLACED').toUpperCase()}</span></td>
+            <td><button class="btn btn-sm btn-outline" onclick="syncLocalOrders()">Sync</button></td>
+          </tr>
+        `).join('')}
+      `;
+      return;
+    }
+    
     tbody.innerHTML = `
       <tr>
         <td colspan="5" style="text-align:center;padding:40px;color:var(--danger)">
           <div style="font-weight:600;margin-bottom:8px;">⚠️ Failed to load orders.</div>
-          <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${err.message || "Network error or session expired."}</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">${err.message || 'Network error or session expired.'}</div>
           <button class="btn btn-sm btn-outline" onclick="loadOrders()">Try Again</button>
         </td>
       </tr>
@@ -137,7 +225,7 @@ function filterOrders(query) {
   const q = query.toLowerCase();
   const rows = document.querySelectorAll('#ordersTable tr');
   rows.forEach(row => {
-    if (row.querySelector('.loader-wrapper')) return; // skip loader
+    if (row.querySelector('.loader-wrapper')) return;
     const text = row.innerText.toLowerCase();
     row.style.display = text.includes(q) ? '' : 'none';
   });
@@ -148,7 +236,7 @@ async function updateStatus(id, st) {
     await api.updateOrderStatus(id, st);
     loadOrders();
   } catch(e) {
-    alert("Failed to update status.");
+    alert('Failed to update status.');
   }
 }
 

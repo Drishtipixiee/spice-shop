@@ -18,8 +18,12 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Amount is required' });
     }
 
-    const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_mockkey';
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || 'mocksecret';
+    const keyId = process.env.RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    
+    if (!keyId || !keySecret) {
+      return res.status(503).json({ error: 'Razorpay not configured. Please use GPay/UPI or COD.' });
+    }
 
     const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
     const response = await fetch('https://api.razorpay.com/v1/orders', {

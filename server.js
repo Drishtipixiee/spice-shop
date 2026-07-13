@@ -117,14 +117,14 @@ const server = http.createServer((req, res) => {
     safePath += '.html';
   }
   
-  const filePath = path.join(__dirname, 'frontend', safePath);
+  const filePath = path.join(__dirname, safePath);
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        fs.readFile(path.join(__dirname, 'frontend', '404.html'), (err, htmlContent) => {
+        fs.readFile(path.join(__dirname, '404.html'), (err, htmlContent) => {
           res.writeHead(404, { 'Content-Type': 'text/html' });
           res.end(htmlContent || '<h1>404 Not Found</h1>', 'utf-8');
         });
@@ -140,7 +140,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Development server running at http://localhost:${PORT}/`);
-  console.log(`- Customer Storefront: http://localhost:${PORT}/index.html`);
-  console.log(`- Admin Portal: http://localhost:${PORT}/admin/index.html (Default Login: admin@spiceshop.in / Admin@1234)`);
+  console.log(`🌶️  Rehoboth Open Store — Dev server running at http://localhost:${PORT}/`);
+  console.log(`📦 Admin Portal: http://localhost:${PORT}/admin/index.html`);
+  console.log(`🔑 Login: admin@spiceshop.in / Admin@1234`);
 });

@@ -82,12 +82,19 @@ class AdminAPI {
 
   async getOrders() {
     const data = await this.fetch('/api/orders');
-    // Map order fields to match frontend expectation
+    if (!Array.isArray(data)) return [];
+    // Normalize all field variations robustly
     return data.map(o => ({
       ...o,
-      total_amount: o.total, // map total to total_amount
-      status: (o.order_status || 'placed').toUpperCase(), // map order_status to status
-      payment_id: o.razorpay_payment_id || 'COD'
+      // Handle both total and total_amount
+      total_amount: o.total_amount || o.total || 0,
+      // Handle both order_status and status, normalize to uppercase
+      status: (o.status || o.order_status || 'PLACED').toUpperCase(),
+      // Payment display
+      payment_method: o.payment_method || 'unknown',
+      payment_id: o.razorpay_payment_id || (o.payment_method === 'cod' ? 'COD' : (o.payment_status === 'paid' ? '\u2705 Paid' : 'Pending')),
+      customer_address: o.customer_address || o.delivery_address || '',
+      delivery_address: o.delivery_address || o.customer_address || ''
     }));
   }
 

@@ -2,7 +2,8 @@
   "name": "spice-shop",
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp -r admin dist/ && cp -r public dist/ && cp -r data dist/ && cp -r api dist/ && cp index.html dist/ && cp login.html dist/ && cp delivery-map.html dist/ && cp 404.html dist/ && cp sw.js dist/ && cp manifest.json dist/"
+    "dev": "node server.js",
+    "build": "node -e \"const fs=require('fs');const path=require('path');['admin','public','data','api'].forEach(d=>{if(fs.existsSync(d)){fs.cpSync(d,'dist/'+d,{recursive:true})}});['index.html','login.html','delivery-map.html','404.html','sw.js','manifest.json'].forEach(f=>{if(fs.existsSync(f))fs.copyFileSync(f,'dist/'+f)});console.log('Build done!');\""
   },
   "dependencies": {}
 }
