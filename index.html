@@ -2575,32 +2575,35 @@
       const btn = document.getElementById('place-order-btn'); btn.disabled=true;
       if (paymentMethod==='cod') { btn.textContent='Placing Order...'; await saveOrder(orderData,'COD'); }
       else if (paymentMethod==='gpay') {
-        btn.textContent='Opening Payment...';
         pendingOrderData = orderData;
-        
-        // Populate amount
-        document.getElementById('gpay-amount-display').textContent = total;
-        
-        // Generate QR code URL
-        // UPI deep link: opens GPay/PhonePe/Paytm directly on mobile
         const upiString = `upi://pay?pa=drishtimishra168@oksbi&pn=Rehoboth%20Open%20Store&am=${total}&cu=INR`;
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiString)}`;
-        document.getElementById('gpay-qr-code').src = qrUrl;
-        
-        // Configure deep link for mobile
-        document.getElementById('gpay-intent-link').href = upiString;
-        
-        // Detect if user is on mobile
         const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-        const mobileContainer = document.getElementById('gpay-mobile-btn-container');
-        if (isMobile) {
-          mobileContainer.style.display = 'block';
-        } else {
-          mobileContainer.style.display = 'none';
-        }
         
-        // Open GPay modal
-        document.getElementById('gpay-modal').classList.add('open');
+        if (isMobile) {
+          // Open UPI app directly on mobile devices
+          window.location.href = upiString;
+          
+          // Show the paid confirmation confirm dialog after a brief timeout
+          setTimeout(async () => {
+            const confirmed = confirm(`📲 UPI Payment Initiated\n\nDid you complete your payment of ₹${total} via your GPay/UPI app?`);
+            if (confirmed) {
+              pendingOrderData.payment_status = 'paid';
+              await saveOrder(pendingOrderData, 'GPay / UPI');
+            } else {
+              showPaymentFailed();
+            }
+          }, 3000);
+        } else {
+          // Fallback for Desktop: Open in new tab/pop-up or prompt to copy/confirm
+          alert(`📲 UPI Payment: Please pay ₹${total} to drishtimishra168@oksbi`);
+          const confirmed = confirm(`Have you completed the payment of ₹${total} to:\ndrishtimishra168@oksbi?`);
+          if (confirmed) {
+            pendingOrderData.payment_status = 'paid';
+            await saveOrder(pendingOrderData, 'GPay / UPI');
+          } else {
+            showPaymentFailed();
+          }
+        }
       } else { btn.textContent='Opening Payment...'; await initiateRazorpay(orderData); }
     }
 
